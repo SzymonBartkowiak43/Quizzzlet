@@ -46,9 +46,7 @@ public class UsersController {
         if(!user.getPassword().isEmpty()) {
             updatedUser.get().setPassword(user.getPassword());
         }
-        return usersService.updateUsers(user) //przciez kurwa nie wiesz jakie id ma ten ziomek a moze
-        // wiesz bo to jego profil, kutwa muisz pomyslec
-
+        Optional<Users> users = usersService.updateUsers(user.getId(), user);
 
     }
 }
