@@ -10,7 +10,6 @@ import lombok.Setter;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-@NOTNULL
     private Long id;
     private String userName;
     private String email;

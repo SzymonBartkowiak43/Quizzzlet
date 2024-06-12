@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -32,21 +31,5 @@ public class UsersController {
                 .buildAndExpand(saveUser.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(saveUser);
-    }
-
-    @PutMapping()
-    ResponseEntity<Users> updateUser(@RequestBody Users user) {
-        Optional<Users> updatedUser = usersService.getUsersById(user.getId());
-        if(!user.getUserName().isEmpty()) {
-            updatedUser.get().setUserName(user.getUserName());
-        }
-        if(!user.getEmail().isEmpty()) {
-            updatedUser.get().setEmail(user.getEmail());
-        }
-        if(!user.getPassword().isEmpty()) {
-            updatedUser.get().setPassword(user.getPassword());
-        }
-        Optional<Users> users = usersService.updateUsers(user.getId(), user);
-
     }
 }
