@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Users {
+    //czytanie
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
