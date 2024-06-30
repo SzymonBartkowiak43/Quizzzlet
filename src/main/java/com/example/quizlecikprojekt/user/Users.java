@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class Users {
     //czytanie
-    //rozwijanie security
+    //rozwijanie security x2
     @Id
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
