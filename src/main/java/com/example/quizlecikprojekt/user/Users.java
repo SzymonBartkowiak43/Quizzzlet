@@ -8,10 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Users {
-    //czytanie
-    //rozwijanie security x2
-    @Id
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userName;
