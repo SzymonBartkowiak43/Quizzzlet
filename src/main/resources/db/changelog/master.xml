@@ -5,57 +5,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
 
+    <include file="0001_create_table_users_and_roles.xml" relativeToChangelogFile="true"/>
+    <include file="0002_create_table_word_set.xml" relativeToChangelogFile="true"/>
+    <include file="0003_create_table_word.xml" relativeToChangelogFile="true"/>
 
-
-    <changeSet id="0001" author="szymon">
-        <createTable tableName="users">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="user_name" type="VARCHAR(100)"/>
-            <column name="email" type="VARCHAR(250)"/>
-            <column name="password" type="VARCHAR(100)"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="0002" author="szymon">
-        <createTable tableName="word_set">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="user_id" type="BIGINT"/>
-            <column name="title" type="VARCHAR(250)"/>
-            <column name="description" type="VARCHAR(250)"/>
-        </createTable>
-
-        <addForeignKeyConstraint
-                baseTableName="word_set"
-                baseColumnNames="user_id"
-                constraintName="fk_word_set"
-                referencedTableName="users"
-                referencedColumnNames="id"/>
-    </changeSet>
-
-    <changeSet id="0003" author="szymon">
-        <createTable tableName="word">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="word_set_id" type="BIGINT"/>
-            <column name="word" type="VARCHAR(250)"/>
-            <column name="translation" type="VARCHAR(250)"/>
-        </createTable>
-
-        <addForeignKeyConstraint
-                baseTableName="word"
-                baseColumnNames="word_set_id"
-                constraintName="fk_word"
-                referencedTableName="word_set"
-                referencedColumnNames="id"/>
-
-    </changeSet>
-
-    <include file="testdata/testdata.sql" relativeToChangelogFile="true"/>
+<!--    Testowe dane -->
+    <include file="../testdata/0001_users_and_roles.sql" relativeToChangelogFile="true" context="dev"/>
+    <include file="../testdata/0002_word_set.sql" relativeToChangelogFile="true" context="dev"/>
+    <include file="../testdata/0003_word.sql" relativeToChangelogFile="true" context="dev"/>
 
 
 </databaseChangeLog>
