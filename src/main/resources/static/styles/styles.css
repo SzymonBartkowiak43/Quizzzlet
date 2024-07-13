@@ -1,0 +1,75 @@
+
+/*--FORMULARZ LOGOWANIA--*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    height: 100vh;
+}
+
+.main-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.list-heading {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #007BFF;
+}
+
+.mc-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.mc-form label {
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.mc-form input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.mc-form input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.mc-form button {
+    padding: 10px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mc-form button:hover {
+    background-color: #0056b3;
+}
+
+.mc-form-message {
+    color: #ff0000;
+    margin-bottom: 10px;
+}
+/*---------------------*/
