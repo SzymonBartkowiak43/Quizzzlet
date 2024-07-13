@@ -2,7 +2,7 @@
 package com.example.quizlecikprojekt;
 
 
-import com.example.quizlecikprojekt.user.Users;
+import com.example.quizlecikprojekt.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +18,6 @@ public class WordSet {
     private String description;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private User user;
 }
 
