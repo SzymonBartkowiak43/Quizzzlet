@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Zarejestruj się | MovieClub</title>
+    <link rel="stylesheet" href="../static/styles/styles.css" th:href="@{/styles/styles.css}">
 </head>
 <body>
-
+<main class="main-content" >
+    <h2 class="list-heading">Zarejestruj się</h2>
+    <form action="#" th:action="@{/rejestracja}" method="post" class="mc-form" th:object="${user}">
+        <label for="email">Adres email</label>
+        <input id="email" type="email" placeholder="nazwa użytkownika" th:field="*{email}">
+        <label for="password">Hasło</label>
+        <input id="password" placeholder="hasło" type="password" th:field="*{password}">
+        <button type="submit">Zarejestruj się</button>
+    </form>
+</main>
 </body>
 </html>

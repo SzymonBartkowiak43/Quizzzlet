@@ -72,4 +72,20 @@ body {
     color: #ff0000;
     margin-bottom: 10px;
 }
+.registration-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.registration-link a {
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.registration-link a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
 /*---------------------*/
