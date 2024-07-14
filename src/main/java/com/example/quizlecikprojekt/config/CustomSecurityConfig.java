@@ -1,10 +1,12 @@
 package com.example.quizlecikprojekt.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,9 +20,13 @@ public class CustomSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
+
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/").permitAll()
+                .requestMatchers(h2ConsoleRequestMatcher).permitAll()
                 .requestMatchers("/rejestracja").permitAll()
+                .requestMatchers("/zestawy").authenticated()
                 .requestMatchers("/log").hasAnyRole(USER_ROLE, ADMIN_ROLE))
         .formLogin(login -> login
                 .loginPage("/login")
@@ -30,13 +36,23 @@ public class CustomSecurityConfig {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout/**", HttpMethod.GET.name()))
                 .logoutSuccessUrl("/login?logout").permitAll()
         );
+
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(h2ConsoleRequestMatcher));
+        http.headers(
+                config -> config.frameOptions(
+                        HeadersConfigurer.FrameOptionsConfig::sameOrigin
+                )
+        );
+
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
-                "/styles/**"
+                "/styles/**",
+                "/img/**",
+                "static/img/**"
         );
     }
 

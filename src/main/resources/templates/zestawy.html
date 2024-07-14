@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoje Zestawy</title>
+    <link rel="stylesheet" href="../static/styles/wordsets.css" th:href="@{/styles/styles.css}">
+    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
+</head>
+<body>
+<div th:replace="header :: header"></div>
+<main class="main-content">
+    <h1>Twoje Zestawy</h1>
+    <div th:if="${#lists.isEmpty(wordSets)}" class="no-sets-message">
+        <p>Nie masz jeszcze żadnych zestawów.</p>
+    </div>
+    <div th:unless="${#lists.isEmpty(wordSets)}">
+        <ul>
+            <li th:each="wordSet : ${wordSets}">
+                <h2 th:text="${wordSet.title}">Tytuł zestawu</h2>
+                <p th:text="${wordSet.description}">Opis zestawu</p>
+            </li>
+        </ul>
+    </div>
+</main>
+</body>
+</html>

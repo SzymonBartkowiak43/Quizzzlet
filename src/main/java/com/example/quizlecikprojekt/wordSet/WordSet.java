@@ -1,5 +1,5 @@
 
-package com.example.quizlecikprojekt;
+package com.example.quizlecikprojekt.wordSet;
 
 
 import com.example.quizlecikprojekt.user.User;

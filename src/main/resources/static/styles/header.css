@@ -1,0 +1,107 @@
+/* Resetowanie domyślnych stylów */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.main-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007BFF;
+    padding: 10px 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    flex: 0 0 auto;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+}
+
+.main-nav {
+    flex: 1;
+    text-align: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.main-nav ul li {
+    margin: 0 15px;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+    color: #ffdd57;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+.user-actions .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+}
+
+.user-actions .profile span {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.user-actions .profile a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.user-actions .profile a:hover {
+    color: #ffdd57;
+}
+
+.user-actions .auth-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.user-actions .auth-links a:hover {
+    color: #ffdd57;
+}
+
+.main-content {
+    padding: 100px 20px 20px; /* Dodatkowa przestrzeń na górze, aby uwzględnić stały nagłówek */
+}
