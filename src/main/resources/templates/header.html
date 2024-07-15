@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +14,19 @@
     </div>
     <nav class="main-nav">
         <ul>
-            <li><a href="#" th:href="@{/zestawy}">Moje zestawy</a></li>
+            <li><a href="#" th:href="@{/wordSet}">My sets</a></li>
             <li><a href="#" th:href="@{/menu}">Menu</a></li>
-            <li><a href="#" th:href="@{/ustawienia}">Ustawienia</a></li>
+            <li><a href="#" th:href="@{/ustawienia}">Setings</a></li>
         </ul>
     </nav>
     <div class="user-actions">
-        <div class="profile" th:if="${#authentication.principal}">
+        <div class="profile" sec:authorize="isAuthenticated()">
             <span>Profil</span>
-            <a href="#" th:href="@{/logout}">Wyloguj</a>
+            <a href="#" th:href="@{/logout}">Logout</a>
         </div>
-        <div class="auth-links" th:if="${#authentication.principal == null}">
-            <a href="#" th:href="@{/login}">Zaloguj</a>
-            <a href="#" th:href="@{/rejestracja}">Zarejestruj</a>
+        <div class="auth-links" sec:authorize="!isAuthenticated()">
+            <a href="#" th:href="@{/login}">Login</a>
+            <a href="#" th:href="@{/rejestracja}">Register</a>
         </div>
     </div>
 </header>
