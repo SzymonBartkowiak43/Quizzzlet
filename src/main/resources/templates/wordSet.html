@@ -18,7 +18,7 @@
     <div th:unless="${#lists.isEmpty(wordSets)}">
         <ul>
             <li th:each="wordSet : ${wordSets}" class="word-set-item">
-                <a th:href="@{/wordSet/{id}/words(id=${wordSet.id})}" class="word-set-link">
+                <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="word-set-link">
                     <h2 th:text="${wordSet.title}">Tytuł zestawu</h2>
                     <p th:text="${wordSet.description}">Opis zestawu</p>
                 </a>

@@ -30,18 +30,24 @@ public class ZestawyController {
         return "wordSet";
     }
 
-    @GetMapping("/wordSet/{id}/words")
+    @GetMapping("/wordSet/{id}")
     public String showWords(@PathVariable Long id, Model model) {
         List<Word> words = wordSetService.getWordsByWordSetId(id);
         model.addAttribute("words", words);
-        return "words";
+        return "wordSetMenu";
     }
 
     @GetMapping("/wordSet/{id}/edit")
     public String editWordSet(@PathVariable Long id, Model model) {
-        Optional<WordSet> wordSet = wordSetService.getWordSetById(id);
+        Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
+
+        if (wordSetOptional.isEmpty()) {
+            return "redirect:/error";
+        }
+
+        WordSet wordSet = wordSetOptional.get();
         model.addAttribute("wordSet", wordSet);
-        return "editWordSet";
+        return "wordSetEdit";
     }
 
 }

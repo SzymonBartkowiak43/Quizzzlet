@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoje Zestawy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/wordsets.css" th:href="@{/styles/styles.css}">
+    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
+    <style>
+        .word-item { display: none; }
+        .word-item.visible { display: list-item; }
+        .show-more, .show-less { cursor: pointer; color: blue; text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div th:replace="header :: header"></div>
+<main class="main-content">
+    <h1>Słowa w Zestawie</h1>
+    <div th:if="${#lists.isEmpty(words)}" class="no-sets-message">
+        <p>Brak słów w tym zestawie.</p>
+    </div>
+    <div th:unless="${#lists.isEmpty(words)}">
+        <ul>
+            <li th:each="word, iterStat : ${words}" th:classappend="${iterStat.index < 5} ? 'visible' : ''" class="word-item">
+                <h2 th:text="${word.word}">Słowo</h2>
+                <p th:text="${word.translation}">Tłumaczenie</p>
+            </li>
+        </ul>
+        <p class="show-more" onclick="showMore()">Pokaż więcej słów</p>
+<!--        <li><a href="#" th:href="@{/wordSet/{id}/edit(id=${wordSet.id})}">Edytuj Zestaw</a></li>-->
+        <p class="show-less" style="display:none;" onclick="showLess()">Zwiń</p>
+
+    </div>
+</main>
+<script>
+    function showMore() {
+        var hiddenWords = document.querySelectorAll('.word-item:not(.visible)');
+        for (var i = 0; i < 5 && i < hiddenWords.length; i++) {
+            hiddenWords[i].classList.add('visible');
+        }
+        if (hiddenWords.length <= 5) {
+            document.querySelector('.show-more').style.display = 'none';
+        }
+        document.querySelector('.show-less').style.display = 'block';
+    }
+
+    function showLess() {
+        var words = document.querySelectorAll('.word-item');
+        words.forEach(function(word, index) {
+            if (index >= 5) {
+                word.classList.remove('visible');
+            }
+        });
+        document.querySelector('.show-more').style.display = 'block';
+        document.querySelector('.show-less').style.display = 'none';
+    }
+</script>
+</body>
+</html>
