@@ -26,9 +26,12 @@ public class CustomSecurityConfig {
                 .requestMatchers("/").permitAll()
                 .requestMatchers(h2ConsoleRequestMatcher).permitAll()
                 .requestMatchers("/rejestracja").permitAll()
+                .requestMatchers("/home").permitAll()
                 .requestMatchers("/wordSet/**").authenticated()
                 .requestMatchers("/wordSet").authenticated()
-                .requestMatchers("/words").authenticated())
+                .requestMatchers("/words").authenticated()
+                .anyRequest().authenticated()
+                )
         .formLogin(login -> login
                 .loginPage("/login")
                 .permitAll()
@@ -44,6 +47,7 @@ public class CustomSecurityConfig {
                         HeadersConfigurer.FrameOptionsConfig::sameOrigin
                 )
         );
+
 
         return http.build();
     }

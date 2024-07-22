@@ -10,7 +10,7 @@
 <body>
 <header class="main-header">
     <div class="logo-container">
-        <img src="../static/img/logo.jpg"  th:src="@{/img/logo.jpg}" alt="Logo" class="logo">
+        <img src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" alt="Logo" class="logo" th:href="@{/home}" style="cursor: pointer;" data-url="@{/home}">
     </div>
     <nav class="main-nav">
         <ul>
@@ -30,5 +30,14 @@
         </div>
     </div>
 </header>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var logo = document.getElementById('logo');
+        logo.addEventListener('click', function() {
+            var destinationUrl = logo.getAttribute('data-url');
+            window.location.href = destinationUrl;
+        });
+    });
+</script>
 </body>
 </html>

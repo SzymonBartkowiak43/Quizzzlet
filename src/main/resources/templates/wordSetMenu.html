@@ -10,6 +10,7 @@
         .word-item { display: none; }
         .word-item.visible { display: list-item; }
         .show-more, .show-less { cursor: pointer; color: blue; text-decoration: underline; }
+        .edit-button { cursor: pointer; color: blue; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -27,10 +28,10 @@
             </li>
         </ul>
         <p class="show-more" onclick="showMore()">Pokaż więcej słów</p>
-<!--        <li><a href="#" th:href="@{/wordSet/{id}/edit(id=${wordSet.id})}">Edytuj Zestaw</a></li>-->
         <p class="show-less" style="display:none;" onclick="showLess()">Zwiń</p>
-
     </div>
+    <p><a th:href="@{/wordSet/{id}/edit(id=${wordSet.id})}" class="edit-button">Edytuj Zestaw</a></p>
+
 </main>
 <script>
     function showMore() {

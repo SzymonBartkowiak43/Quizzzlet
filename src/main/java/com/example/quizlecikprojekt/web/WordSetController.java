@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class ZestawyController {
+public class WordSetController {
 
     private final WordSetService wordSetService;
 
 
-    public ZestawyController(WordSetService wordSetService) {
+    public WordSetController(WordSetService wordSetService) {
         this.wordSetService = wordSetService;
     }
 
@@ -33,6 +33,14 @@ public class ZestawyController {
     @GetMapping("/wordSet/{id}")
     public String showWords(@PathVariable Long id, Model model) {
         List<Word> words = wordSetService.getWordsByWordSetId(id);
+        Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
+
+        if (wordSetOptional.isEmpty()) {
+            return "redirect:/error";
+        }
+
+        WordSet wordSet = wordSetOptional.get();
+        model.addAttribute("wordSet", wordSet);
         model.addAttribute("words", words);
         return "wordSetMenu";
     }
@@ -48,6 +56,11 @@ public class ZestawyController {
         WordSet wordSet = wordSetOptional.get();
         model.addAttribute("wordSet", wordSet);
         return "wordSetEdit";
+    }
+
+    @GetMapping("/wordSet/{id}/learn")
+    public String learnWordSet(@PathVariable("id") Long id, Model model) {
+        return "wordSetLearn";
     }
 
 }

@@ -9,8 +9,4 @@ public class HomeController {
     public String home() {
         return "home";
     }
-    @GetMapping("/log")
-    public String log() {
-        return "zalogowany";
-    }
 }
