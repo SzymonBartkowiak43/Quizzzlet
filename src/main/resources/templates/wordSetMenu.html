@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/styles/wordsets.css" th:href="@{/styles/styles.css}">
     <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
+    <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
     <style>
         .word-item { display: none; }
         .word-item.visible { display: list-item; }
@@ -30,7 +31,9 @@
         <p class="show-more" onclick="showMore()">Pokaż więcej słów</p>
         <p class="show-less" style="display:none;" onclick="showLess()">Zwiń</p>
     </div>
-    <p><a th:href="@{/wordSet/{id}/edit(id=${wordSet.id})}" class="edit-button">Edytuj Zestaw</a></p>
+    <div>
+        <p><a th:href="@{/wordSet/{id}/edit(id=${wordSet.id})}" class="edit-button">Edytuj Zestaw</a></p>
+    </div>
 
 </main>
 <script>

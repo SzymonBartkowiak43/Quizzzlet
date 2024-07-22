@@ -1,0 +1,55 @@
+.edit-button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding around the text */
+    text-decoration: none; /* Remove underline from links */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Bold font */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    margin-top: 20px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3; /* Darker blue background on hover */
+    color: #ffffff; /* Keep text white on hover */
+}
+
+/*Header*/
+.save-changes-button {
+    background-color: #007bff; /* Green background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding around the text */
+    text-decoration: none; /* Remove underline from links */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Bold font */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    margin-top: 20px; /* Spacing from other elements */
+    margin-right: 40px;
+}
+
+.save-changes-button:hover {
+    background-color: #0056b3; /* Darker green background on hover */
+    color: #ffffff; /* Keep text white on hover */
+}
+
+.back-to-set-link {
+    color: #007bff; /* Blue color */
+    margin-top: 20px; /* Top margin */
+    margin-right: 20px; /* Right margin */
+    margin-left: 40px;
+    text-decoration: underline; /* Underline text */
+    display: inline-block; /* Display inline */
+}
+.back-to-set-link:hover {
+    color: #0056b3; /* Darker blue color on hover */
+}
+
+.save-changes-button {
+    display: inline-block; /* Ensure button is displayed inline with the link */
+}
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/*header*/

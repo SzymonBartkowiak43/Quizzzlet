@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
 </head>
+<header>
+    <div class="buttons-container">
+        <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="back-to-set-button back-to-set-link"> &lt; Back to set</a>
+        <form th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
+            <button type="submit" class="save-changes-button">Save Changes</button>
+        </form>
+    </div>
+</header>
 <body>
-    <h1>Edytuj:::::</h1>
+    <h1>Edit Word Set</h1>
+    <form th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="*{title}"/>
+        <label for="description">Description:</label>
+        <input type="text" id="description" th:field="*{description}"/>
+    </form>
+<!--    <h2>Words in the set</h2>-->
+<!--    <form th:action="@{/wordSet/{id}/addWord(id=${wordSet.id})}" th:object="${words}" method="post">-->
+<!--        <label for="word">Word:</label>-->
+<!--        <input type="text" id="word" th:field="*{word}"/>-->
+<!--        <label for="translation">Translation:</label>-->
+<!--        <input type="text" id="translation" th:field="*{translation}"/>-->
+<!--        <button type="submit" class="add-word-button">Add Word</button>-->
+<!--    </form>-->
+<!--    <ul>-->
+<!--        <li th:each="word, iterStat : ${words}">-->
+<!--            <form th:action="@{/wordSet/{id}/deleteWord(id=${wordSet.id})}" th:object="${word}" method="post">-->
+<!--                <input type="hidden" th:field="*{id}" th:value="${word.id}"/>-->
+<!--                <span th:text="${word.word}">Word</span>-->
+<!--                <span th:text="${word.translation}">Translation</span>-->
+<!--            </form>-->
+<!--        </li>-->
+<!--    </ul>-->
 </body>
 </html>

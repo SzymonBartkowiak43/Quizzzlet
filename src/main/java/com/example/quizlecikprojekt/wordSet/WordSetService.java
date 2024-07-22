@@ -6,6 +6,7 @@ import com.example.quizlecikprojekt.user.UserRepository;
 import com.example.quizlecikprojekt.word.Word;
 import com.example.quizlecikprojekt.word.WordRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,17 @@ public class WordSetService {
 
     public Optional<WordSet> getWordSetById(Long wordSetId) {
         return wordSetRepository.findById(wordSetId);
+    }
+
+    @Transactional
+    public void saveWordSet(WordSet wordSet) {
+        wordSetRepository.save(wordSet);
+    }
+
+    @Transactional
+    public void deleteWordById(Long wordSetId) {
+        Optional<WordSet> wordSet = wordSetRepository.findById(wordSetId);
+        wordSetRepository.deleteById(wordSetId);
     }
 
 

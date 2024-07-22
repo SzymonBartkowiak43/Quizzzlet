@@ -6,8 +6,7 @@ import com.example.quizlecikprojekt.wordSet.WordSetService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,19 +47,41 @@ public class WordSetController {
     @GetMapping("/wordSet/{id}/edit")
     public String editWordSet(@PathVariable Long id, Model model) {
         Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
+        List<Word> words = wordSetService.getWordsByWordSetId(id);
 
         if (wordSetOptional.isEmpty()) {
             return "redirect:/error";
         }
 
         WordSet wordSet = wordSetOptional.get();
+
         model.addAttribute("wordSet", wordSet);
+        model.addAttribute("words", words);
         return "wordSetEdit";
     }
 
     @GetMapping("/wordSet/{id}/learn")
     public String learnWordSet(@PathVariable("id") Long id, Model model) {
         return "wordSetLearn";
+    }
+
+    @PostMapping("/wordSet/{id}/update")
+    public String updateWordSet(@PathVariable Long id, @ModelAttribute WordSet wordSet, Model model) {
+        Optional<WordSet> existingWordSet = wordSetService.getWordSetById(id);
+        if (existingWordSet.isEmpty()) {
+            return "redirect:/error";
+        }
+
+        wordSet.setId(id);
+        wordSetService.saveWordSet(wordSet);
+
+        return "redirect:/wordSet";
+    }
+
+    @PostMapping("/wordSet/{wordSetId}/deleteWord")
+    public String deleteWord(@PathVariable Long wordSetId, @RequestParam("id") Long wordId) {
+        wordSetService.deleteWordById(wordId);
+        return "redirect:/wordSet/" + wordSetId;
     }
 
 }
