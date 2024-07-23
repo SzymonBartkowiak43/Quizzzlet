@@ -1,4 +1,5 @@
-MySetsZrob poprawnie
+MySetsEdi poprawnie
+zrob zeby dalo sie edytowac slowka
 zrob zeby dalo sie uczyc slowek
 dodawaj slowka do listy
 przkierowywanie z loga

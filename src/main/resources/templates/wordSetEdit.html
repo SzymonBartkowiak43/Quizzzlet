@@ -6,23 +6,20 @@
     <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
     <link rel="stylesheet" href="../static/styles/frame-style.css" th:href="@{/styles/frame-style.css}">
 </head>
-<header>
-    <div class="buttons-container">
-        <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="back-to-set-button back-to-set-link"> &lt; Back to set</a>
-        <form th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
-            <button type="submit" class="save-changes-button">Save Changes</button>
-        </form>
-    </div>
-</header>
 <body>
-    <form th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
+    <header>
+        <div class="buttons-container">
+            <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="back-to-set-button back-to-set-link"> &lt; Back to set</a>
+            <button form="wordSetForm" type="submit" class="save-changes-button">Save Changes</button>
+        </div>
+    </header>
+    <form id="wordSetForm" th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
         <label for="name">Name:</label>
-        <input type="text" id="name" th:field="*{title}" class="input-large" placeholder="Set a tittle.."/>
+        <input type="text" id="name" th:field="*{title}" class="input-large" placeholder="Set a title.."/>
         <label for="description">Description:</label>
         <textarea id="description" th:field="*{description}" class="input-large" placeholder="Add a description.."></textarea>
-    </form>
-    <h2>Words in the set</h2>
-    <form th:action="@{/wordSet/{id}/updateWords(id=${wordSet.id})}" method="post">
+
+        <h2>Words in the set</h2>
         <ul>
             <li th:each="word, iterStat : ${words}">
                 <label th:for="${'word-' + iterStat.index}">Word:</label>
@@ -32,7 +29,5 @@
             </li>
         </ul>
     </form>
-
-
 </body>
 </html>

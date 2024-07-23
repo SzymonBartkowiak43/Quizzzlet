@@ -67,40 +67,32 @@ public class WordSetController {
     }
 
     @PostMapping("/wordSet/{id}/update")
-    public String updateWordSet(@PathVariable Long id, @ModelAttribute WordSet wordSet, Model model) {
-        Optional<WordSet> existingWordSet = wordSetService.getWordSetById(id);
-        List<Word> words = wordSetService.getWordsByWordSetId(id);
-        if (existingWordSet.isEmpty()) {
-            return "redirect:/error";
-        }
-
-        wordSet.setId(id);
-        wordSetService.saveWordSet(wordSet);
-        model.addAttribute("words", words);
-
-        return "redirect:/wordSet";
-    }
-
-    @PostMapping("/wordSet/{id}/updateWords")
-    public String updateWords(@PathVariable Long id, @ModelAttribute WordSet wordSet, BindingResult result, Model model) {
+    public String updateWordSet(@PathVariable Long id, @ModelAttribute WordSet wordSetForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "redirect:/error";
         }
 
-        Optional<WordSet> existingWordSet = wordSetService.getWordSetById(id);
-        if (existingWordSet.isEmpty()) {
+        Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
+        if (wordSetOptional.isEmpty()) {
             return "redirect:/error";
         }
 
+        WordSet wordSet = wordSetOptional.get();
+        wordSet.setTitle(wordSetForm.getTitle());
+        wordSet.setDescription(wordSetForm.getDescription());
+
+        // Update words by ID
+        List<Word> listOfWord = wordSetService.getWordsByWordSetId(wordSet.getId());
+        for (Word word : listOfWord) {
+            word.setWord(word.getWord());
+            word.setTranslation(word.getTranslation());
+        }
 
 
-        return "redirect:/wordSet/" + id;
+        wordSetService.saveWordSet(wordSet);
+
+        return "redirect:/wordSet/" + id + "/edit";
     }
 
-    @PostMapping("/wordSet/{wordSetId}/deleteWord")
-    public String deleteWord(@PathVariable Long wordSetId, @RequestParam("id") Long wordId) {
-        wordSetService.deleteWordById(wordId);
-        return "redirect:/wordSet/" + wordSetId;
-    }
 
 }
