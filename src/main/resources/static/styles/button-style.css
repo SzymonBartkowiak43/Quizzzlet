@@ -15,6 +15,11 @@
 }
 
 /*Header*/
+header {
+    background-color: #EDEDED;
+    margin-bottom: 20px; /* Add space between header and body */
+}
+
 .save-changes-button {
     background-color: #007bff; /* Green background */
     color: white; /* White text */

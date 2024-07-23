@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface WordSetRepository extends CrudRepository<WordSet, Long> {
     List<WordSet> findByUser(Optional<User> user);
+
 }
