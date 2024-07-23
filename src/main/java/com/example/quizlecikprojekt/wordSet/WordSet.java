@@ -3,9 +3,12 @@ package com.example.quizlecikprojekt.wordSet;
 
 
 import com.example.quizlecikprojekt.user.User;
+import com.example.quizlecikprojekt.word.Word;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
@@ -20,6 +23,8 @@ public class WordSet {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Word> words;
 
 
 }

@@ -58,3 +58,21 @@ header {
     align-items: center;
 }
 /*header*/
+
+.add-word-button {
+    background-color: white; /* White background */
+    height: 100px;
+    width: 100%;
+    color: black; /* Black text color */
+    padding: 10px 20px; /* Padding around the text */
+    font-size: 20px; /* Larger font size */
+    border: 2px solid black; /* Black border */
+    cursor: pointer; /* Cursor changes to pointer on hover */
+    display: block; /* Ensure the button is a block element to fill width */
+    margin: 20px auto; /* Margin top for spacing and auto to center horizontally */
+    border-radius: 5px; /* Slightly rounded corners */
+}
+
+.add-word-button:hover {
+    color: #007bff;
+}

@@ -19,4 +19,7 @@ public class Word {
     @ManyToOne
     @JoinColumn(name = "word_set_id", nullable = false)
     private WordSet wordSet;
+
+
+
 }

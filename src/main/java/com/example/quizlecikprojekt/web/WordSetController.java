@@ -1,6 +1,7 @@
 package com.example.quizlecikprojekt.web;
 
 import com.example.quizlecikprojekt.word.Word;
+import com.example.quizlecikprojekt.word.WordRepository;
 import com.example.quizlecikprojekt.wordSet.WordSet;
 import com.example.quizlecikprojekt.wordSet.WordSetService;
 import org.springframework.security.core.Authentication;
@@ -16,10 +17,12 @@ import java.util.Optional;
 public class WordSetController {
 
     private final WordSetService wordSetService;
+    private final WordRepository wordRepository;
 
 
-    public WordSetController(WordSetService wordSetService) {
+    public WordSetController(WordSetService wordSetService, WordRepository wordRepository) {
         this.wordSetService = wordSetService;
+        this.wordRepository = wordRepository;
     }
 
     @GetMapping("/wordSet")
@@ -81,13 +84,21 @@ public class WordSetController {
         wordSet.setTitle(wordSetForm.getTitle());
         wordSet.setDescription(wordSetForm.getDescription());
 
-        // Update words by ID
-        List<Word> listOfWord = wordSetService.getWordsByWordSetId(wordSet.getId());
-        for (Word word : listOfWord) {
-            word.setWord(word.getWord());
-            word.setTranslation(word.getTranslation());
+        //update word from form
+        for (Word formWord : wordSetForm.getWords()) {
+            if (formWord.getId() == null) { // New word
+                formWord.setWordSet(wordSet);
+                wordSet.getWords().add(formWord);
+            } else { // Existing word, update logic as before
+                for (Word word : wordSet.getWords()) {
+                    if (word.getId().equals(formWord.getId())) {
+                        word.setWord(formWord.getWord());
+                        word.setTranslation(formWord.getTranslation());
+                        break;
+                    }
+                }
+            }
         }
-
 
         wordSetService.saveWordSet(wordSet);
 

@@ -29,5 +29,41 @@
             </li>
         </ul>
     </form>
+    <button type="button"  onclick="addNewWord()" class="add-word-button">+ ADD CART</button>
+
+    <script>
+        function addNewWord() {
+            const list = document.querySelector('ul');
+            const index = list.children.length;
+
+            const li = document.createElement('li');
+
+            const wordLabel = document.createElement('label');
+            wordLabel.setAttribute('for', `word-${index}`);
+            wordLabel.textContent = 'Word:';
+            li.appendChild(wordLabel);
+
+            const wordInput = document.createElement('input');
+            wordInput.setAttribute('type', 'text');
+            wordInput.setAttribute('id', `word-${index}`);
+            wordInput.setAttribute('name', `words[${index}].word`);
+            wordInput.classList.add('input-large');
+            li.appendChild(wordInput);
+
+            const translationLabel = document.createElement('label');
+            translationLabel.setAttribute('for', `translation-${index}`);
+            translationLabel.textContent = 'Translation:';
+            li.appendChild(translationLabel);
+
+            const translationInput = document.createElement('input');
+            translationInput.setAttribute('type', 'text');
+            translationInput.setAttribute('id', `translation-${index}`);
+            translationInput.setAttribute('name', `words[${index}].translation`);
+            translationInput.classList.add('input-large');
+            li.appendChild(translationInput);
+
+            list.appendChild(li);
+        }
+    </script>
 </body>
 </html>

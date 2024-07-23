@@ -1,7 +1,6 @@
 package com.example.quizlecikprojekt.wordSet;
 
 import com.example.quizlecikprojekt.user.User;
-import com.example.quizlecikprojekt.word.Word;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
