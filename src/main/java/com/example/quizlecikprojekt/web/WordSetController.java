@@ -84,23 +84,29 @@ public class WordSetController {
         wordSet.setTitle(wordSetForm.getTitle());
         wordSet.setDescription(wordSetForm.getDescription());
 
-        //update word from form
+        // Clear existing words to prevent duplication
+        wordSet.getWords().clear();
+
+        // Re-add updated words from form
         for (Word formWord : wordSetForm.getWords()) {
-            if (formWord.getId() == null) { // New word
-                formWord.setWordSet(wordSet);
-                wordSet.getWords().add(formWord);
-            } else { // Existing word, update logic as before
-                for (Word word : wordSet.getWords()) {
-                    if (word.getId().equals(formWord.getId())) {
-                        word.setWord(formWord.getWord());
-                        word.setTranslation(formWord.getTranslation());
-                        break;
-                    }
-                }
-            }
+            formWord.setWordSet(wordSet); // Set the wordSet for each word
+            wordSet.getWords().add(formWord);
         }
 
         wordSetService.saveWordSet(wordSet);
+
+        return "redirect:/wordSet/" + id + "/edit";
+    }
+
+    @GetMapping("/wordSet/{id}/deleteWord/{wordId}")
+    public String deleteWordFromWordSet(@PathVariable Long id, @PathVariable Long wordId) {
+
+        Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
+        if (wordSetOptional.isEmpty()) {
+            return "redirect:/error";
+        }
+
+        wordRepository.deleteById(wordId);
 
         return "redirect:/wordSet/" + id + "/edit";
     }
