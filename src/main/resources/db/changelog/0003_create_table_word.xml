@@ -13,6 +13,8 @@
         <column name="word_set_id" type="BIGINT"/>
         <column name="word" type="VARCHAR(250)"/>
         <column name="translation" type="VARCHAR(250)"/>
+        <column name="points" type="INT"/>
+        <column name="star" type="BOOLEAN"/>
     </createTable>
 
     <addForeignKeyConstraint

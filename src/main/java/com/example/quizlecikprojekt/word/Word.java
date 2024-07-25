@@ -15,6 +15,8 @@ public class Word {
     private Long id;
     private String word;
     private String translation;
+    private Integer points;
+    private boolean star;
 
     @ManyToOne
     @JoinColumn(name = "word_set_id", nullable = false)
