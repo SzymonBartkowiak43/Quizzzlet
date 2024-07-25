@@ -9,4 +9,6 @@ VALUES
     ('orzeł','eagle' , 1),
     ('lama','lama' , 1),
     ('małpa','monkey' , 1),
-    ('pies', 'dog', 1);
+    ('pies', 'dog', 1),
+    ('koszula', 'shirt', 2),
+    ('czapka', 'hat', 2);

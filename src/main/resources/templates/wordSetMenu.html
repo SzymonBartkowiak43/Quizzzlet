@@ -17,7 +17,7 @@
 <body>
 <div th:replace="header :: header"></div>
 <main class="main-content">
-    <h1>Słowa w Zestawie</h1>
+    <h1 th:text="wordSet.name">Słowa w Zestawie</h1>
     <div th:if="${#lists.isEmpty(words)}" class="no-sets-message">
         <p>Brak słów w tym zestawie.</p>
     </div>
@@ -33,6 +33,7 @@
     </div>
     <div>
         <p><a th:href="@{/wordSet/{id}/edit(id=${wordSet.id})}" class="edit-button">Edytuj Zestaw</a></p>
+        <a th:href="@{/wordSet/{id}/test(id=${wordSet.id})}" class="edit-button">Test</a>}
     </div>
 
 </main>
