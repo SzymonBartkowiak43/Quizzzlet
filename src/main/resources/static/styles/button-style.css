@@ -76,3 +76,30 @@ header {
 .add-word-button:hover {
     color: #007bff;
 }
+
+.submit-test-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.submit-test-button:hover {
+    background-color: #007bff;
+}
+
+.back-button {
+    display: inline-block; /* Allows for margin and padding adjustments */
+    padding: 8px 12px; /* Padding around the text for better visibility */
+    background-color: #007bff; /* Primary button color */
+    color: white; /* Text color */
+    text-decoration: none; /* Removes underline from link */
+    border-radius: 5px; /* Rounded corners for a modern look */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker shade on hover for visual feedback */
+    color: #ffffff; /* Ensures text color remains white on hover */
+}

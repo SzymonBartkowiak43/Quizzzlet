@@ -1,50 +1,31 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Twoje Zestawy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/wordsets.css" th:href="@{/styles/styles.css}">
+    <link rel="stylesheet" href="../static/styles/wordsets.css" th:href="@{/styles/wordsets.css}">
     <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
 </head>
-<body>
+<header>
 <div th:replace="header :: header"></div>
+</header>
+<body>
 <main class="main-content">
     <h1>Twoje Zestawy</h1>
     <div th:if="${#lists.isEmpty(wordSets)}" class="no-sets-message">
         <p>Nie masz jeszcze żadnych zestawów.</p>
     </div>
     <div th:unless="${#lists.isEmpty(wordSets)}">
-        <ul>
-            <li th:each="wordSet : ${wordSets}" class="word-set-item">
+        <div class="word-sets-container">
+            <div th:each="wordSet : ${wordSets}" class="word-set-card">
                 <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="word-set-link">
-                    <h2 th:text="${wordSet.title}">Tytuł zestawu</h2>
-                    <p th:text="${wordSet.description}">Opis zestawu</p>
+                    <h2 th:text="${wordSet.title}" class="word-set-title">Tytuł zestawu</h2>
+                    <p th:text="${wordSet.description}" class="word-set-description">Opis zestawu</p>
                 </a>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
 </main>
-<script>
-    function toggleMenu(element) {
-        var menu = element.nextElementSibling;
-        if (menu.style.display === "block") {
-            menu.style.display = "none";
-        } else {
-            menu.style.display = "block";
-        }
-    }
-
-    document.addEventListener('click', function(event) {
-        var isClickInside = event.target.closest('.word-set-item');
-        if (!isClickInside) {
-            var menus = document.querySelectorAll('.word-set-menu');
-            menus.forEach(function(menu) {
-                menu.style.display = 'none';
-            });
-        }
-    });
-</script>
 </body>
 </html>

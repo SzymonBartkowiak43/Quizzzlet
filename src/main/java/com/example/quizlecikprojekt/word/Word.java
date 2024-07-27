@@ -22,6 +22,18 @@ public class Word {
     @JoinColumn(name = "word_set_id", nullable = false)
     private WordSet wordSet;
 
+    public void addPoint() {
+        if(points < 2) {
+            points++;
+        }
+    }
+
+    public void subtractPoint() {
+        if(points > 0) {
+            points--;
+        }
+    }
+
 
 
 }

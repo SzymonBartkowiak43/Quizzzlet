@@ -18,4 +18,8 @@ public class WordService {
     public void deleteWordById(Long wordId) {
         wordRepository.deleteById(wordId);
     }
+
+    public Word getWordById(Long wordId) {
+        return wordRepository.findById(wordId).orElse(null);
+    }
 }

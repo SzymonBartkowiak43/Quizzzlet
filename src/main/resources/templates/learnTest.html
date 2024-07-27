@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Learning Test</title>
-    <link rel="stylesheet" href="../static/styles/frame-style.css" th:href="@{/styles/frame-style.css}">
+    <link rel="stylesheet" href="../static/styles/learn.css" th:href="@{/styles/learn.css}">
     <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
+    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
 </head>
 <body>
-    <header>
-        <h1>Learning Test</h1>
-    </header>
+    <div th:replace="header :: header"></div>
+    <div class="navigation-bar">
+        <a th:href="@{/wordSet/{id}(id=${wordSetId})}" class="back-button">Back to Word Sets</a>
+    </div>
     <form th:action="@{/wordSet/{id}/submitTest(id=${wordSetId})}" method="post">
         <ol>
             <li th:each="word : ${words}">
