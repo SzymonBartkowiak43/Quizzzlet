@@ -18,8 +18,12 @@ public class LearnController {
 
     private final WordSetService wordSetService;
     private final WordService wordService;
+
     private int nextWordIndex = 0;
     private List<Word> words;
+    private int score = 0;
+    private List<Word> uncorrectedWords = new ArrayList<>();
+    private List<Word> correctedWords = new ArrayList<>();
 
     public LearnController(WordSetService wordSetService, WordService wordService) {
         this.wordSetService = wordSetService;
@@ -31,22 +35,19 @@ public class LearnController {
     public String leranFlashCards(@PathVariable long id, Model model) {
         if(nextWordIndex == 0) {
             words = wordSetService.getWordsByWordSetId(id);
+            Collections.shuffle(words);
         }
 
-        if(words.size() < 4) {
-            model.addAttribute("error", "Word set must have at least 4 words to start learning");
-            return "error";
+        if(nextWordIndex >= words.size()) {
+            words.clear();
+            nextWordIndex = 0;
+            model.addAttribute("score", score);
+            model.addAttribute("uncorrectedWords", uncorrectedWords);
+            return "flashCardsResult";
         } else {
-            Collections.shuffle(words);
             model.addAttribute("wordSetId", id);
             model.addAttribute("words", words);
             model.addAttribute("nextWordIndex", nextWordIndex);
-            System.out.println(nextWordIndex);
-            if(nextWordIndex >= words.size()) {
-                words.clear();
-                nextWordIndex = 0;
-                return "flashCardsResult";
-            }
             return "learnFlashCards";
         }
     }
@@ -54,6 +55,8 @@ public class LearnController {
     @PostMapping("/wordSet/{id}/flashCards/like")
     public String likeWord(@PathVariable long id, long wordId, Model model) {
         wordService.getWordById(wordId).addPoint();
+        correctedWords.add(wordService.getWordById(wordId));
+        score++;
         nextWordIndex++;
         return "redirect:/wordSet/" + id + "/flashCards";
     }
@@ -61,6 +64,7 @@ public class LearnController {
     @PostMapping("/wordSet/{id}/flashCards/dislike")
     public String dislikeWord(@PathVariable long id, long wordId, Model model) {
         wordService.getWordById(wordId).subtractPoint();
+        uncorrectedWords.add(wordService.getWordById(wordId));
         nextWordIndex++;
         return "redirect:/wordSet/" + id + "/flashCards";
     }
