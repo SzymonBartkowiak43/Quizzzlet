@@ -15,6 +15,7 @@
         <column name="translation" type="VARCHAR(250)"/>
         <column name="points" type="INT"/>
         <column name="star" type="BOOLEAN"/>
+        <column name="last_practiced" type="DATE"/>
     </createTable>
 
     <addForeignKeyConstraint

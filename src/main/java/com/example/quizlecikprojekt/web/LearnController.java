@@ -1,7 +1,6 @@
 package com.example.quizlecikprojekt.web;
 
 import com.example.quizlecikprojekt.word.Word;
-import com.example.quizlecikprojekt.word.WordRepository;
 import com.example.quizlecikprojekt.word.WordService;
 import com.example.quizlecikprojekt.wordSet.WordSetService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,8 +21,7 @@ public class LearnController {
     private int nextWordIndex = 0;
     private List<Word> words;
     private int score = 0;
-    private List<Word> uncorrectedWords = new ArrayList<>();
-    private List<Word> correctedWords = new ArrayList<>();
+    private final List<Word> uncorrectedWords = new ArrayList<>();
 
     public LearnController(WordSetService wordSetService, WordService wordService) {
         this.wordSetService = wordSetService;
@@ -55,7 +53,6 @@ public class LearnController {
     @PostMapping("/wordSet/{id}/flashCards/like")
     public String likeWord(@PathVariable long id, long wordId, Model model) {
         wordService.getWordById(wordId).addPoint();
-        correctedWords.add(wordService.getWordById(wordId));
         score++;
         nextWordIndex++;
         return "redirect:/wordSet/" + id + "/flashCards";
