@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
 </head>
 <body>
-<div th:replace="header :: header"></div>
+<header>
+    <div th:replace="header :: header"></div>
+</header>
 <main class="main-div">
     <div th:if="${isLoggedIn}">
-        <h2>Words to Repeat</h2>
+        <h2>Find correct Words</h2>
         <div class="flashcard-container">
-            <div th:each="word, iterStat : ${wordsToRepeat}" th:if="${iterStat.index < 8}" class="flashcard" th:data-id="${word.id}">
+            <div th:each="word, iterStat : ${wordsToRepeat}" th:if="${iterStat.index < 8}" class="flashcard" th:data-id="${word}">
                 <div class="flashcard-front">
                     <p class="flashcard-word" th:text="${word.word}">Word</p>
                 </div>
@@ -35,20 +37,44 @@
         const flashcards = document.querySelectorAll('.flashcard');
         flashcards.forEach(flashcard => {
             flashcard.addEventListener('click', function() {
+                const word = flashcard.querySelector('.flashcard-word').textContent;
+                const translation = flashcard.querySelector('.flashcard-translation').textContent;
+                checkAnswer(word, translation);
                 reloadFlashcard(flashcard);
+                flashcard.classList.add('flashcard-pulsing');
+                setTimeout(() => {
+                    flashcard.classList.remove('flashcard-pulsing');
+                }, 1500);
             });
         });
     });
 
+    function checkAnswer(word, translation) {
+        fetch(`/checkAnswer/${word}/${translation}`)
+            .then(response => response.json())
+            .then(correctWordOnView => {
+                if (correctWordOnView === 8) {
+                    showPopup('Now all words are correct. Restarting...');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 5000);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
     function reloadFlashcard(flashcard) {
-        const wordId = flashcard.getAttribute('data-id');
-        fetch(`/reloadFlashcard/${wordId}`)
+        fetch(`/reloadFlashcard`)
             .then(response => response.json())
             .then(data => {
                 flashcard.querySelector('.flashcard-word').textContent = data.word;
                 flashcard.querySelector('.flashcard-translation').textContent = data.translation;
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function showPopup(message) {
+        alert(message);
     }
 </script>
 </body>

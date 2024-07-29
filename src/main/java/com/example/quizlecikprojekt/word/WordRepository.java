@@ -18,5 +18,5 @@ public interface WordRepository extends CrudRepository<Word, Long> {
 //            "GROUP BY w.id " +
 //            "HAVING COUNT(w.id) <= 5")
     @Query("SELECT w FROM Word w WHERE w.points = 0")
-    List<Word> findWordsIdToRepeat();
+    List<Word> findWordsToRepeat();
 }

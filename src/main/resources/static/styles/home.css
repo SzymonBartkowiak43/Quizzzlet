@@ -68,3 +68,23 @@ h2 {
 .flashcard-clicked {
     background-color: #ffeb3b; /* Example color */
 }
+
+/* Add this to your existing CSS file (e.g., home.css) */
+
+/* Define the green pulsing animation */
+@keyframes greenPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 20px 20px rgba(0, 255, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+    }
+}
+
+/* Class to apply the green pulsing animation */
+.flashcard-pulsing {
+    animation: greenPulse 1.5s infinite;
+}
