@@ -9,7 +9,7 @@
 </head>
 <body>
 <header>
-    <div th:replace="header :: header"></div>
+    <div th:replace="~{header :: header}"></div>
 </header>
 <main class="main-div">
     <div th:if="${isLoggedIn}">
@@ -32,50 +32,16 @@
         <p>Please log in to see the words to repeat.</p>
     </div>
 </main>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const flashcards = document.querySelectorAll('.flashcard');
-        flashcards.forEach(flashcard => {
-            flashcard.addEventListener('click', function() {
-                const word = flashcard.querySelector('.flashcard-word').textContent;
-                const translation = flashcard.querySelector('.flashcard-translation').textContent;
-                checkAnswer(word, translation);
-                reloadFlashcard(flashcard);
-                flashcard.classList.add('flashcard-pulsing');
-                setTimeout(() => {
-                    flashcard.classList.remove('flashcard-pulsing');
-                }, 1500);
-            });
-        });
-    });
 
-    function checkAnswer(word, translation) {
-        fetch(`/checkAnswer/${word}/${translation}`)
-            .then(response => response.json())
-            .then(correctWordOnView => {
-                if (correctWordOnView === 8) {
-                    showPopup('Now all words are correct. Restarting...');
-                    setTimeout(() => {
-                        location.reload();
-                    }, 5000);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
+<!-- Modal Popup -->
+<div id="popupModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="popupMessage"></p>
+    </div>
+</div>
 
-    function reloadFlashcard(flashcard) {
-        fetch(`/reloadFlashcard`)
-            .then(response => response.json())
-            .then(data => {
-                flashcard.querySelector('.flashcard-word').textContent = data.word;
-                flashcard.querySelector('.flashcard-translation').textContent = data.translation;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    function showPopup(message) {
-        alert(message);
-    }
-</script>
+<script src="../static/scripts/confetti.js" th:src="@{/scripts/confetti.js}"></script>
+<script src="../static/scripts/home.js" th:src="@{/scripts/home.js}"></script>
 </body>
 </html>
