@@ -8,7 +8,6 @@ import java.util.List;
 @Service
 public class WordService {
     private final WordRepository wordRepository;
-    private final int MAX_REPEAT = 10;
 
     public WordService(WordRepository wordRepository) {
         this.wordRepository = wordRepository;
@@ -27,6 +26,6 @@ public class WordService {
     }
 
     public List<Word> getWordsToRepeat() {
-        return wordRepository.findWordsToRepeat(MAX_REPEAT);
+        return wordRepository.findWordsIdToRepeat();
     }
 }

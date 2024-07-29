@@ -33,6 +33,7 @@ public class LearnController {
     public String leranFlashCards(@PathVariable long id, Model model) {
         if(nextWordIndex == 0) {
             words = wordSetService.getWordsByWordSetId(id);
+            score = 0;
             Collections.shuffle(words);
         }
 

@@ -57,7 +57,8 @@ public class CustomSecurityConfig {
         return web -> web.ignoring().requestMatchers(
                 "/styles/**",
                 "/img/**",
-                "static/img/**"
+                "static/img/**",
+                "/scripts/**"
         );
     }
 
