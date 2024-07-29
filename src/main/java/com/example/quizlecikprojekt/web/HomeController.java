@@ -7,7 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +38,12 @@ public class HomeController {
         return "home";
     }
 
-
+    @GetMapping("/reloadFlashcard/{id}")
+    @ResponseBody
+    public Word reloadFlashcard(@PathVariable Long id) {
+        List<Word> wordsToRepeat = wordService.getWordsToRepeat();
+        Collections.shuffle(wordsToRepeat);
+        return wordsToRepeat.stream().filter(w -> !w.getId().equals(id)).findFirst().orElse(null);
+    }
 
 }

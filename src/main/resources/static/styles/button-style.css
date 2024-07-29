@@ -103,3 +103,33 @@ header {
     background-color: #0056b3; /* Darker shade on hover for visual feedback */
     color: #ffffff; /* Ensures text color remains white on hover */
 }
+
+.reload-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Optional: Add some margin to the top */
+}
+
+.reload-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.reload-button:hover {
+    background-color: #0056b3;
+}
+
+.reload-button:active {
+    background-color: #004494;
+}
