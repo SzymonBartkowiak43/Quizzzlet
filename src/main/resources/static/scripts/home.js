@@ -4,12 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
         flashcard.addEventListener('click', function() {
             const word = flashcard.querySelector('.flashcard-word').textContent;
             const translation = flashcard.querySelector('.flashcard-translation').textContent;
-            checkAnswer(word, translation);
+            checkAnswer(word, translation, flashcard);
             reloadFlashcard(flashcard);
-            flashcard.classList.add('flashcard-pulsing');
-            setTimeout(() => {
-                flashcard.classList.remove('flashcard-pulsing');
-            }, 1500);
         });
     });
 
@@ -32,18 +28,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function checkAnswer(word, translation) {
+let lastPoint = 0;
+
+function checkAnswer(word, translation, flashcard) {
     fetch(`/checkAnswer/${word}/${translation}`)
         .then(response => response.json())
         .then(correctWordOnView => {
+
             if (correctWordOnView === 8) {
-                showPopup('Congratulations! You are doing a great job. Now all flashcards are correct. Restarting...');
+                showPopup("Congratulations! You're doing great! Now all flashcards are correct. Restarting...");
                 setTimeout(() => {
                     location.reload();
-                }, 3000);
-                const start = () => {
-                   confetti.start();
-                };
+                }, 5000);
+                confetti.start();
+            } else {
+                if (correctWordOnView >= lastPoint) {
+                    flashcard.classList.add('flashcard-pulsing');
+                } else {
+                    flashcard.classList.add('flashcard-incorrect');
+                }
+                setTimeout(() => {
+                    flashcard.classList.remove('flashcard-pulsing', 'flashcard-incorrect');
+                }, 1500);
+                lastPoint = correctWordOnView;
             }
         })
         .catch(error => console.error('Error:', error));

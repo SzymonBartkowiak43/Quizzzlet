@@ -88,6 +88,25 @@ h2 {
 .flashcard-pulsing {
     animation: greenPulse 1.5s infinite;
 }
+
+/* Define the red pulsing animation */
+@keyframes redPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 20px 20px rgba(255, 0, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
+}
+
+/* Class to apply the red pulsing animation */
+.flashcard-incorrect {
+    animation: redPulse 1.5s infinite;
+}
+
 /* Modal styles */
 .modal {
     display: none;

@@ -13,7 +13,7 @@
 </header>
 <main class="main-div">
     <div th:if="${isLoggedIn}">
-        <h2>Find correct Words</h2>
+        <h2>Find incorrect flashcards</h2>
         <div class="flashcard-container">
             <div th:each="word, iterStat : ${wordsToRepeat}" th:if="${iterStat.index < 8}" class="flashcard" th:data-id="${word}">
                 <div class="flashcard-front">
