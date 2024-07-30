@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Settings</title>
+    <link rel="stylesheet" href="../static/styles/profile-settings.css" th:href="@{/styles/profile-settings.css}">
+    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
+
+</head>
+<body>
+<header th:replace="~{header :: header}"></header>
+<main class="main-frame">
+    <h1>Profile Settings</h1>
+    <form th:action="@{/profileSettings}" method="post" >
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${user.email}" required>
+        </div>
+        <div>
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" name="currentPassword" required>
+        </div>
+        <div>
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+        </div>
+        <button type="submit">Update</button>
+    </form>
+    <div th:if="${param.success}">
+        <p>Profile updated successfully!</p>
+    </div>
+    <div th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+</main>
+</body>
+</html>

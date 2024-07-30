@@ -35,4 +35,16 @@ public class UserService {
         user.getRoles().add(defaultRole);
         userRepository.save(user);
     }
+
+    @Transactional
+    public void updateUser(UserDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail()).orElseThrow();
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userRepository.save(user);
+    }
+
+    public boolean verifyCurrentPassword(String email, String currentPassword) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        return passwordEncoder.matches(currentPassword, user.getPassword());
+    }
 }
