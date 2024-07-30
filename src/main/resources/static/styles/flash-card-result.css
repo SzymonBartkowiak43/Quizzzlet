@@ -1,54 +1,61 @@
+/* General styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-color: #f4f4f9;
     color: #333;
+    line-height: 1.6;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
+    box-sizing: border-box;
 }
 
-.main-content {
+/* Main content styles */
+.main-content-result {
+    padding: 100px 20px 20px;
     text-align: center;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    color: #007BFF;
+/* Heading styles */
+.main-content-result h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
 }
 
-h2 {
-    color: #333;
+.main-content-result h2 {
+    font-size: 2em;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
-ul {
-    list-style-type: none;
+/* Score styles */
+.main-content-result p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Uncorrected words list styles */
+.main-content-result ul {
+    list-style: none;
     padding: 0;
 }
 
-li {
-    background: #f1f1f1;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 4px;
+.main-content-result ul li {
+    font-size: 1.2em;
+    margin-bottom: 10px;
 }
 
-a {
+/* Retry link styles */
+.main-content-result a {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 30px;
     padding: 10px 20px;
     background-color: #007BFF;
     color: white;
     text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-a:hover {
+.main-content-result a:hover {
     background-color: #0056b3;
 }

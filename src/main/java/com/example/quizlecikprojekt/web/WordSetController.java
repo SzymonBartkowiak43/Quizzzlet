@@ -64,11 +64,6 @@ public class WordSetController {
         return "wordSetEdit";
     }
 
-    @GetMapping("/wordSet/{id}/learn")
-    public String learnWordSet(@PathVariable("id") Long id, Model model) {
-        return "wordSetLearn";
-    }
-
     @PostMapping("/wordSet/{id}/update")
     public String updateWordSet(@PathVariable Long id, @ModelAttribute WordSet wordSetForm, BindingResult result, Model model) {
         if (result.hasErrors()) {

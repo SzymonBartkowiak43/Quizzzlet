@@ -38,10 +38,11 @@ public class LearnController {
         }
 
         if(nextWordIndex >= words.size()) {
-            words.clear();
+            words.clear();;
             nextWordIndex = 0;
             model.addAttribute("score", score);
             model.addAttribute("uncorrectedWords", uncorrectedWords);
+            model.addAttribute("wordSetId", id);
             return "flashCardsResult";
         } else {
             model.addAttribute("wordSetId", id);
@@ -109,10 +110,11 @@ public class LearnController {
             }
         }
 
+        words.clear();
         model.addAttribute("score", score);
-
         model.addAttribute("uncorrectedUserAnswers", uncorrectUserAnswers);
         model.addAttribute("uncorrectedWords", uncorrectedWords);
+        model.addAttribute("wordSetId", id);
 
         model.addAttribute("correctWords", correctWords);
         return "testResult";

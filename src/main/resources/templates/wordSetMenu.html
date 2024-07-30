@@ -13,9 +13,9 @@
 </header>
 <body>
 <main class="main-content">
-    <h1 th:text="${wordSet.title}">Słowa w Zestawie</h1>
+    <h1 th:text="${wordSet.title}">Word's in the set</h1>
     <div th:if="${#lists.isEmpty(words)}" class="no-sets-message">
-        <p>Brak słów w tym zestawie.</p>
+        <p>Words set is empty.</p>
     </div>
     <div th:unless="${#lists.isEmpty(words)}">
         <ul class="word-list">
@@ -25,8 +25,8 @@
             </li>
         </ul>
         <div th:if="${#lists.size(words) > 5}">
-            <p class="show-more" onclick="showMore()">Pokaż więcej słów</p>
-            <p class="show-less" style="display:none;" onclick="showLess()">Zwiń</p>
+            <p class="show-more" onclick="showMore()">Show more</p>
+            <p class="show-less" style="display:none;" onclick="showLess()">Show less</p>
         </div>
     </div>
     <div class="buttons-container">

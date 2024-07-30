@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <title>Flashcards Result</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
     <link rel="stylesheet" href="../static/styles/flash-card-result.css" th:href="@{/styles/flash-card-result.css}">
+    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
 </head>
 <body>
 <header>
     <div th:replace="header :: header"></div>
 </header>
-    <main class="main-content">
+    <main class="main-content-result">
         <h1>Flashcards Result</h1>
         <p>Your Score: <span th:text="${score}">0</span></p>
         <h2>Uncorrected Words</h2>
         <ul>
             <li th:each="word : ${uncorrectedWords}" th:text="${word.word} + ' - ' + ${word.translation}">Word - Translation</li>
         </ul>
-        <a href="/wordSet/{id}/flashCards" th:href="@{/wordSet/{id}/flashCards(id=${wordSetId})}">Try Again</a>
+        <a th:href="@{/wordSet/{id}/flashCards(id=${wordSetId})}">Try Again</a>
     </main>
 </body>
 </html>

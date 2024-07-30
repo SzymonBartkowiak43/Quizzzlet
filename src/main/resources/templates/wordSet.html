@@ -12,9 +12,9 @@
 </header>
 <body>
 <main class="main-content">
-    <h1>Twoje Zestawy</h1>
+    <h1>Yours set</h1>
     <div th:if="${#lists.isEmpty(wordSets)}" class="no-sets-message">
-        <p>Nie masz jeszcze żadnych zestawów.</p>
+        <p>You don't have any sets ;/</p>
     </div>
     <div th:unless="${#lists.isEmpty(wordSets)}">
         <div class="word-sets-container">

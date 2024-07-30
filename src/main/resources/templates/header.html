@@ -10,18 +10,19 @@
 <body>
 <header class="main-header">
     <div class="logo-container">
-        <img src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" alt="Logo" class="logo" th:href="@{/home}" style="cursor: pointer;" data-url="@{/home}">
+        <a href="#" th:href="@{/}">
+        <img id="logo" src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" alt="Logo" class="logo" style="cursor: pointer;">
+        </a>
     </div>
     <nav class="main-nav">
         <ul>
             <li><a href="#" th:href="@{/wordSet}">My sets</a></li>
-            <li><a href="#" th:href="@{/menu}">Menu</a></li>
+            <li><a href="#" th:href="@{/menu}">My profile</a></li>
             <li><a href="#" th:href="@{/ustawienia}">Setings</a></li>
         </ul>
     </nav>
     <div class="user-actions">
         <div class="profile" sec:authorize="isAuthenticated()">
-            <span>Profil</span>
             <a href="#" th:href="@{/logout}">Logout</a>
         </div>
         <div class="auth-links" sec:authorize="!isAuthenticated()">
@@ -30,14 +31,5 @@
         </div>
     </div>
 </header>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var logo = document.getElementById('logo');
-        logo.addEventListener('click', function() {
-            var destinationUrl = logo.getAttribute('data-url');
-            window.location.href = destinationUrl;
-        });
-    });
-</script>
 </body>
 </html>

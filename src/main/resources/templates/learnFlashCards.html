@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/styles/flash-card.css" th:href="@{/styles/flash-card.css}">
     <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
-    <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
 </head>
 <header>
 <div th:replace="header :: header"></div>
@@ -23,6 +22,7 @@
             </div>
         </div>
     </div>
+    <h3 >Do you know this word?</h3>
     <div class="buttons-container">
         <form th:action="@{/wordSet/{id}/flashCards/like(id=${wordSetId})}" method="post">
             <input type="hidden" name="wordId" th:value="${words[nextWordIndex].id}">
