@@ -17,7 +17,7 @@
         <ol>
             <li th:each="word : ${words}">
                 <label th:text="${word.word}"></label>
-                <input type="text" th:name="${'answer_' + word.id}" placeholder="Your answer here" required>
+                <input type="text" th:name="${'answer_' + word.id}" placeholder="Your answer here">
             </li>
         </ol>
         <button type="submit" class="submit-test-button">Submit Test</button>

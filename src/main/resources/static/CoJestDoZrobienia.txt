@@ -1,5 +1,2 @@
-MySetsEdi poprawnie
-zrob zeby dalo sie edytowac slowka
-zrob zeby dalo sie uczyc slowek
-dodawaj slowka do listy
-przkierowywanie z loga
+Poczytaj cos o rabit mq lub kafka
+Dodaj takie cos by uyzytkownik mogl miec znajomych i zeby wyswietlalo ich aktywnosc

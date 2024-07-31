@@ -79,7 +79,6 @@ public class WordSetController {
         wordSet.setTitle(wordSetForm.getTitle());
         wordSet.setDescription(wordSetForm.getDescription());
 
-        // Clear existing words to prevent duplication
         wordSet.getWords().clear();
 
         // Re-add updated words from form

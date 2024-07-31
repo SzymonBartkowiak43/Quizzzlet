@@ -1,22 +1,24 @@
 package com.example.quizlecikprojekt.word;
 
 
+import com.example.quizlecikprojekt.user.UserRepository;
 import com.example.quizlecikprojekt.word.Dto.MapperWordToWordToRepeadDto;
 import com.example.quizlecikprojekt.word.Dto.WordToRepeadDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class WordService {
     private final WordRepository wordRepository;
     private final MapperWordToWordToRepeadDto mapperWordToWordToRepeadDto;
+    private final UserRepository userRepository;
 
 
-    public WordService(WordRepository wordRepository) {
+    public WordService(WordRepository wordRepository, UserRepository userRepository) {
         this.wordRepository = wordRepository;
+        this.userRepository = userRepository;
         mapperWordToWordToRepeadDto = new MapperWordToWordToRepeadDto();
     }
 
@@ -32,13 +34,13 @@ public class WordService {
         return wordRepository.findById(wordId).orElse(null);
     }
 
-    public List<WordToRepeadDto> getWordsToRepeat() {
-        List<Word> wordsToRepeat = wordRepository.findWordsToRepeat();
+    public List<WordToRepeadDto> getWordsToRepeat(Long userId) {
+        List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
 
         List<WordToRepeadDto> collect = wordsToRepeat.stream()
                 .map(mapperWordToWordToRepeadDto::mapWordToWordToRepeadDto)
                 .toList();
-        List<WordToRepeadDto> unccorectWords = getCorrectWordsAndCreateUncoredWords();
+        List<WordToRepeadDto> unccorectWords = getCorrectWordsAndCreateUncoredWords(userId);
 
         List<WordToRepeadDto> allWords = new ArrayList<>();
         allWords.addAll(collect);
@@ -47,8 +49,8 @@ public class WordService {
         return allWords;
     }
 
-    public List<WordToRepeadDto> getCorrectWordsAndCreateUncoredWords() {
-        List<Word> wordsToRepeat = wordRepository.findWordsToRepeat();
+    public List<WordToRepeadDto> getCorrectWordsAndCreateUncoredWords(Long userId) {
+        List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
         List<WordToRepeadDto> unccorectWords = new ArrayList<>();
         for(int i = 0; i < wordsToRepeat.size(); i++) {
             try {
@@ -62,5 +64,8 @@ public class WordService {
             }
         }
         return unccorectWords;
+    }
+    public Long getUserIdByUsername(String username) {
+        return userRepository.findByEmail(username).get().getId();
     }
 }

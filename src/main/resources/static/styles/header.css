@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #007BFF;
+    background-color: #3a3a3b;
     padding: 10px 20px;
     position: fixed;
     width: 100%;
@@ -23,8 +23,8 @@
 }
 
 .logo {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 }
 
 .main-nav {
@@ -50,7 +50,7 @@
 }
 
 .main-nav ul li a:hover {
-    color: #ffdd57;
+    color: #fd2828;
 }
 
 .user-actions {
@@ -78,7 +78,7 @@
 }
 
 .user-actions .profile a:hover {
-    color: #ffdd57;
+    color: #fd2828;
 }
 
 .user-actions .auth-links a {
@@ -90,6 +90,6 @@
 }
 
 .user-actions .auth-links a:hover {
-    color: #ffdd57;
+    color: #fd2828;
 }
 

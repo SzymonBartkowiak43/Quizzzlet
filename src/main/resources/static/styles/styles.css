@@ -2,7 +2,7 @@
 /*--FORMULARZ LOGOWANIA--*/
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #121212;
     color: #333;
     line-height: 1.6;
     display: flex;
@@ -16,10 +16,10 @@ body {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
     text-align: center;
+    box-shadow: 0 50px 60px rgba(0, 0, 255, 0.5);
 }
 
 .list-heading {

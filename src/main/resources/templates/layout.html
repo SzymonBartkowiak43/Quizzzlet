@@ -10,7 +10,7 @@
 <header class="main-header">
         <div class="logo-container">
             <a href="#" th:href="@{/}">
-                <img id="logo" src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" alt="Logo" class="logo" style="cursor: pointer;">
+                <img id="logo" src="../static/img/logo.png" th:src="@{/img/logo.png}" alt="Logo" class="logo" style="cursor: pointer;">
             </a>
         </div>
         <nav class="main-nav">
@@ -21,7 +21,6 @@
         </nav>
     <div class="user-actions">
         <div class="profile" sec:authorize="isAuthenticated()">
-            <span>Profil</span>
             <a href="#" th:href="@{/logout}">Logout</a>
         </div>
         <div class="auth-links" sec:authorize="!isAuthenticated()">

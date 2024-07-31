@@ -32,13 +32,14 @@ public class LearnController {
     @GetMapping("/wordSet/{id}/flashCards")
     public String leranFlashCards(@PathVariable long id, Model model) {
         if(nextWordIndex == 0) {
+            uncorrectedWords.clear();
             words = wordSetService.getWordsByWordSetId(id);
             score = 0;
             Collections.shuffle(words);
         }
 
         if(nextWordIndex >= words.size()) {
-            words.clear();;
+            words.clear();
             nextWordIndex = 0;
             model.addAttribute("score", score);
             model.addAttribute("uncorrectedWords", uncorrectedWords);
