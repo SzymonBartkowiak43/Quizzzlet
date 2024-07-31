@@ -28,10 +28,12 @@ public class UserService {
 
     @Transactional
     public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
-        UserRole defaultRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        String passwordHash = passwordEncoder.encode(userRegistrationDto.getPassword());
+        user.setPassword(passwordHash);
+
+        UserRole defaultRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
         user.getRoles().add(defaultRole);
         userRepository.save(user);
     }
@@ -45,6 +47,8 @@ public class UserService {
 
     public boolean verifyCurrentPassword(String email, String currentPassword) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        return passwordEncoder.matches(currentPassword, user.getPassword());
+        String passwordHash = passwordEncoder.encode(currentPassword);
+        user.setPassword(passwordHash);
+        return  passwordEncoder.matches(currentPassword, user.getPassword());
     }
 }

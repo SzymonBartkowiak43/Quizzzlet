@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class WordService {
     private final WordRepository wordRepository;
-    private MapperWordToWordToRepeadDto mapperWordToWordToRepeadDto;
+    private final MapperWordToWordToRepeadDto mapperWordToWordToRepeadDto;
 
 
     public WordService(WordRepository wordRepository) {

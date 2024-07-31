@@ -44,11 +44,6 @@ public class WordSetService {
         wordSetRepository.save(wordSet);
     }
 
-    @Transactional
-    public void deleteWordById(Long wordSetId) {
-        Optional<WordSet> wordSet = wordSetRepository.findById(wordSetId);
-        wordSetRepository.deleteById(wordSetId);
-    }
 
 
 }
