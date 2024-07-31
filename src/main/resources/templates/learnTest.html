@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Learning Test</title>
     <link rel="stylesheet" href="../static/styles/learn.css" th:href="@{/styles/learn.css}">
     <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
-    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
 </head>
 <body>
-    <div th:replace="header :: header"></div>
     <div class="navigation-bar">
         <a th:href="@{/wordSet/{id}(id=${wordSetId})}" class="back-button">Back to Word Sets</a>
     </div>

@@ -1,9 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #121212;
     color: #333;
     line-height: 1.6;
-    padding-top: 120px; /* Dodajemy miejsce na header */
+    padding-top: 120px;
 }
 
 /* Stylizacja głównej zawartości */
@@ -12,7 +12,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background: #fff;
+    background-color: #121212;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
@@ -43,7 +43,7 @@ h1 {
     padding: 20px;
     border-left: 5px solid #007BFF;
     border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 100px rgba(0, 0, 255, 0.5);
     width: calc(33.333% - 20px);
     box-sizing: border-box;
     transition: transform 0.3s ease, box-shadow 0.3s ease;

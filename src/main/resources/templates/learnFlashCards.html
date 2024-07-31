@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Flashcards</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/styles/flash-card.css" th:href="@{/styles/flash-card.css}">
-    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
 </head>
-<header>
-<div th:replace="header :: header"></div>
-</header>
 <body>
 <main class="main-content">
     <div class="flashcard-container">

@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.video-section {
+    text-align: center;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+}
+
+.movie-section-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.movie-trailer {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 90px rgba(250, 4, 4, 0.5);
+}

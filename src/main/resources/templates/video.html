@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>English Movie for Today</title>
+    <link rel="stylesheet" href="../static/styles/video.css" th:href="@{/styles/video.css}">
+</head>
+<body>
+<section class="video-section">
+    <h2 class="movie-section-heading">English Movie for Today</h2>
+    <iframe width="900" height="600" class="movie-trailer"
+            src="https://www.youtube.com/embed/2W85Dwxx218"
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</section>
+</body>
+</html>

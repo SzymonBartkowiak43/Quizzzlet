@@ -1,47 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="../static/styles/home.css" th:href="@{/styles/home.css}">
-    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
-    <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
+    <link rel="stylesheet" href="../static/styles/new-home.css" th:href="@{/styles/new-home.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <div th:replace="~{header :: header}"></div>
-</header>
-<main class="main-div">
-    <div th:if="${isLoggedIn}">
-        <h2>Find incorrect flashcards</h2>
-        <div class="flashcard-container">
-            <div th:each="word, iterStat : ${wordsToRepeat}" th:if="${iterStat.index < 8}" class="flashcard" th:data-id="${word}">
-                <div class="flashcard-front">
-                    <p class="flashcard-word" th:text="${word.word}">Word</p>
-                </div>
-                <div class="flashcard-back">
-                    <p class="flashcard-translation" th:text="${word.translation}">Translation</p>
-                </div>
-            </div>
-        </div>
-        <div class="reload-button-container">
-            <button class="reload-button" onclick="location.reload()">Reload</button>
+<div class="container1">
+    <h1>What do you want to do today?</h1>
+</div>
+<div class="container2">
+    <div class="centered-frame-blue blue-frame">
+        <div class="content-frame-blue">
+            <h2 class="title">Review Previous Word</h2>
+            <p class="description">Here you can review the words you have previously learned. This section allows you to revisit and reinforce your vocabulary knowledge, ensuring better retention and understanding of the words you have studied.</p>
+            <button class="review-button" onclick="location.href='/review'">REVIEW WORD</button>
         </div>
     </div>
-    <div th:if="${!isLoggedIn}">
-        <p>Please log in to see the words to repeat.</p>
+    <div class="centered-frame-red red-frame">
+        <div class="content-frame-red">
+            <h2 class="title">Watch Video</h2>
+            <p class="description">Watch English videos to improve your language skills. This section provides a variety of videos that cover different aspects of the English language, including grammar, vocabulary, pronunciation, and more.</p>
+            <button class="watch-button" onclick="location.href='/video'">LET'S WATCH</button>
+        </div>
     </div>
-</main>
-
-<!-- Modal Popup -->
-<div id="popupModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <p id="popupMessage"></p>
+    <div class="centered-frame-green green-frame">
+        <div class="content-frame-green">
+            <h2 class="title">My Sets</h2>
+            <p class="description">Explore your personalized sets! Create, manage your custom flashcard sets to enhance your learning experience. Dive into a world of tailored content that suits your study needs and track your progress as you master new topics.</p>
+            <button class="sets-button" onclick="location.href='/wordSet'">GO TO SETS</button>
+        </div>
     </div>
 </div>
-
-<script src="../static/scripts/confetti.js" th:src="@{/scripts/confetti.js}"></script>
-<script src="../static/scripts/home.js" th:src="@{/scripts/home.js}"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Test Result</title>
@@ -8,9 +11,6 @@
     <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
 </head>
 <body>
-<header>
-    <div th:replace="header :: header"></div>
-</header>
 <div class="test-result-container">
     <h1 class="test-result-heading">Test Result</h1>
     <p>Your score is: <span th:text="${score}"></span> points.</p>
