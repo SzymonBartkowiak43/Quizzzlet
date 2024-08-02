@@ -5,15 +5,34 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>English Movie for Today</title>
+    <title th:text="${title}">Video Page</title>
     <link rel="stylesheet" href="../static/styles/video.css" th:href="@{/styles/video.css}">
 </head>
 <body>
 <section class="video-section">
     <h2 class="movie-section-heading">English Movie for Today</h2>
+    <h2 class="movie-section-heading" th:text="${title}">Video Title</h2>
     <iframe width="900" height="600" class="movie-trailer"
-            src="https://www.youtube.com/embed/2W85Dwxx218"
+            th:src="${url}"
             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <p>Posted by: <span th:text="${userName}">Username</span></p>
+</section>
+
+<section class="comments-section">
+    <h3 class="movie-section-heading">Comments</h3>
+    <ul>
+        <li th:each="comment : ${comments}">
+            <p th:text="${comment.content}">Comment content</p>
+            <div class="comment-meta">
+                <small th:text="${comment.user.userName}">Username</small>
+                <small th:text="${comment.formattedDateAndTime}">Date and Time</small>
+            </div>
+        </li>
+    </ul>
+    <form th:action="@{/video/{id}/addComment(id=${videoId})}" method="post" class="comment-form">
+        <textarea name="content" placeholder="Add a comment..." required></textarea>
+        <button type="submit">Add Comment</button>
+    </form>
 </section>
 </body>
 </html>

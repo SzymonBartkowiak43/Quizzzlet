@@ -4,12 +4,15 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
-    <changeSet id="0003-1" author="szymon">
+    <changeSet id="0003" author="szymon">
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="email" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="user_name" type="VARCHAR(100)">
                 <constraints unique="true"/>
             </column>
             <column name="password" type="VARCHAR(200)"/>

@@ -1,8 +1,8 @@
 insert into
-    users (email, password)
+    users (email, user_name, password)
 values
-    ('admin@wp.com', '{noop}admin'),
-    ('user@wp.com', '{noop}user');
+    ('admin@wp.com','admin', '{noop}admin'),
+    ('user@wp.com','user', '{noop}user');
 
 insert into
     user_role (name, description)

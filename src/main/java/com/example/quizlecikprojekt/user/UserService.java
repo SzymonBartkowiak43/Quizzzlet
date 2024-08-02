@@ -30,10 +30,15 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    public User getUserByid(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
     @Transactional
     public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
+        user.setUserName(userRegistrationDto.getUsername());
         String passwordHash = passwordEncoder.encode(userRegistrationDto.getPassword());
         user.setPassword(passwordHash);
 
@@ -48,6 +53,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userRepository.save(user);
     }
+
 
     public boolean verifyCurrentPassword(String email, String currentPassword) {
         User user = userRepository.findByEmail(email).orElseThrow();

@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.web;
 
+
 import com.example.quizlecikprojekt.user.User;
 import com.example.quizlecikprojekt.user.UserService;
 import com.example.quizlecikprojekt.word.Word;
@@ -14,8 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class WordSetController {
@@ -103,16 +108,46 @@ public class WordSetController {
         wordSet.setLanguage(wordSetForm.getLanguage());
         wordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
 
-        wordSet.getWords().clear();
+
+        List<Word> existingWords = wordSet.getWords();
+        Map<Long, Word> existingWordsMap = existingWords.stream()
+                .collect(Collectors.toMap(Word::getId, word -> word));
+
 
         for (Word formWord : wordSetForm.getWords()) {
-            formWord.setWordSet(wordSet);
-            wordSet.getWords().add(formWord);
+            if (formWord.getId() != null && existingWordsMap.containsKey(formWord.getId())) {
+                Word existingWord = existingWordsMap.get(formWord.getId());
+                if (!existingWord.getWord().equals(formWord.getWord()) ||
+                        !existingWord.getTranslation().equals(formWord.getTranslation())) {
+                    existingWord.setWord(formWord.getWord());
+                    existingWord.setTranslation(formWord.getTranslation());
+                }
+            } else {
+                formWord.setWordSet(wordSet);
+                formWord.setPoints(0);
+                formWord.setLastPracticed(Date.valueOf(LocalDateTime.now().toLocalDate()));
+                wordSet.getWords().add(formWord);
+            }
         }
+
+        List<Long> formWordIds = wordSetForm.getWords().stream()
+                .map(Word::getId)
+                .toList();
+        wordSet.getWords().removeIf(word -> word.getId() != null && !formWordIds.contains(word.getId()));
+
 
         wordSetService.saveWordSet(wordSet);
 
         return "redirect:/wordSet/" + id + "/edit";
+    }
+
+    private boolean checkExisiting(Word word, List<Word> words) {
+        for (Word w : words) {
+          if(w.getWord().equals(word.getWord()) && w.getTranslation().equals(word.getTranslation())) {
+            return true;
+          }
+        }
+        return false;
     }
 
     @GetMapping("/wordSet/{id}/deleteWord/{wordId}")
