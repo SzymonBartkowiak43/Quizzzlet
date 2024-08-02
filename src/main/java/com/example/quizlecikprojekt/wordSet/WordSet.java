@@ -20,6 +20,9 @@ public class WordSet {
     private Long id;
     private String title;
     private String description;
+    private String language;
+    private String translationLanguage;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

@@ -19,6 +19,26 @@
         <label for="description">Description:</label>
         <textarea id="description" th:field="*{description}" class="input-large" placeholder="Add a description.."></textarea>
 
+        <div class="language">
+            <div>
+                <label for="language">Language:</label>
+                <select id="language" th:field="*{language}" class="input-large-l">
+                    <option value="pl">Polish</option>
+                    <option value="en">English</option>
+                    <option value="de">Deutschland</option>
+                </select>
+            </div>
+            <div>
+                <label for="translationLanguage">Translation Language:</label>
+                <select id="translationLanguage" th:field="*{translationLanguage}" class="input-large-l">
+                    <option value="pl">Polish</option>
+                    <option value="en">English</option>
+                    <option value="de">Deutschland</option>
+                </select>
+            </div>
+        </div>
+
+
         <h2>Words in the set</h2>
         <ul>
             <li th:each="word, iterStat : ${words}" class="word-item">

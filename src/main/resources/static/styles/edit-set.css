@@ -29,6 +29,27 @@ label {
     box-sizing: border-box;
 }
 
+.input-large-l {
+    width: 45%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #b5b5b9;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.language {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.language > div {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
 .input-large:focus {
     border-bottom: 3px solid black; /* Black border at the bottom when focused */
     outline: none; /* Remove default outline */

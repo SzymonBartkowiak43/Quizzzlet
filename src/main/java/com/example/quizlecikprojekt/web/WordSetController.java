@@ -1,10 +1,14 @@
 package com.example.quizlecikprojekt.web;
 
+import com.example.quizlecikprojekt.user.User;
+import com.example.quizlecikprojekt.user.UserService;
 import com.example.quizlecikprojekt.word.Word;
-import com.example.quizlecikprojekt.word.WordRepository;
+import com.example.quizlecikprojekt.word.WordService;
 import com.example.quizlecikprojekt.wordSet.WordSet;
 import com.example.quizlecikprojekt.wordSet.WordSetService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,14 +19,15 @@ import java.util.Optional;
 
 @Controller
 public class WordSetController {
-
     private final WordSetService wordSetService;
-    private final WordRepository wordRepository;
+    private final WordService wordService;
+    private final UserService userService;
 
 
-    public WordSetController(WordSetService wordSetService, WordRepository wordRepository) {
+    public WordSetController(WordSetService wordSetService, WordService wordService, UserService userService) {
         this.wordSetService = wordSetService;
-        this.wordRepository = wordRepository;
+        this.wordService = wordService;
+        this.userService = userService;
     }
 
     @GetMapping("/wordSet")
@@ -31,6 +36,23 @@ public class WordSetController {
         List<WordSet> wordSets = wordSetService.getWordSetsByEmail(email);
         model.addAttribute("wordSets", wordSets);
         return "wordSet";
+    }
+
+    @GetMapping("/wordSet/create")
+    public String createWordSet() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getUserByEmail(userDetails.getUsername());
+
+        WordSet wordSet = new WordSet();
+        wordSet.setUser(user);
+        wordSet.setTitle("New Word Set");
+        wordSet.setDescription("Description");
+        wordSet.setLanguage("pl");
+        wordSet.setTranslationLanguage("en");
+
+        wordSetService.createWordSet(wordSet);
+        return "redirect:/wordSet";
     }
 
     @GetMapping("/wordSet/{id}")
@@ -81,9 +103,8 @@ public class WordSetController {
 
         wordSet.getWords().clear();
 
-        // Re-add updated words from form
         for (Word formWord : wordSetForm.getWords()) {
-            formWord.setWordSet(wordSet); // Set the wordSet for each word
+            formWord.setWordSet(wordSet);
             wordSet.getWords().add(formWord);
         }
 
@@ -100,10 +121,14 @@ public class WordSetController {
             return "redirect:/error";
         }
 
-        wordRepository.deleteById(wordId);
+        wordService.deleteWordById(wordId);
 
         return "redirect:/wordSet/" + id + "/edit";
     }
 
-
+    @PostMapping("/wordSet/delete")
+    public String deleteWordSet(@RequestParam Long wordSetIdToDelete) {
+        wordSetService.deleteWordSet(wordSetIdToDelete);
+        return "redirect:/wordSet";
+    }
 }

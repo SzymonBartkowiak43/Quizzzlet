@@ -1,2 +1,9 @@
+zrob te jezyki wordSetow
+zobacz to api od deeply
+dalej zeby uzytkownik mogl komentowac film
+dodaj moze 'home do headera'
+Spraw by uzytoknik mogl zobaczyc swoje punkty
+
+
 Poczytaj cos o rabit mq lub kafka
 Dodaj takie cos by uyzytkownik mogl miec znajomych i zeby wyswietlalo ich aktywnosc

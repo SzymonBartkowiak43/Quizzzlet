@@ -44,6 +44,15 @@ public class WordSetService {
         wordSetRepository.save(wordSet);
     }
 
+    @Transactional
+    public void createWordSet(WordSet wordSet) {
+        wordSetRepository.save(wordSet);
+    }
+    @Transactional
+    public void deleteWordSet(Long id) {
+        wordSetRepository.deleteById(id);
+    }
+
 
 
 }
