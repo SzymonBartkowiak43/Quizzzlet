@@ -1,4 +1,3 @@
-zrob te jezyki wordSetow
 zobacz to api od deeply
 dalej zeby uzytkownik mogl komentowac film
 dodaj moze 'home do headera'

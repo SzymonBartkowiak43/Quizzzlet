@@ -87,7 +87,7 @@ public class WordSetController {
     }
 
     @PostMapping("/wordSet/{id}/update")
-    public String updateWordSet(@PathVariable Long id, @ModelAttribute WordSet wordSetForm, BindingResult result, Model model) {
+    public String updateWordSet(@PathVariable Long id, @ModelAttribute WordSet wordSetForm, BindingResult result) {
         if (result.hasErrors()) {
             return "redirect:/error";
         }
@@ -100,6 +100,8 @@ public class WordSetController {
         WordSet wordSet = wordSetOptional.get();
         wordSet.setTitle(wordSetForm.getTitle());
         wordSet.setDescription(wordSetForm.getDescription());
+        wordSet.setLanguage(wordSetForm.getLanguage());
+        wordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
 
         wordSet.getWords().clear();
 
@@ -131,4 +133,8 @@ public class WordSetController {
         wordSetService.deleteWordSet(wordSetIdToDelete);
         return "redirect:/wordSet";
     }
+
+
+
+
 }

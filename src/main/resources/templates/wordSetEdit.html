@@ -24,20 +24,21 @@
                 <label for="language">Language:</label>
                 <select id="language" th:field="*{language}" class="input-large-l">
                     <option value="pl">Polish</option>
-                    <option value="en">English</option>
-                    <option value="de">Deutschland</option>
+                    <option value="en-US">English</option>
+                    <option value="de">German</option>
+                    <option value="es">Spanish</option>
                 </select>
             </div>
             <div>
                 <label for="translationLanguage">Translation Language:</label>
                 <select id="translationLanguage" th:field="*{translationLanguage}" class="input-large-l">
                     <option value="pl">Polish</option>
-                    <option value="en">English</option>
-                    <option value="de">Deutschland</option>
+                    <option value="en-US">English</option>
+                    <option value="de">German</option>
+                    <option value="es">Spanish</option>
                 </select>
             </div>
         </div>
-
 
         <h2>Words in the set</h2>
         <ul>
@@ -45,7 +46,7 @@
                 <div class="word-pair">
                     <div>
                         <label th:for="${'word-' + iterStat.index}">Word:</label>
-                        <input type="text" th:id="${'word-' + iterStat.index}" th:value="${word.word}" th:name="${'words[' + iterStat.index + '].word'}" class="input-large-word-pair"/>
+                        <input type="text" th:id="${'word-' + iterStat.index}" th:value="${word.word}" th:name="${'words[' + iterStat.index + '].word'}" class="input-large-word-pair" onblur="fetchTranslation(this)"/>
                     </div>
                     <div>
                         <label th:for="${'translation-' + iterStat.index}">Translation:</label>
@@ -80,6 +81,7 @@
             wordInput.setAttribute('id', `word-${index}`);
             wordInput.setAttribute('name', `words[${index}].word`);
             wordInput.classList.add('input-large-word-pair');
+            wordInput.setAttribute('onblur', 'fetchTranslation(this)');
             wordDiv.appendChild(wordInput);
 
             const translationDiv = document.createElement('div');
@@ -112,12 +114,28 @@
             fetch(url, { method: 'GET' })
                 .then(response => {
                     if (response.ok) {
-                        window.location.reload(); // Reload the page to reflect changes
+                        window.location.reload();
                     } else {
                         alert('Failed to delete word.');
                     }
                 })
                 .catch(error => console.error('Error deleting word:', error));
+        }
+
+        function fetchTranslation(wordInput) {
+            const word = wordInput.value;
+            const translationInput = wordInput.parentElement.nextElementSibling.querySelector('input');
+            const currentLang = document.getElementById('language').value;
+            const targetLang = document.getElementById('translationLanguage').value;
+
+            if (word && !translationInput.value) {
+                fetch(`/translate?text=${word}&currentLanguage=${currentLang}&targetLang=${targetLang}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        translationInput.value = data;
+                    })
+                    .catch(error => console.error('Error fetching translation:', error));
+            }
         }
     </script>
 </body>

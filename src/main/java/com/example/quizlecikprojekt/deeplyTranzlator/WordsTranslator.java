@@ -1,6 +1,8 @@
 package com.example.quizlecikprojekt.deeplyTranzlator;
 import com.deepl.api.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WordsTranslator {
     String AUTH_KEY = "8ec376ab-7847-48d6-9941-23856ca6a578:fx";
     private static Translator translator;
@@ -9,9 +11,11 @@ public class WordsTranslator {
         translator = new Translator(AUTH_KEY);
     }
 
-    public String translate(String text, String targetLang) {
+    public String translate(String text,String currentLanguage, String targetLang) {
         try {
-            return String.valueOf(translator.translateText(text, null, targetLang));
+            TextResult result = translator.translateText(text, currentLanguage, targetLang);
+            System.out.println(text + " " + targetLang + " result: " + result.getText());
+            return result.getText();
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
