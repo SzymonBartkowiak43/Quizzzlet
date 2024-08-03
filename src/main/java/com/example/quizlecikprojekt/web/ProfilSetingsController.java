@@ -26,10 +26,15 @@ public class ProfilSetingsController {
     }
 
     @PostMapping("/profileSettings")
-    public String updateProfileSettings(@RequestParam String email, @RequestParam String currentPassword, @RequestParam String newPassword, Model model) {
+    public String updateProfileSettings(@RequestParam String email,@RequestParam String userName  ,@RequestParam String currentPassword, @RequestParam String newPassword, Model model) {
         if (userService.verifyCurrentPassword(email, currentPassword)) {
             UserDto userDto = new UserDto();
-            userDto.setEmail(email);
+            if(!email.isEmpty()) {
+                userDto.setEmail(email);
+            }
+            if(!userName.isEmpty()) {
+                userDto.setUserName(userName);
+            }
             userDto.setPassword(newPassword);
             userService.updateUser(userDto);
             return "redirect:/profileSettings?success";

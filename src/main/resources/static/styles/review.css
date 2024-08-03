@@ -2,6 +2,7 @@
 body {
     background-color: #121212;
 }
+
 h2 {
     color: white;
     text-align: center;
@@ -72,8 +73,6 @@ h2 {
 .flashcard-clicked {
     background-color: #ffeb3b; /* Example color */
 }
-
-/* Add this to your existing CSS file (e.g., review.css) */
 
 /* Define the green pulsing animation */
 @keyframes greenPulse {

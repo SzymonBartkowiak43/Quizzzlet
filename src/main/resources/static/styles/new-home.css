@@ -79,7 +79,7 @@ h2 {
 
 .centered-frame-blue:hover {
     transform: scale(1.01);
-    box-shadow: 0 0 30px rgba(0, 0, 255, 0.7);
+    box-shadow: 0 40px 70px rgba(0, 0, 255, 0.7);
 }
 
 .blue-frame {
@@ -149,7 +149,7 @@ h2 {
 
 .centered-frame-red:hover {
     transform: scale(1.01);
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+    box-shadow: 0 100px 100px rgba(255, 0, 0, 0.7);
 }
 
 
@@ -173,7 +173,7 @@ h2 {
 }
 
 .red-frame:hover {
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+    box-shadow: 0 40px 70px rgba(255, 0, 0, 0.7);
 }
 
 .watch-button {
@@ -223,7 +223,7 @@ h2 {
 
 .centered-frame-green:hover {
     transform: scale(1.01);
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.7);
+    box-shadow: 0 40px 70px rgba(0, 255, 0, 0.7);
 }
 
 .green-frame {

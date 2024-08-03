@@ -27,9 +27,6 @@ public class CustomSecurityConfig {
                 .requestMatchers(h2ConsoleRequestMatcher).permitAll()
                 .requestMatchers("/rejestracja").permitAll()
                 .requestMatchers("/home").permitAll()
-                .requestMatchers("/wordSet/**").authenticated()
-                .requestMatchers("/wordSet").authenticated()
-                .requestMatchers("/words").authenticated()
                 .anyRequest().authenticated()
                 )
         .formLogin(login -> login
