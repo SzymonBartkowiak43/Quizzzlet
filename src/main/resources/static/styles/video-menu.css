@@ -1,0 +1,105 @@
+body {
+    background-color: black;
+}
+
+.video-menu-section {
+    padding: 20px;
+    background-color: #000;
+    color: #fff;
+    margin-right: 50px;
+    margin-left: 100px;
+}
+
+.video-menu-section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #fff; /* Set heading color to white */
+}
+
+.video-menu-section ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.video-menu-section li {
+    margin-bottom: 20px;
+    position: relative;
+    width: calc(25% - 20px);
+    margin-right: 20px;
+}
+
+.video-menu-section li:nth-child(4n) {
+    margin-right: 0; /* Remove right margin for every fourth item */
+}
+
+.video-menu-section a {
+    display: block;
+    font-size: 1.2em;
+    color: #e7e4e4;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.video-menu-section a:hover {
+    text-decoration: underline;
+}
+
+.iframe-container {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.iframe-container .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.iframe-container div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.video-details {
+    text-align: center;
+    color: #fff;
+}
+
+.title {
+    display: block;
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.title:hover {
+    text-decoration: underline;
+}

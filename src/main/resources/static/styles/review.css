@@ -137,7 +137,7 @@ h2 {
     animation: fadeIn 0.5s; /* Fade-in animation */
 }
 
-.close {
+.delette-comment {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -145,8 +145,8 @@ h2 {
     cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
+.delette-comment:hover,
+.delette-comment:focus {
     color: #000; /* Change color on hover */
     text-decoration: none;
 }

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get the modal
     const modal = document.getElementById("popupModal");
-    const span = document.getElementsByClassName("close")[0];
+    const span = document.getElementsByClassName("delette-comment")[0];
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {

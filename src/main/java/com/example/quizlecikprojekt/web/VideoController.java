@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -45,14 +46,6 @@ public class VideoController {
         return "video";
     }
 
-    @PostMapping("/video/{id}/addComment")
-    public String addComment(@PathVariable Long id, String content, User user) {
-        Video video = videoService.findById(id);
-        commentService.addComment(content, user, video);
-        return "redirect:/video/" + id;
-    }
-
-
     @GetMapping("/video/{id}")
     public String video(@PathVariable Long id, Model model) {
         Video video = videoService.findById(id);
@@ -68,6 +61,31 @@ public class VideoController {
 
         return "video";
     }
+
+    @PostMapping("/video/{id}/addComment")
+    public String addComment(@PathVariable Long id, String content, User user) {
+        Video video = videoService.findById(id);
+        commentService.addComment(content, user, video);
+        return "redirect:/video/" + id;
+    }
+
+    @PostMapping("/video/{videoId}/deleteComment")
+    public String deleteComment(@PathVariable Long videoId, Long commentId, Principal principal) {
+        Comment comment = commentService.findById(commentId);
+        User currentUser = userService.getUserByEmail(principal.getName());
+        if (comment.getUserId().equals(currentUser.getId())) {
+            commentService.deleteComment(commentId);
+        }
+        return "redirect:/video/" + videoId;
+    }
+
+    @GetMapping("/video/showAll")
+    public String showAllVideos(Model model) {
+        List<Video> allVideos = videoService.findAll();
+        model.addAttribute("videos", allVideos);
+        return "videoMenu";
+    }
+
 
 
 }

@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt.video;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +19,8 @@ public class VideoService {
     }
     public Video findMainVideo() {
         return videoRepository.findById(1L).orElseThrow(() -> new RuntimeException("Video not found"));
+    }
+    public List<Video> findAll() {
+        return (List<Video>) videoRepository.findAll();
     }
 }

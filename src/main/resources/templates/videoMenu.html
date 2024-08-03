@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Video Menu'">Video Menu</title>
+    <link rel="stylesheet" href="../static/styles/video-menu.css" th:href="@{/styles/video-menu.css}">
+</head>
+<body>
+<section class="video-menu-section">
+    <h2 class="section-heading">Video Menu</h2>
+    <ul>
+        <li th:each="video : ${videos}">
+                <div class="iframe-container" >
+                    <iframe class="movie-trailer"
+                            th:src="${video.url}"
+                            th:action="@{/video/{videoId}(videoId=${video.id})}"
+                            th:href="@{/video/{videoId}(videoId=${video.id})}"
+                            frameborder="0"></iframe>
+                    <div class="overlay"></div>
+                </div>
+                <div class="video-details">
+                    <a class="title" th:text="${video.title}" th:href="@{/video/{videoId}(videoId=${video.id})}">Video Title</a>
+                </div>
+        </li>
+    </ul>
+</section>
+</body>
+</html>

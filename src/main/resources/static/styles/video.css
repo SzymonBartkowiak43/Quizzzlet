@@ -8,8 +8,35 @@ body {
     align-items: center;
     padding: 20px;
 }
+.other-movies-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #b23c17, #c66900); /* Darker gradient background */
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1em; /* Adjust font size */
+    position: absolute; /* Position the button */
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+.other-movies-button:hover {
+    background: linear-gradient(45deg, #8e2c12, #a15200); /* Darken gradient on hover */
+    transform: translateY(-2px); /* Slightly lift the button on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+}
+
+.other-movies-button:active {
+    background: linear-gradient(45deg, #7a2610, #8e4700); /* Darken gradient on click */
+    transform: translateY(0); /* Reset lift on click */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Reset shadow on click */
+}
 
 .video-section {
+    position: relative; /* Ensure the button is positioned relative to this container */
     text-align: center;
     padding: 20px;
     background-color: #1e1e1e;
@@ -178,4 +205,29 @@ body {
 
 .comment-form button:hover {
     background-color: #5a5a5a;
+}
+
+.delete-comment {
+    margin-left: 10px;
+    color: #ff4d4d;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.delete-comment:hover {
+    text-decoration: underline;
+}
+.delete-comment:before, .delete-comment:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+}
+.delete-comment:before {
+    transform: rotate(45deg);
+}
+.delete-comment:after {
+    transform: rotate(-45deg);
 }
