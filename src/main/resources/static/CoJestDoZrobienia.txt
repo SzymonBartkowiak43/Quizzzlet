@@ -1,4 +1,5 @@
 dodaj moze 'home do headera'
+jakis dzwiny x przy usuwaniu komentarzy
 
 
 Poczytaj cos o rabit mq lub kafka

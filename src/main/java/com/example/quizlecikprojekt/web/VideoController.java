@@ -86,6 +86,13 @@ public class VideoController {
         return "videoMenu";
     }
 
+    @PostMapping("/video/addVideo")
+    public String addVideo(String url, String title, Principal principal) {
+        User user = userService.getUserByEmail(principal.getName());
+        videoService.addVideo(url, title, user.getId());
+        return "redirect:/video/showAll";
+    }
+
 
 
 }

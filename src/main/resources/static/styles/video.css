@@ -215,19 +215,7 @@ body {
 }
 
 .delete-comment:hover {
-    text-decoration: underline;
-}
-.delete-comment:before, .delete-comment:after {
-    position: absolute;
-    left: 15px;
-    content: ' ';
-    height: 33px;
-    width: 2px;
-    background-color: #333;
-}
-.delete-comment:before {
-    transform: rotate(45deg);
-}
-.delete-comment:after {
-    transform: rotate(-45deg);
+    color: #ff0000;
+    font-weight: bold;
+    transition: color 0.3s ease, font-weight 0.3s ease;
 }

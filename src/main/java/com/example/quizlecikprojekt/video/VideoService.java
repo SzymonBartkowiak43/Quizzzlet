@@ -23,4 +23,11 @@ public class VideoService {
     public List<Video> findAll() {
         return (List<Video>) videoRepository.findAll();
     }
+    public Video addVideo(String url, String title, Long userId) {
+        Video video = new Video();
+        video.setUrl(url);
+        video.setTitle(title);
+        video.setUserId(userId);
+        return videoRepository.save(video);
+    }
 }

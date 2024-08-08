@@ -47,15 +47,13 @@ body {
 }
 
 .iframe-container {
-    display: block;
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    cursor: pointer;
 }
 
 .iframe-container iframe {
@@ -76,17 +74,6 @@ body {
     background: transparent;
     cursor: pointer;
 }
-
-.iframe-container div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    cursor: pointer;
-}
-
 .video-details {
     text-align: center;
     color: #fff;
@@ -101,5 +88,7 @@ body {
 }
 
 .title:hover {
-    text-decoration: underline;
+    color: #ff4d4d;
+    font-weight: bold; /* Make the text bold on hover */
+    transition: color 0.3s ease, font-weight 0.3s ease; /* Smooth transition for color and font-weight */
 }
