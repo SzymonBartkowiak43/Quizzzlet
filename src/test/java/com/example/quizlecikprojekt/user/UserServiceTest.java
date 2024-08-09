@@ -1,7 +1,8 @@
 package com.example.quizlecikprojekt.user;
 
-import com.example.quizlecikprojekt.user.Dto.UserDto;
-import com.example.quizlecikprojekt.user.Dto.UserRegistrationDto;
+import com.example.quizlecikprojekt.domain.user.*;
+import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
+import com.example.quizlecikprojekt.domain.user.Dto.UserRegistrationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

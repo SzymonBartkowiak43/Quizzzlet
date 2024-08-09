@@ -1,12 +1,12 @@
 package com.example.quizlecikprojekt.web;
 
 
-import com.example.quizlecikprojekt.user.User;
-import com.example.quizlecikprojekt.user.UserService;
-import com.example.quizlecikprojekt.word.Word;
-import com.example.quizlecikprojekt.word.WordService;
-import com.example.quizlecikprojekt.wordSet.WordSet;
-import com.example.quizlecikprojekt.wordSet.WordSetService;
+import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.word.Word;
+import com.example.quizlecikprojekt.domain.word.WordService;
+import com.example.quizlecikprojekt.domain.wordSet.WordSet;
+import com.example.quizlecikprojekt.domain.wordSet.WordSetService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

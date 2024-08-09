@@ -9,11 +9,27 @@
     <link rel="stylesheet" href="../static/styles/video-menu.css" th:href="@{/styles/video-menu.css}">
 </head>
 <body>
-<div>
-    <button>Add video</button>
-</div>
 <section class="video-menu-section">
-    <h2 class="section-heading">Video Menu</h2>
+    <h2 class="section-heading">Top 4 best rated videos this week</h2>
+    <ul>
+        <li th:each="video : ${top5BestRatedVideosLast7Days}">
+            <div class="iframe-container">
+                <iframe class="movie-trailer" th:src="${video.url}"></iframe>
+                <div class="overlay" th:onclick="|window.location.href='@{/video/{videoId}(videoId=${video.id})}'|"></div>
+            </div>
+            <div class="video-details">
+                <a class="title" th:text="${video.title}" th:href="@{/video/{videoId}(videoId=${video.id})}">Video Title</a>
+                <div class="rating">
+                    <span th:each="star : ${#numbers.sequence(1, 5)}"
+                          th:classappend="${star <= videoRatings[video.id]} ? 'filled' : 'empty'">&#10084;</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</section>
+
+<section class="video-menu-section">
+    <h2 class="section-heading-allVideo">All videos</h2>
     <ul>
         <li th:each="video : ${videos}">
             <div class="iframe-container">
@@ -22,6 +38,10 @@
             </div>
             <div class="video-details">
                 <a class="title" th:text="${video.title}" th:href="@{/video/{videoId}(videoId=${video.id})}">Video Title</a>
+                <div class="rating">
+                    <span th:each="star : ${#numbers.sequence(1, 5)}"
+                     th:classappend="${star <= videoRatings[video.id]} ? 'filled' : 'empty'">&#10084;</span>
+                </div>
             </div>
         </li>
     </ul>

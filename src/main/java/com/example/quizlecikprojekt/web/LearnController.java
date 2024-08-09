@@ -1,8 +1,8 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.word.Word;
-import com.example.quizlecikprojekt.word.WordService;
-import com.example.quizlecikprojekt.wordSet.WordSetService;
+import com.example.quizlecikprojekt.domain.word.Word;
+import com.example.quizlecikprojekt.domain.word.WordService;
+import com.example.quizlecikprojekt.domain.wordSet.WordSetService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

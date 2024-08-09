@@ -46,9 +46,10 @@ body {
     margin-bottom: 20px; /* Add margin to separate from comments */
 }
 
-.movie-section-heading {
+.video-section-heading {
     font-size: 24px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .movie-trailer {
@@ -218,4 +219,23 @@ body {
     color: #ff0000;
     font-weight: bold;
     transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+.movie-rating-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.video-rating-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2em;
+    color: #ff0018;
+    margin: 0 5px;
+}
+
+.video-rating-button .fa-heart.fa-regular {
+    color: rgba(48, 48, 59, 0.5);
 }

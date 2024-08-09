@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.user.Dto.UserDto;
-import com.example.quizlecikprojekt.user.UserService;
+import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
+import com.example.quizlecikprojekt.domain.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;

@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.word.Dto.WordToRepeadDto;
-import com.example.quizlecikprojekt.word.WordService;
+import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.WordService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

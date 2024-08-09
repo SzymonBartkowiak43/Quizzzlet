@@ -6,3 +6,6 @@ VALUES ('Why do we dream?', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-0
        ('Video 5', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-01-01 00:00:00', 2),
        ('Video 6', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-01-01 00:00:00', 2),
        ('Video 7', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-01-01 00:00:00', 2),
+       ('Video 8', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-01-01 00:00:00', 2),
+       ('Video 9', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-01-01 00:00:00', 2),
+       ('Video 10', 'https://www.youtube.com/embed/2W85Dwxx218', '2020-01-01 00:00:00', 2);

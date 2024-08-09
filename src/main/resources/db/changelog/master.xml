@@ -10,6 +10,7 @@
     <include file="0003_create_table_word.xml" relativeToChangelogFile="true"/>
     <include file="0005_create_table_video.xml" relativeToChangelogFile="true"/>
     <include file="0004_create_table_user_comments.xml" relativeToChangelogFile="true"/>
+    <include file="0006_create_table_video_rating.xml" relativeToChangelogFile="true"/>
 
 <!--    Testowe dane -->
     <include file="../testdata/0001_users_and_roles.sql" relativeToChangelogFile="true" context="dev"/>
@@ -17,5 +18,6 @@
     <include file="../testdata/0003_word.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0005_video.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0004_comment.sql" relativeToChangelogFile="true" context="dev"/>
+    <include file="../testdata/0006_video_rating.sql" relativeToChangelogFile="true" context="dev"/>
 
 </databaseChangeLog>

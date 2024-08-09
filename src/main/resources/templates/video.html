@@ -7,20 +7,35 @@
     <meta charset="UTF-8">
     <title th:text="${title}">Video Page</title>
     <link rel="stylesheet" href="../static/styles/video.css" th:href="@{/styles/video.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <section class="video-section">
 
     <button class="other-movies-button" onclick="window.location.href='/video/showAll'">See other movies</button>
-    <h2 class="movie-section-heading" th:text="${title}">Video Title</h2>
+    <h2 class="video-section-heading" th:text="${title}">Video Title</h2>
     <iframe width="900" height="600" class="movie-trailer"
             th:src="${url}"
             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     <p>Posted by: <span th:text="${userName}">Username</span></p>
 </section>
-
+<section class="rating-section">
+    <h3 class="video-section-heading">Rate this video</h3>
+    <form th:action="@{/video/{id}/rate(id=${videoId})}" method="post" class="rating-form">
+        <div class="movie-rating-buttons">
+            <input type="hidden" name="rating" id="rating" value="0" />
+            <button class="video-rating-button"
+                    name="rating"
+                    th:each="i: ${#numbers.sequence(1, 5)}"
+                    th:value="${i}"
+                    th:onclick="'document.getElementById(\'rating\').value=' + ${i} + '; this.form.submit();'">
+                <i class="fa-heart" th:classappend="${i <= userRating ? 'fa-solid' : 'fa-regular'}"></i>
+            </button>
+        </div>
+    </form>
+</section>
 <section class="comments-section">
-    <h3 class="movie-section-heading">Comments</h3>
+    <h3 class="video-section-heading">Comments</h3>
     <ul>
         <li th:each="comment : ${comments}">
             <p th:text="${comment.content}">Comment content</p>

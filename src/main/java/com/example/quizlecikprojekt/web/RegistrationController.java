@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.user.Dto.UserRegistrationDto;
-import com.example.quizlecikprojekt.user.UserService;
+import com.example.quizlecikprojekt.domain.user.Dto.UserRegistrationDto;
+import com.example.quizlecikprojekt.domain.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
