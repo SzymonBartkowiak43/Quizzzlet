@@ -3,6 +3,7 @@ package com.example.quizlecikprojekt.domain.comment;
 import com.example.quizlecikprojekt.domain.comment.Dto.CommentDto;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.video.Video;
+import com.example.quizlecikprojekt.domain.comment.Dto.CommentDtoMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,22 +12,16 @@ import java.util.List;
 @Service
 public class CommentService  {
     private final CommentRepository commentRepository;
-    private final com.example.quizlecikprojekt.domain.comment.Dto.CommentDtoMapper CommentDtoMapper;
+    private final CommentDtoMapper commentDtoMapper;
 
-    public CommentService(CommentRepository commentRepository, com.example.quizlecikprojekt.domain.comment.Dto.CommentDtoMapper commentDtoMapper) {
+    public CommentService(CommentRepository commentRepository, CommentDtoMapper commentDtoMapper) {
         this.commentRepository = commentRepository;
-        CommentDtoMapper = commentDtoMapper;
+        this.commentDtoMapper = commentDtoMapper;
     }
 
-    public List<Comment> findAllCommentsByVideo(Video video) {
-        return commentRepository.findByVideo(video);
-    }
-    public List<Comment> findAllCommentsByVideoId(Long id) {
-        return commentRepository.findByVideoId(id);
-    }
     public List<CommentDto> findAllDtoCommentsByVideoId(Long id) {
         List<Comment> ListOfComments = commentRepository.findByVideoId(id);
-        return CommentDtoMapper.toDto(ListOfComments);
+        return commentDtoMapper.toDto(ListOfComments);
     }
 
     public void addComment(String content, User user, Video video) {

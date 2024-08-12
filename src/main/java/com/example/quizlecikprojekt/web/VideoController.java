@@ -8,6 +8,7 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.video.VideoService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -59,11 +60,26 @@ public class VideoController {
         List<Video> top5BestRatedVideosLast7Days = videoService.findTop4BestRatedVideosLast7Days();
         Map<Long, Double> videoRatings = allVideos.stream()
                 .collect(Collectors.toMap(Video::getId, video -> ratingService.getAverageRatingForVideo(video.getId())));
+//       List<Video> videosFromDirectoryVideo = videoService.getVideosFromDirectoryVideo();
+
         model.addAttribute("videos", allVideos);
         model.addAttribute("top5BestRatedVideosLast7Days", top5BestRatedVideosLast7Days);
         model.addAttribute("videoRatings", videoRatings);
+//        model.addAttribute("videosFromDirectoryVideo", videosFromDirectoryVideo);
         return "videoMenu";
     }
+
+    @GetMapping("/search")
+    public String searchVideos(@RequestParam String query, Model model) {
+        List<Video> searchResults = videoService.searchVideosByTitle(query);
+        Map<Long, Double> videoRatings = searchResults.stream()
+                .collect(Collectors.toMap(Video::getId, video -> ratingService.getAverageRatingForVideo(video.getId())));
+
+        model.addAttribute("videoRatings", videoRatings);
+        model.addAttribute("videos", searchResults);
+        return "videoMenu";
+    }
+
 
     @PostMapping("/addVideo")
     public String addVideo(String url, String title, Principal principal) {
@@ -82,10 +98,12 @@ public class VideoController {
     }
 
     @PostMapping("/{videoId}/deleteComment")
-    public String deleteComment(@PathVariable Long videoId, Long commentId, Principal principal) {
+    public String deleteComment(@PathVariable Long videoId, Long commentId, Authentication authentication) {
         Comment comment = commentService.findById(commentId);
-        User currentUser = userService.getUserByEmail(principal.getName());
-        if (comment.getUser().equals(currentUser)) {
+        User currentUser = userService.getUserByEmail(authentication.getName());
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ADMIN"));
+        if (isAdmin || comment.getUser().equals(currentUser)) {
             commentService.deleteComment(commentId);
         }
         return "redirect:/video/" + videoId;

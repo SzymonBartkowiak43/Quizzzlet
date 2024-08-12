@@ -42,7 +42,9 @@
             <div class="comment-meta">
                 <small th:text="${comment.user.userName}">Username</small>
                 <small th:text="${comment.formattedDateAndTime}">Date and Time</small>
-                <a th:if="${#authentication.name == comment.user.email}"  th:onclick="'event.preventDefault(); document.getElementById(\'delete-comment-form-' + ${comment.id} + '\').submit();'" class="delete-comment">Delete</a>
+                <a th:if="${#authentication.name == comment.user.email || #authentication.authorities.contains('ADMIN')}"
+                   th:onclick="'event.preventDefault(); document.getElementById(\'delete-comment-form-' + ${comment.id} + '\').submit();'"
+                   class="delete-comment">Delete</a>
                 <form th:action="@{/video/{videoId}/deleteComment(videoId=${videoId})}" th:method="post" th:id="'delete-comment-form-' + ${comment.id}" style="display:none;">
                     <input type="hidden" name="commentId" th:value="${comment.id}" />
                 </form>
