@@ -4,6 +4,8 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.video.VideoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
+    private final static Logger LOGGER = LoggerFactory.getLogger(RatingService .class);
 
     public RatingService(RatingRepository ratingRepository, UserRepository userRepository, VideoRepository videoRepository) {
         this.ratingRepository = ratingRepository;
@@ -23,24 +26,39 @@ public class RatingService {
     }
 
     public void addOrUpdateRating(String userEmail, long videoId, int rating) {
-        Rating ratingToSaveOrUpdate = ratingRepository.findByUser_EmailAndVideo_Id(userEmail, videoId)
-                .orElseGet(Rating::new);
-        User user = userRepository.findByEmail(userEmail).orElseThrow();
-        Video video = videoRepository.findById(videoId).orElseThrow();
-        ratingToSaveOrUpdate.setUser(user);
-        ratingToSaveOrUpdate.setVideo(video);
-        ratingToSaveOrUpdate.setRating(rating);
-        ratingToSaveOrUpdate.setDateAndTime(LocalDateTime.now());
-        ratingRepository.save(ratingToSaveOrUpdate);
+        LOGGER.info("Entering addOrUpdateRating with userEmail: {}, videoId: {}, rating: {}", userEmail, videoId, rating);
+        try {
+            Rating ratingToSave = ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
+                    .orElseGet(Rating::new);
+            User user = userRepository.findByEmail(userEmail).orElseThrow();
+            Video video = videoRepository.findById(videoId).orElseThrow();
+            ratingToSave.setUser(user);
+            ratingToSave.setVideo(video);
+            ratingToSave.setRating(rating);
+            ratingToSave.setDateAndTime(LocalDateTime.now());
+            ratingRepository.save(ratingToSave);
+        } catch (Exception e) {
+            LOGGER.error("Error in addOrUpdateRating: {}", e.getMessage());
+        }
+
     }
 
     public Optional<Integer> getUserRatingForVideo(String userEmail, long videoId) {
-        return ratingRepository.findByUser_EmailAndVideo_Id(userEmail, videoId)
+        LOGGER.info("Entering getUserRatingForVideo with userEmail: {}, videoId: {}", userEmail, videoId);
+        return ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
                 .map(Rating::getRating);
     }
 
     public double getAverageRatingForVideo(long videoId) {
-        List<Rating> ratings = ratingRepository.findByVideo_Id(videoId);
+        List<Rating> ratings = ratingRepository.findByVideoId(videoId);
         return ratings.stream().mapToInt(Rating::getRating).average().orElse(0.0);
+    }
+
+    public double getAverageRatingForViceoInLast7Days(long videoId) {
+        List<Rating> ratings = ratingRepository.findByVideoId(videoId);
+        List<Rating> list = ratings.stream()
+                .filter(rating -> rating.getDateAndTime().isAfter(LocalDateTime.now().minusDays(7)))
+                .toList();
+        return list.stream().mapToInt(Rating::getRating).average().orElse(0.0);
     }
 }

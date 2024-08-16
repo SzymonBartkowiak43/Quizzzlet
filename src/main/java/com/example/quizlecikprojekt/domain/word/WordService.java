@@ -1,9 +1,10 @@
 package com.example.quizlecikprojekt.domain.word;
 
 
-import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
 import com.example.quizlecikprojekt.domain.word.Dto.MapperWordToWordToRepeadDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,28 +14,33 @@ import java.util.List;
 public class WordService {
     private final WordRepository wordRepository;
     private final MapperWordToWordToRepeadDto mapperWordToWordToRepeadDto;
-    private final UserRepository userRepository;
+    private final static Logger LOGGER = LoggerFactory.getLogger(WordService.class);
 
 
-    public WordService(WordRepository wordRepository, UserRepository userRepository) {
+    public WordService(WordRepository wordRepository) {
         this.wordRepository = wordRepository;
-        this.userRepository = userRepository;
         mapperWordToWordToRepeadDto = new MapperWordToWordToRepeadDto();
     }
 
     public void saveWord(Word word) {
+        LOGGER.info("Entering saveWord with word: {}", word);
         wordRepository.save(word);
+        LOGGER.info("Word saved successfully");
     }
 
     public void deleteWordById(Long wordId) {
+        LOGGER.info("Entering deleteWordById with wordId: {}", wordId);
         wordRepository.deleteById(wordId);
+        LOGGER.info("Word deleted successfully");
     }
 
     public Word getWordById(Long wordId) {
+        LOGGER.info("Entering getWordById with wordId: {}", wordId);
         return wordRepository.findById(wordId).orElse(null);
     }
 
     public List<WordToRepeadDto> getWordsToRepeat(Long userId) {
+        LOGGER.info("Entering getWordsToRepeat with userId: {}", userId);
         List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
 
         List<WordToRepeadDto> collect = wordsToRepeat.stream()
@@ -46,10 +52,12 @@ public class WordService {
         allWords.addAll(collect);
         allWords.addAll(unccorectWords);
 
+        LOGGER.info("Returning words to repeat");
         return allWords;
     }
 
     public List<WordToRepeadDto> getCorrectWordsAndCreateUncoredWords(Long userId) {
+        LOGGER.info("Entering getCorrectWordsAndCreateUncoredWords with userId: {}", userId);
         List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
         List<WordToRepeadDto> unccorectWords = new ArrayList<>();
         for(int i = 0; i < wordsToRepeat.size(); i++) {
@@ -60,12 +68,11 @@ public class WordService {
                     unccorectWords.add(new WordToRepeadDto(wordsToRepeat.get(randomWord).getWord(), wordsToRepeat.get(randomTranzlation).getTranslation(), false));
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                LOGGER.error("Error in getCorrectWordsAndCreateUncoredWords: {}", e.getMessage());
             }
         }
+        LOGGER.info("Returning incorrect words");
         return unccorectWords;
     }
-    public Long getUserIdByUsername(String username) {
-        return userRepository.findByEmail(username).get().getId();
-    }
+
 }

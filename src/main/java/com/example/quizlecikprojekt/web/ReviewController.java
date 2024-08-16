@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.web;
 
+import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
 import com.example.quizlecikprojekt.domain.word.WordService;
 import org.springframework.security.core.Authentication;
@@ -17,12 +18,15 @@ import java.util.List;
 @Controller
 public class ReviewController {
     private final WordService wordService;
+    private final UserService userService;
+
     private int correctWordOnView = 0;
     private List<WordToRepeadDto> wordsToRepeat;
     private boolean systemAddCorrectWord;
 
-    public ReviewController(WordService wordService) {
+    public ReviewController(WordService wordService, UserService userService) {
         this.wordService = wordService;
+        this.userService = userService;
     }
 
     @GetMapping("/review")
@@ -30,7 +34,7 @@ public class ReviewController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-        Long userId = wordService.getUserIdByUsername(username);
+        Long userId = userService.getUserIdByUsername(username);
 
 
 
@@ -55,11 +59,7 @@ public class ReviewController {
     @ResponseBody
     public WordToRepeadDto reloadFlashcard() {
         Collections.shuffle(wordsToRepeat);
-        if(wordsToRepeat.get(0).isCorrect()) {
-            systemAddCorrectWord = true;
-        } else {
-           systemAddCorrectWord = false;
-        }
+        systemAddCorrectWord = wordsToRepeat.get(0).isCorrect();
 
         return wordsToRepeat.get(0);
     }
