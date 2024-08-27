@@ -2,21 +2,26 @@ package com.example.quizlecikprojekt.deeplyTranzlator;
 import com.deepl.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WordsTranslator {
-    String AUTH_KEY = "8ec376ab-7847-48d6-9941-23856ca6a578:fx";
     private static Translator translator;
     private final static Logger LOGGER = LoggerFactory.getLogger(WordsTranslator.class);
 
+    @Value("${deepl.auth-key}")
+    private String authKey;
+
     public WordsTranslator() {
-        translator = new Translator(AUTH_KEY);
     }
 
     public String translate(String text, String currentLanguage, String targetLang) {
         LOGGER.info("Entering translate word: {}, currentLanguage: {}, targetLang: {}", text, currentLanguage, targetLang);
         try {
+            if (translator == null) {
+                translator = new Translator(authKey);
+            }
             if (text.length() > 100) {
                 LOGGER.warn("Text length exceeds 100 characters");
                 return "error";

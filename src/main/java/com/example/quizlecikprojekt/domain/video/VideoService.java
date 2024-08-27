@@ -35,6 +35,14 @@ public class VideoService {
 
     public void addVideo(String url, String title, Long userId) {
         LOGGER.info("Entering addVideo with url: {}, title: {}, userId: {}", url, title, userId);
+
+        try {
+            url =  "https://www.youtube.com/embed/" +  url.substring(url.indexOf("v=") + 2);
+        } catch (Exception e) {
+            LOGGER.error("Invalid url: {}", url);
+            throw new RuntimeException("Invalid url");
+        }
+
         Video video = new Video();
         video.setUrl(url);
         video.setTitle(title);

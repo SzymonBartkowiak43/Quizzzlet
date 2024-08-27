@@ -11,10 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 
 @Controller
+@RequestMapping("/wordSet")
 public class LearnController {
 
     private final WordSetService wordSetService;
@@ -31,9 +33,9 @@ public class LearnController {
         this.wordService = wordService;
     }
 
-    @GetMapping("/wordSet/{id}/flashCards")
-    public String leranFlashCards(@PathVariable long id, Model model) {
-        LOGGER.info("Entering leranFlashCards with wordSetId: {}", id);
+    @GetMapping("/{id}/flashCards")
+    public String learnFlashCards(@PathVariable long id, Model model) {
+        LOGGER.info("Entering learnFlashCards with wordSetId: {}", id);
         if(nextWordIndex == 0) {
             uncorrectedWords.clear();
             words = wordSetService.getWordsByWordSetId(id);
@@ -58,7 +60,7 @@ public class LearnController {
         }
     }
 
-    @PostMapping("/wordSet/{id}/flashCards/like")
+    @PostMapping("/{id}/flashCards/like")
     public String likeWord(@PathVariable long id, long wordId, Model model) {
         LOGGER.info("Entering likeWord with wordSetId: {} and wordId: {}", id, wordId);
         wordService.getWordById(wordId).addPoint();
@@ -68,7 +70,7 @@ public class LearnController {
         return "redirect:/wordSet/" + id + "/flashCards";
     }
 
-    @PostMapping("/wordSet/{id}/flashCards/dislike")
+    @PostMapping("/{id}/flashCards/dislike")
     public String dislikeWord(@PathVariable long id, long wordId, Model model) {
         LOGGER.info("Entering dislikeWord with wordSetId: {} and wordId: {}", id, wordId);
         wordService.getWordById(wordId).subtractPoint();
@@ -78,7 +80,7 @@ public class LearnController {
         return "redirect:/wordSet/" + id + "/flashCards";
     }
 
-    @GetMapping("/wordSet/{id}/test")
+    @GetMapping("/{id}/test")
     public String learnTest(@PathVariable long id, Model model) {
         LOGGER.info("Entering learnTest with wordSetId: {}", id);
         List<Word> words = wordSetService.getWordsByWordSetId(id);
@@ -95,7 +97,7 @@ public class LearnController {
         }
     }
 
-    @PostMapping("/wordSet/{id}/submitTest")
+    @PostMapping("/{id}/submitTest")
     public String submitTest(@PathVariable long id, HttpServletRequest request, Model model) {
         LOGGER.info("Entering submitTest with wordSetId: {}", id);
         List<Word> words = wordSetService.getWordsByWordSetId(id);

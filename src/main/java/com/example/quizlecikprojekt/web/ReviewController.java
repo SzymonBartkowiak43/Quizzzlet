@@ -3,6 +3,8 @@ package com.example.quizlecikprojekt.web;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
 import com.example.quizlecikprojekt.domain.word.WordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ReviewController {
     private final WordService wordService;
     private final UserService userService;
+    private final static Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     private int correctWordOnView = 0;
     private List<WordToRepeadDto> wordsToRepeat;
@@ -31,12 +33,11 @@ public class ReviewController {
 
     @GetMapping("/review")
     public String home(Model model) {
+        LOGGER.info("Entering home method");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
         Long userId = userService.getUserIdByUsername(username);
-
-
 
         wordsToRepeat = wordService.getWordsToRepeat(userId);
         Collections.shuffle(wordsToRepeat);
@@ -48,16 +49,15 @@ public class ReviewController {
             }
         }
 
-        System.out.println("numberOfCorrectWords: " + correctWordOnView);
-
+        LOGGER.info("Number of correct words on view: {}", correctWordOnView);
 
         model.addAttribute("wordsToRepeat", wordsToRepeat);
         return "review";
     }
 
     @GetMapping("/reloadFlashcard")
-    @ResponseBody
     public WordToRepeadDto reloadFlashcard() {
+        LOGGER.info("Entering reloadFlashcard method");
         Collections.shuffle(wordsToRepeat);
         systemAddCorrectWord = wordsToRepeat.get(0).isCorrect();
 
@@ -65,8 +65,8 @@ public class ReviewController {
     }
 
     @GetMapping("/checkAnswer/{word}/{translation}")
-    @ResponseBody
     public int checkAnswer(@PathVariable String word, @PathVariable String translation) {
+        LOGGER.info("Entering checkAnswer method with word: {} and translation: {}", word, translation);
         WordToRepeadDto wordToRepeadDto = wordsToRepeat.stream()
                 .filter(w -> w.getWord().equals(word) && w.getTranslation().equals(translation))
                 .findFirst()
@@ -80,7 +80,7 @@ public class ReviewController {
                 correctWordOnView--;
             }
         }
-        System.out.println("numberOfCorrectWords: " + correctWordOnView);
+        LOGGER.info("Number of correct words on view after check: {}", correctWordOnView);
         return correctWordOnView;
     }
 

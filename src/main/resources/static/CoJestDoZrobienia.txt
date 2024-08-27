@@ -1,7 +1,8 @@
-Zrob logera
-a potem logi zapisuj do pliku
 nastepnoe logi zapisuj do mongoDb
 nastepnie logi zapisuj do elasticSearch/Kafka/RabitMQ
 
 Poczytaj cos o rabit mq lub kafka
 Dodaj takie cos by uyzytkownik mogl miec znajomych i zeby wyswietlalo ich aktywnosc
+dockerek
+dodaj do aplikacji dockerfile
+TESTY

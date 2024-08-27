@@ -25,12 +25,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<UserDto> findCredentialsByEmail(String email) {
-        LOGGER.info("Entering findCredentialsByEmail with email: {}", email);
-        return userRepository.findByEmail(email)
-                .map(UserCredentialsDtoMapper::map);
-    }
-
     public User getUserByEmail(String email) {
         LOGGER.info("Entering getUserByEmail with email: {}", email);
         return userRepository.findByEmail(email).orElseThrow(() -> {
@@ -46,6 +40,14 @@ public class UserService {
             return new UsernameNotFoundException("User not found");
         });
     }
+
+    public Optional<UserDto> findCredentialsByEmail(String email) {
+        LOGGER.info("Entering findCredentialsByEmail with email: {}", email);
+        return userRepository.findByEmail(email)
+                .map(UserCredentialsDtoMapper::map);
+    }
+
+
     public Long getUserIdByUsername(String username) {
         LOGGER.info("Entering getUserIdByUsername with username: {}", username);
         return userRepository.findByEmail(username).orElseThrow(() -> {
@@ -57,6 +59,7 @@ public class UserService {
     @Transactional
     public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
         LOGGER.info("Entering registerUserWithDefaultRole with userRegistrationDto: {}", userRegistrationDto);
+
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
         user.setUserName(userRegistrationDto.getUsername());

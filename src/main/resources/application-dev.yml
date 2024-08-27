@@ -10,4 +10,5 @@ spring:
 app:
   storage:
     location: uploads
-
+deepl:
+  auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx

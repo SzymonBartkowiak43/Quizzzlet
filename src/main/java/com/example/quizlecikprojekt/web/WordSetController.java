@@ -7,6 +7,8 @@ import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordService;
 import com.example.quizlecikprojekt.domain.wordSet.WordSet;
 import com.example.quizlecikprojekt.domain.wordSet.WordSetService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +29,7 @@ public class WordSetController {
     private final WordSetService wordSetService;
     private final WordService wordService;
     private final UserService userService;
+    private final static Logger LOGGER = LoggerFactory.getLogger(WordSetController.class);
 
 
     public WordSetController(WordSetService wordSetService, WordService wordService, UserService userService) {
@@ -37,14 +40,17 @@ public class WordSetController {
 
     @GetMapping("/wordSet")
     public String getWordSets(Model model, Authentication authentication) {
-        String email = authentication.getName(); //email
+        LOGGER.info("Entering getWordSets method");
+        String email = authentication.getName();
         List<WordSet> wordSets = wordSetService.getWordSetsByEmail(email);
         model.addAttribute("wordSets", wordSets);
+        LOGGER.info("Returning wordSet view");
         return "wordSet";
     }
 
     @GetMapping("/wordSet/create")
     public String createWordSet() {
+        LOGGER.info("Entering createWordSet method");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getUserByEmail(userDetails.getUsername());
@@ -57,21 +63,25 @@ public class WordSetController {
         wordSet.setTranslationLanguage("en");
 
         wordSetService.createWordSet(wordSet);
+        LOGGER.info("WordSet created and redirecting to /wordSet");
         return "redirect:/wordSet";
     }
 
     @GetMapping("/wordSet/{id}")
     public String showWords(@PathVariable Long id, Model model) {
+        LOGGER.info("Entering showWords method with id: {}", id);
         List<Word> words = wordSetService.getWordsByWordSetId(id);
         Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
 
         if (wordSetOptional.isEmpty()) {
+            LOGGER.warn("WordSet not found for id: {}", id);
             return "redirect:/error";
         }
 
         WordSet wordSet = wordSetOptional.get();
         model.addAttribute("wordSet", wordSet);
         model.addAttribute("words", words);
+        LOGGER.info("Returning wordSetMenu view for id: {}", id);
         return "wordSetMenu";
     }
 
