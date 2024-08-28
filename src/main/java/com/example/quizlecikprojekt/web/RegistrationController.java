@@ -18,7 +18,7 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    @GetMapping("/rejestracja")
+    @GetMapping("/registration")
     public String registrationForm(Model model) {
         LOGGER.info("Entering registrationForm");
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
@@ -26,7 +26,7 @@ public class RegistrationController {
         return "registration-form";
     }
 
-    @PostMapping("/rejestracja")
+    @PostMapping("/registration")
     public String register(UserRegistrationDto userRegistrationDto) {
         LOGGER.info("Entering register with user: {}", userRegistrationDto.getEmail());
         userService.registerUserWithDefaultRole(userRegistrationDto);

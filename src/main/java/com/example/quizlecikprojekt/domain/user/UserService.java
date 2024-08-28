@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -75,17 +76,51 @@ public class UserService {
     @Transactional
     public void updateUser(UserDto userDto) {
         LOGGER.info("Entering updateUser with userDto: {}", userDto);
-        User user = userRepository.findByEmail(userDto.getEmail()).orElseThrow();
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userRepository.save(user);
-        LOGGER.info("User updated successfully");
+        User user = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> {
+                    LOGGER.error("User not found with email: {}", userDto.getEmail());
+                    return new NoSuchElementException("User not found");
+                });
+
+        boolean updated = false;
+
+        if(userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            String passwordHash = passwordEncoder.encode(userDto.getPassword());
+            if(!passwordHash.equals(user.getPassword())) {
+                user.setPassword(passwordHash);
+                updated = true;
+            }
+        }
+
+        if(userDto.getUserName() != null && !userDto.getUserName().isEmpty() && !userDto.getUserName().equals(user.getUserName())) {
+            user.setUserName(userDto.getUserName());
+            updated = true;
+        }
+
+        if(userDto.getEmail() != null && !userDto.getEmail().isEmpty() && !userDto.getEmail().equals(user.getEmail())) {
+            user.setEmail(userDto.getEmail());
+            updated = true;
+        }
+
+
+        if(updated) {
+            userRepository.save(user);
+            LOGGER.info("User updated successfully");
+        } else {
+            LOGGER.info("No changes detected, user not updated");
+        }
     }
+
 
     public boolean verifyCurrentPassword(String email, String currentPassword) {
         LOGGER.info("Entering verifyCurrentPassword with email: {}", email);
-        User user = userRepository.findByEmail(email).orElseThrow();
-        String passwordHash = passwordEncoder.encode(currentPassword);
-        user.setPassword(passwordHash);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    LOGGER.error("User not found with email: {}", email);
+                    return new NoSuchElementException("User not found");
+                });
+
         boolean matches = passwordEncoder.matches(currentPassword, user.getPassword());
         LOGGER.info("Password verification result: {}", matches);
         return matches;

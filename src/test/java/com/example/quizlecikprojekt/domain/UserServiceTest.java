@@ -9,9 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +23,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -92,17 +97,53 @@ public class UserServiceTest {
         assertEquals(user.getId(), id);
     }
 
+//    verifyCurrentPasswordTest
     @Test
-    public void verifyCurrentPasswordTest() {
+    public void verifyCurrentPasswordWithCorrectPasswordTest() {
         //Given
         String email = "user1@test.pl";
-        String password = "password1";
+        String password = "{noop}password1";
+        User user = users.get(0);
 
         //When
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(users.get(0)));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);
+
         boolean result = userService.verifyCurrentPassword(email, password);
 
         //Then
         assertTrue(result);
     }
+
+    @Test
+    public void verifyCurrentPasswordWithIncorrectPasswordTest() {
+        //Given
+        String email = "user1@test.pl";
+        String password = "{noop}wrong";
+        User user = users.get(0);
+
+        //When
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(password, user.getPassword())).thenReturn(false);
+
+        boolean result = userService.verifyCurrentPassword(email, password);
+
+        //Then
+        assertFalse(result);
+    }
+
+    @Test
+    public void verifyCurrentPasswordUserNotFoundTest() {
+        //Given
+        String email = "notFound@test.pl";
+        String password = "{noop}password";
+
+        //When
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        //Then
+        assertThrows(NoSuchElementException.class, () -> userService.verifyCurrentPassword(email, password));
+    }
+
+
 }

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class ProfilSetingsController {
+public class ProfileSettingsController {
     private final UserService userService;
-    private final static Logger LOGGER = LoggerFactory.getLogger(ProfilSetingsController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProfileSettingsController.class);
 
 
-    public ProfilSetingsController(UserService userService) {
+    public ProfileSettingsController(UserService userService) {
         this.userService = userService;
     }
 
@@ -32,20 +32,45 @@ public class ProfilSetingsController {
     }
 
     @PostMapping("/profileSettings")
-    public String updateProfileSettings(@RequestParam String email,@RequestParam String userName  ,@RequestParam String currentPassword, @RequestParam String newPassword, Model model) {
+    public String updateProfileSettings(@RequestParam String email,
+                                        @RequestParam String userName,
+                                        @RequestParam String currentPassword,
+                                        @RequestParam String newPassword,
+                                        Model model) {
+
         LOGGER.info("Entering updateProfileSettings with email: {}", email);
+
         if (userService.verifyCurrentPassword(email, currentPassword)) {
             UserDto userDto = new UserDto();
-            if (!email.isEmpty()) {
+
+            boolean updated = false;
+
+            if (!email.isEmpty() && !email.equals(getCurrentUserEmail())) {
                 userDto.setEmail(email);
+                updated = true;
             }
-            if (!userName.isEmpty()) {
+
+            if (!userName.isEmpty() && !userName.equals(userService.getUserByEmail(email).getUserName())) {
                 userDto.setUserName(userName);
+                updated = true;
             }
-            userDto.setPassword(newPassword);
-            userService.updateUser(userDto);
-            LOGGER.info("Profile updated for email: {}", email);
-            return "redirect:/profileSettings?success";
+
+            if (!newPassword.isEmpty() && !newPassword.equals(currentPassword)) {
+                userDto.setPassword(newPassword);
+                updated = true;
+            }
+
+
+            if (updated) {
+                userService.updateUser(userDto);
+                LOGGER.info("Profile updated for email: {}", email);
+                return "redirect:/profileSettings?success";
+            } else {
+                LOGGER.info("No changes detected for email: {}", email);
+                model.addAttribute("error", "No changes detected.");
+                return "profileSettings";
+            }
+
         } else {
             LOGGER.warn("Current password is incorrect for email: {}", email);
             model.addAttribute("error", "Current password is incorrect.");
