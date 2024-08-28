@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.domain;
 
+import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.user.UserService;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 
@@ -143,6 +144,65 @@ public class UserServiceTest {
 
         //Then
         assertThrows(NoSuchElementException.class, () -> userService.verifyCurrentPassword(email, password));
+    }
+
+//  updateUser
+    @Test
+    public void UpdateUserUpdatePasswordTest() {
+        //Given
+        UserDto userDto = new UserDto();
+        userDto.setEmail("user1@test.pl");
+        userDto.setUserName("test");
+        userDto.setPassword("newPassword");
+
+        User user = users.get(0);
+
+        //When
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(userDto.getPassword())).thenReturn("newPasswordHash");
+
+        userService.updateUser(userDto);
+
+        //Then
+        verify(userRepository).save(user);
+        assertEquals(user.getPassword(), "newPasswordHash");
+
+    }
+
+    @Test
+    public void UpdateUserUpdateAllTest() {
+        //Given
+        UserDto userDto = new UserDto();
+        userDto.setEmail("new@test.pl");
+        userDto.setUserName("test");
+        userDto.setPassword("newPassword");
+
+        User user = users.get(0);
+
+        //When
+        when(userRepository.findByEmail("new@test.pl")).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(userDto.getPassword())).thenReturn("newPasswordHash");
+
+        userService.updateUser(userDto);
+
+        //Then
+        verify(userRepository).save(user);
+        assertEquals("newPasswordHash", user.getPassword());
+        assertEquals("test", user.getUserName());
+    }
+
+    @Test
+    public void UpdateUserNoChangesTest() {
+        //Given
+        UserDto userDto = new UserDto();
+        userDto.setEmail("notFound@test.pl");
+
+        //When
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
+
+        //Then
+        assertThrows(NoSuchElementException.class, () -> userService.updateUser(userDto));
+        verify(userRepository, never()).save(any(User.class));
     }
 
 

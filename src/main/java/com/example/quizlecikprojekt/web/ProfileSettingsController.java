@@ -1,6 +1,7 @@
 package com.example.quizlecikprojekt.web;
 
 import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
+import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 public class ProfileSettingsController {
@@ -35,28 +38,25 @@ public class ProfileSettingsController {
     public String updateProfileSettings(@RequestParam String email,
                                         @RequestParam String userName,
                                         @RequestParam String currentPassword,
-                                        @RequestParam String newPassword,
+                                        @RequestParam Optional<String> newPassword,
                                         Model model) {
 
         LOGGER.info("Entering updateProfileSettings with email: {}", email);
 
         if (userService.verifyCurrentPassword(email, currentPassword)) {
             UserDto userDto = new UserDto();
+            userDto.setEmail(email);
 
             boolean updated = false;
+            User currentUser = userService.getUserByEmail(email);
 
-            if (!email.isEmpty() && !email.equals(getCurrentUserEmail())) {
-                userDto.setEmail(email);
-                updated = true;
-            }
-
-            if (!userName.isEmpty() && !userName.equals(userService.getUserByEmail(email).getUserName())) {
+            if (!userName.isEmpty() && !userName.equals(currentUser.getUserName())) {
                 userDto.setUserName(userName);
                 updated = true;
             }
 
-            if (!newPassword.isEmpty() && !newPassword.equals(currentPassword)) {
-                userDto.setPassword(newPassword);
+            if (newPassword.isPresent() && !newPassword.get().equals(currentPassword)) {
+                userDto.setPassword(newPassword.get());
                 updated = true;
             }
 
@@ -74,7 +74,7 @@ public class ProfileSettingsController {
         } else {
             LOGGER.warn("Current password is incorrect for email: {}", email);
             model.addAttribute("error", "Current password is incorrect.");
-            return "profileSettings";
+            return "error";
         }
     }
 

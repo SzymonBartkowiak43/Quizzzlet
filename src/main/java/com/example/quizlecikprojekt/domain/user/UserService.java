@@ -76,6 +76,7 @@ public class UserService {
     @Transactional
     public void updateUser(UserDto userDto) {
         LOGGER.info("Entering updateUser with userDto: {}", userDto);
+
         User user = userRepository.findByEmail(userDto.getEmail())
                 .orElseThrow(() -> {
                     LOGGER.error("User not found with email: {}", userDto.getEmail());
@@ -86,7 +87,7 @@ public class UserService {
 
         if(userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
             String passwordHash = passwordEncoder.encode(userDto.getPassword());
-            if(!passwordHash.equals(user.getPassword())) {
+            if(!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
                 user.setPassword(passwordHash);
                 updated = true;
             }
@@ -94,11 +95,6 @@ public class UserService {
 
         if(userDto.getUserName() != null && !userDto.getUserName().isEmpty() && !userDto.getUserName().equals(user.getUserName())) {
             user.setUserName(userDto.getUserName());
-            updated = true;
-        }
-
-        if(userDto.getEmail() != null && !userDto.getEmail().isEmpty() && !userDto.getEmail().equals(user.getEmail())) {
-            user.setEmail(userDto.getEmail());
             updated = true;
         }
 

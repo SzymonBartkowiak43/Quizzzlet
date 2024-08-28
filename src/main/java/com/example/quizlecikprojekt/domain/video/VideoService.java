@@ -56,7 +56,7 @@ public class VideoService {
         LOGGER.info("Entering findTop4BestRatedVideosLast7Days");
         List<Video> all = (List<Video>) videoRepository.findAll();
         return all.stream()
-                .sorted((v1, v2) -> Double.compare(ratingService.getAverageRatingForViceoInLast7Days(v2.getId()), ratingService.getAverageRatingForViceoInLast7Days(v1.getId())))
+                .sorted((v1, v2) -> Double.compare(ratingService.getAverageRatingForVideoInLast7Days(v2.getId()), ratingService.getAverageRatingForVideoInLast7Days(v1.getId())))
                 .limit(4)
                 .collect(Collectors.toList());
     }

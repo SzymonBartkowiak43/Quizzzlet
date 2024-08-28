@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -30,17 +31,26 @@ public class RatingService {
         try {
             Rating ratingToSave = ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
                     .orElseGet(Rating::new);
-            User user = userRepository.findByEmail(userEmail).orElseThrow();
-            Video video = videoRepository.findById(videoId).orElseThrow();
-            ratingToSave.setUser(user);
-            ratingToSave.setVideo(video);
+
+            if (ratingToSave.getUser() == null || ratingToSave.getVideo() == null) {
+                User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
+                        new NoSuchElementException("User not found with email: " + userEmail));
+                Video video = videoRepository.findById(videoId).orElseThrow(() ->
+                        new NoSuchElementException("Video not found with id: " + videoId));
+                ratingToSave.setUser(user);
+                ratingToSave.setVideo(video);
+            }
+
             ratingToSave.setRating(rating);
             ratingToSave.setDateAndTime(LocalDateTime.now());
+
             ratingRepository.save(ratingToSave);
+            LOGGER.info("Rating successfully saved for userEmail: {}, videoId: {}", userEmail, videoId);
+        } catch (NoSuchElementException e) {
+            LOGGER.error("Entity not found: {}", e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in addOrUpdateRating: {}", e.getMessage());
         }
-
     }
 
     public Optional<Integer> getUserRatingForVideo(String userEmail, long videoId) {
@@ -54,11 +64,32 @@ public class RatingService {
         return ratings.stream().mapToInt(Rating::getRating).average().orElse(0.0);
     }
 
-    public double getAverageRatingForViceoInLast7Days(long videoId) {
-        List<Rating> ratings = ratingRepository.findByVideoId(videoId);
-        List<Rating> list = ratings.stream()
+    public double getAverageRatingForVideoInLast7Days(long videoId) {
+        return ratingRepository.findByVideoId(videoId).stream()
                 .filter(rating -> rating.getDateAndTime().isAfter(LocalDateTime.now().minusDays(7)))
-                .toList();
-        return list.stream().mapToInt(Rating::getRating).average().orElse(0.0);
+                .mapToInt(Rating::getRating)
+                .average()
+                .orElse(0.0);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
