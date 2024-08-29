@@ -1,3 +1,6 @@
+Cel 50 testow do serwisow
+Cel 50 testow do kontrolerow
+
 nastepnoe logi zapisuj do mongoDb
 nastepnie logi zapisuj do elasticSearch/Kafka/RabitMQ
 
@@ -5,4 +8,3 @@ Poczytaj cos o rabit mq lub kafka
 Dodaj takie cos by uyzytkownik mogl miec znajomych i zeby wyswietlalo ich aktywnosc
 dockerek
 dodaj do aplikacji dockerfile
-TESTY

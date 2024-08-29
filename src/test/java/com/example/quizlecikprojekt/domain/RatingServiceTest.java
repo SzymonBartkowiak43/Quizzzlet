@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -135,7 +135,7 @@ public class RatingServiceTest {
     }
 
     @Test
-    public void getUserRatingForVideoUserHasRating() {
+    public void getUserRatingForVideoUserHasRatingTest() {
         // Given
         String userEmail = "test@wp.pl";
         long videoId = 1L;
@@ -149,6 +149,50 @@ public class RatingServiceTest {
         assertEquals(5, result.get().intValue());
         verify(ratingRepository, times(1)).findByUserEmailAndVideoId(userEmail, videoId);
     }
+
+    @Test
+    public void addOrUpdateRatingExistingRating() {
+        // Given
+        when(ratingRepository.findByUserEmailAndVideoId(user.getEmail(), video.getId()))
+                .thenReturn(Optional.of(ratings.get(0)));
+
+        // When
+        ratingService.addOrUpdateRating(user.getEmail(), video.getId(), 1);
+
+        // Then
+        verify(ratingRepository, times(1)).save(ratings.get(0));
+        assertEquals(1, ratings.get(0).getRating());
+    }
+
+    @Test
+    public void addOrUpdateRatingUserNotFound() {
+        // Given
+        when(ratingRepository.findByUserEmailAndVideoId(user.getEmail(), video.getId()))
+                .thenReturn(Optional.empty());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+
+        // When
+        ratingService.addOrUpdateRating(user.getEmail(), video.getId(), 1);
+
+        // Then
+        verify(ratingRepository, times(0)).save(any(Rating.class));
+
+    }
+
+    @Test
+    public void addOrUpdateRatingVideoNotFound() {
+        when(ratingRepository.findByUserEmailAndVideoId(user.getEmail(), video.getId()))
+                .thenReturn(Optional.empty());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(videoRepository.findById(video.getId())).thenReturn(Optional.empty());
+
+        // When
+        ratingService.addOrUpdateRating(user.getEmail(), video.getId(), 1);
+
+        // Then
+        verify(ratingRepository, times(0)).save(any(Rating.class));
+    }
+
 
 
 }

@@ -52,7 +52,9 @@
                         <label th:for="${'translation-' + iterStat.index}">Translation:</label>
                         <input type="text" th:id="${'translation-' + iterStat.index}" th:value="${word.translation}" th:name="${'words[' + iterStat.index + '].translation'}" class="input-large-word-pair"/>
                     </div>
-                    <button type="button" th:attr="onclick='deleteWord(' + ${wordSet.id} + ',' + ${word.id} + ')'" class="delete-word-button">Delete</button>
+                    <form th:action="@{/wordSet/{wordSetId}/deleteWord/{wordId}(wordSetId=${wordSet.id}, wordId=${word.id})}" method="post" class="inline-form">
+                        <button type="submit" class="delete-word-button">Delete</button>
+                    </form>
                 </div>
             </li>
         </ul>
@@ -111,7 +113,13 @@
 
         function deleteWord(wordSetId, wordId) {
             const url = `/wordSet/${wordSetId}/deleteWord/${wordId}`;
-            fetch(url, { method: 'GET' })
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({ _method: 'DELETE' }) // Simulate DELETE request
+            })
                 .then(response => {
                     if (response.ok) {
                         window.location.reload();
