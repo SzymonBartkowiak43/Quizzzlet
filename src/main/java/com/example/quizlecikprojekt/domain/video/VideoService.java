@@ -69,22 +69,4 @@ public class VideoService {
                 .collect(Collectors.toList());
     }
 
-//    public List<Video> getVideosFromDirectoryVideo() {
-//        try(Stream<Path> paths = Files.walk(Paths.get("src/main/resources/static/video"))) {
-//            return paths
-//                    .filter(Files::isRegularFile)
-//                    .map(Path::toFile)
-//                    .map(file -> {
-//                        Video video = new Video();
-//                        video.setTitle(file.getName());
-//                        video.setUrl("**/static/video/" + file.getName());
-//                        System.out.println(video.getUrl());
-//                        return video;
-//                    })
-//                    .collect(Collectors.toList());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 }

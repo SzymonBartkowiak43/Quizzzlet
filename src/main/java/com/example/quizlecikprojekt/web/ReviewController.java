@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ReviewController {
 
     @GetMapping("/review")
     public String home(Model model) {
-        LOGGER.info("Entering home method");
+        LOGGER.info("Entering review method");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
@@ -56,8 +57,10 @@ public class ReviewController {
     }
 
     @GetMapping("/reloadFlashcard")
+    @ResponseBody
     public WordToRepeadDto reloadFlashcard() {
         LOGGER.info("Entering reloadFlashcard method");
+
         Collections.shuffle(wordsToRepeat);
         systemAddCorrectWord = wordsToRepeat.get(0).isCorrect();
 
@@ -65,6 +68,7 @@ public class ReviewController {
     }
 
     @GetMapping("/checkAnswer/{word}/{translation}")
+    @ResponseBody
     public int checkAnswer(@PathVariable String word, @PathVariable String translation) {
         LOGGER.info("Entering checkAnswer method with word: {} and translation: {}", word, translation);
         WordToRepeadDto wordToRepeadDto = wordsToRepeat.stream()

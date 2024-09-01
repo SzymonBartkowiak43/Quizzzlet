@@ -278,4 +278,28 @@ public class WordSetServiceTest {
         assertEquals(Collections.emptyList(), actualWordSets);
     }
 
+    @Test
+    public void getWordsByWordSetIdShoudReturnListOfWord() {
+        // Given
+        Word word1 = new Word();
+        word1.setId(1L);
+        Word word2 = new Word();
+        word2.setId(2L);
+
+        WordSet wordSet = new WordSet();
+        wordSet.setWords(List.of(word1, word2));
+
+        when(wordSetRepository.findById(1L)).thenReturn(Optional.of(wordSet));
+        when(wordRepository.findByWordSet(Optional.of(wordSet))).thenReturn(List.of(word1, word2));
+
+        // When
+        List<Word> words = wordSetService.getWordsByWordSetId(1L);
+
+        //Then
+        assertEquals(2, words.size());
+        assertEquals(word1, words.get(0));
+        assertEquals(word2, words.get(1));
+
+    }
+
 }
