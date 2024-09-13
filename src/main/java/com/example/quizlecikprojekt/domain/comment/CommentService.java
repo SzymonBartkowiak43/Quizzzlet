@@ -32,13 +32,18 @@ public class CommentService  {
 
     public void addComment(String content, User user, Video video) {
         LOGGER.info("Entering addComment with content: {}, user: {}, video: {}", content, user, video);
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setUser(user);
-        comment.setVideo(video);
-        comment.setDateAndTime(LocalDateTime.now());
-        commentRepository.save(comment);
-        LOGGER.info("Comment added successfully");
+        if(content.isBlank()) {
+            throw new IllegalArgumentException("Content cannot be empty");
+        } else {
+            Comment comment = new Comment();
+            comment.setContent(content);
+            comment.setUser(user);
+            comment.setVideo(video);
+            comment.setDateAndTime(LocalDateTime.now());
+            commentRepository.save(comment);
+            LOGGER.info("Comment added successfully");
+        }
+
     }
     public void deleteComment(Long id) {
         LOGGER.info("Entering deleteComment with id: {}", id);

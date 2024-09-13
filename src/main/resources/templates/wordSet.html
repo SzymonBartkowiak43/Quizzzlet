@@ -25,11 +25,13 @@
                 </a>
                 <i class="fa fa-trash-o delete-icon" th:onclick="'showDeleteModal(' + ${wordSet.id} + ')'"></i>
             </div>
-            <div class="word-set-card">
-                <a th:href="@{/wordSet/create}" class="word-set-link">
-                    <h2>Create a new set</h2>
-                    <p>Click here to create a new word set</p>
-                </a>
+            <div class="word-set-card-new">
+                <form th:action="@{/wordSet}" method="post">
+                    <button type="submit" class="word-set-link-v2">
+                        <h2>Create a new set</h2>
+                        <p>Click here to create a new word set</p>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -63,6 +65,7 @@
     function closeDeleteModal() {
         document.getElementById('deleteModal').style.display = 'none';
     }
+
 </script>
 </body>
 </html>
