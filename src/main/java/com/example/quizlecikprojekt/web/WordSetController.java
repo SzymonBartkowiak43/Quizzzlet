@@ -64,7 +64,6 @@ public class WordSetController {
     }
 
 
-
     @PostMapping("/delete")
     public String deleteWordSet(@RequestParam Long wordSetIdToDelete) {
         wordSetService.deleteWordSet(wordSetIdToDelete);
