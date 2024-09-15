@@ -116,6 +116,8 @@ public class WordSetController {
 
 
         wordSetService.updateWordSetDetails(wordSet, wordSetForm);
+
+
         wordSetService.updateWordsInWordSet(wordSetForm, wordSet);
 
 
@@ -126,6 +128,7 @@ public class WordSetController {
 
     @PostMapping("/{id}/deleteWord/{wordId}")
     public String deleteWordFromWordSet(@PathVariable Long id, @PathVariable Long wordId) {
+        System.out.println("WTFFFFFFFFFFFFFFFFFF");
         Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
         if (wordSetOptional.isEmpty()) {
             return "redirect:/error";
@@ -133,6 +136,7 @@ public class WordSetController {
 
         wordService.deleteWordById(wordId);
 
-        return "redirect:/wordSet/" + id + "/edit";
+        return "redirect:/wordSet" +
+                "/" + id + "/edit";
     }
 }

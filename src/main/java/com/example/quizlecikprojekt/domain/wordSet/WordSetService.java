@@ -82,6 +82,7 @@ public class WordSetService {
         wordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
     }
 
+    @Transactional
     public void updateWordsInWordSet(WordSet updatedWordSet, WordSet existingWordSet) {
         Map<Long, Word> existingWordsMap = mapExistingWords(existingWordSet);
 

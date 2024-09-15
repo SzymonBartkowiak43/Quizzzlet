@@ -99,35 +99,21 @@
             translationInput.classList.add('input-large-word-pair');
             translationDiv.appendChild(translationInput);
 
+            const deleteForm = document.createElement('form');
+            deleteForm.setAttribute('method', 'post');
+            deleteForm.classList.add('inline-form');
+            deleteForm.setAttribute('onsubmit', `deleteWord(${wordSetId}, null); return false;`);
+
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('delete-word-button');
-            deleteButton.setAttribute('title', 'Save the word set to enable deletion');
+            deleteForm.appendChild(deleteButton);
 
             wordPair.appendChild(wordDiv);
             wordPair.appendChild(translationDiv);
-            wordPair.appendChild(deleteButton);
+            wordPair.appendChild(deleteForm);
             li.appendChild(wordPair);
             list.appendChild(li);
-        }
-
-        function deleteWord(wordSetId, wordId) {
-            const url = `/wordSet/${wordSetId}/deleteWord/${wordId}`;
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({ _method: 'DELETE' }) // Simulate DELETE request
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert('Failed to delete word.');
-                    }
-                })
-                .catch(error => console.error('Error deleting word:', error));
         }
 
         function fetchTranslation(wordInput) {
