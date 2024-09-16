@@ -7,130 +7,136 @@
     <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
 </head>
 <body>
-    <header>
-        <div class="buttons-container-header">
-            <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="back-to-set-button back-to-set-link"> &lt; Back to set</a>
-            <button form="wordSetForm" type="submit" class="save-changes-button">Save Changes</button>
-        </div>
-    </header>
-    <form id="wordSetForm" th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" th:field="*{title}" class="input-large" placeholder="Set a title.."/>
-        <label for="description">Description:</label>
-        <textarea id="description" th:field="*{description}" class="input-large" placeholder="Add a description.."></textarea>
+<header>
+    <div class="buttons-container-header">
+        <a th:href="@{/wordSet/{id}(id=${wordSet.id})}" class="back-to-set-button back-to-set-link"> &lt; Back to set</a>
+        <button form="wordSetForm" type="submit" class="save-changes-button">Save Changes</button>
+    </div>
+</header>
+<form id="wordSetForm" th:action="@{/wordSet/{id}/update(id=${wordSet.id})}" th:object="${wordSet}" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{title}" class="input-large" placeholder="Set a title.."/>
+    <label for="description">Description:</label>
+    <textarea id="description" th:field="*{description}" class="input-large" placeholder="Add a description.."></textarea>
 
-        <div class="language">
-            <div>
-                <label for="language">Language:</label>
-                <select id="language" th:field="*{language}" class="input-large-l">
-                    <option value="pl">Polish</option>
-                    <option value="en-US">English</option>
-                    <option value="de">German</option>
-                    <option value="es">Spanish</option>
-                </select>
-            </div>
-            <div>
-                <label for="translationLanguage">Translation Language:</label>
-                <select id="translationLanguage" th:field="*{translationLanguage}" class="input-large-l">
-                    <option value="pl">Polish</option>
-                    <option value="en-US">English</option>
-                    <option value="de">German</option>
-                    <option value="es">Spanish</option>
-                </select>
-            </div>
+    <div class="language">
+        <div>
+            <label for="language">Language:</label>
+            <select id="language" th:field="*{language}" class="input-large-l">
+                <option value="pl">Polish</option>
+                <option value="en-US">English</option>
+                <option value="de">German</option>
+                <option value="es">Spanish</option>
+            </select>
         </div>
+        <div>
+            <label for="translationLanguage">Translation Language:</label>
+            <select id="translationLanguage" th:field="*{translationLanguage}" class="input-large-l">
+                <option value="pl">Polish</option>
+                <option value="en-US">English</option>
+                <option value="de">German</option>
+                <option value="es">Spanish</option>
+            </select>
+        </div>
+    </div>
 
-        <h2>Words in the set</h2>
-        <ul>
-            <li th:each="word, iterStat : ${words}" class="word-item">
-                <div class="word-pair">
-                    <div>
-                        <label th:for="${'word-' + iterStat.index}">Word:</label>
-                        <input type="text" th:id="${'word-' + iterStat.index}" th:value="${word.word}" th:name="${'words[' + iterStat.index + '].word'}" class="input-large-word-pair" onblur="fetchTranslation(this)"/>
-                    </div>
-                    <div>
-                        <label th:for="${'translation-' + iterStat.index}">Translation:</label>
-                        <input type="text" th:id="${'translation-' + iterStat.index}" th:value="${word.translation}" th:name="${'words[' + iterStat.index + '].translation'}" class="input-large-word-pair"/>
-                    </div>
-                    <form th:action="@{/wordSet/{wordSetId}/deleteWord/{wordId}(wordSetId=${wordSet.id}, wordId=${word.id})}" method="post" class="inline-form">
-                        <button type="submit" class="delete-word-button">Delete</button>
-                    </form>
+    <h2>Words in the set</h2>
+    <ul>
+        <li th:each="word, iterStat : ${words}" class="word-item">
+            <div class="word-pair">
+                <div>
+                    <label th:for="${'word-' + iterStat.index}">Word:</label>
+                    <input type="text" th:id="${'word-' + iterStat.index}" th:value="${word.word}" th:name="${'words[' + iterStat.index + '].word'}" class="input-large-word-pair" onblur="fetchTranslation(this)"/>
                 </div>
-            </li>
-        </ul>
-    </form>
-    <button type="button" onclick="addNewWord()" class="add-word-button">+ ADD CART</button>
+                <div>
+                    <label th:for="${'translation-' + iterStat.index}">Translation:</label>
+                    <input type="text" th:id="${'translation-' + iterStat.index}" th:value="${word.translation}" th:name="${'words[' + iterStat.index + '].translation'}" class="input-large-word-pair"/>
+                </div>
+                <button type="button" th:attr="onclick='deleteWord(' + ${wordSet.id} + ',' + ${word.id} + ')'" class="delete-word-button">Delete</button>
+            </div>
+        </li>
+    </ul>
+</form>
+<button type="button" onclick="addNewWord()" class="add-word-button">+ ADD CART</button>
 
-    <script>
-        function addNewWord() {
-            const list = document.querySelector('ul');
-            const index = list.children.length;
+<script>
+    function addNewWord() {
+        const list = document.querySelector('ul');
+        const index = list.children.length;
 
-            const li = document.createElement('li');
-            li.classList.add('word-item');
+        const li = document.createElement('li');
+        li.classList.add('word-item');
 
-            const wordPair = document.createElement('div');
-            wordPair.classList.add('word-pair');
+        const wordPair = document.createElement('div');
+        wordPair.classList.add('word-pair');
 
-            const wordDiv = document.createElement('div');
-            const wordLabel = document.createElement('label');
-            wordLabel.setAttribute('for', `word-${index}`);
-            wordLabel.textContent = 'Word:';
-            wordDiv.appendChild(wordLabel);
+        const wordDiv = document.createElement('div');
+        const wordLabel = document.createElement('label');
+        wordLabel.setAttribute('for', `word-${index}`);
+        wordLabel.textContent = 'Word:';
+        wordDiv.appendChild(wordLabel);
 
-            const wordInput = document.createElement('input');
-            wordInput.setAttribute('type', 'text');
-            wordInput.setAttribute('id', `word-${index}`);
-            wordInput.setAttribute('name', `words[${index}].word`);
-            wordInput.classList.add('input-large-word-pair');
-            wordInput.setAttribute('onblur', 'fetchTranslation(this)');
-            wordDiv.appendChild(wordInput);
+        const wordInput = document.createElement('input');
+        wordInput.setAttribute('type', 'text');
+        wordInput.setAttribute('id', `word-${index}`);
+        wordInput.setAttribute('name', `words[${index}].word`);
+        wordInput.classList.add('input-large-word-pair');
+        wordInput.setAttribute('onblur', 'fetchTranslation(this)');
+        wordDiv.appendChild(wordInput);
 
-            const translationDiv = document.createElement('div');
-            const translationLabel = document.createElement('label');
-            translationLabel.setAttribute('for', `translation-${index}`);
-            translationLabel.textContent = 'Translation:';
-            translationDiv.appendChild(translationLabel);
+        const translationDiv = document.createElement('div');
+        const translationLabel = document.createElement('label');
+        translationLabel.setAttribute('for', `translation-${index}`);
+        translationLabel.textContent = 'Translation:';
+        translationDiv.appendChild(translationLabel);
 
-            const translationInput = document.createElement('input');
-            translationInput.setAttribute('type', 'text');
-            translationInput.setAttribute('id', `translation-${index}`);
-            translationInput.setAttribute('name', `words[${index}].translation`);
-            translationInput.classList.add('input-large-word-pair');
-            translationDiv.appendChild(translationInput);
+        const translationInput = document.createElement('input');
+        translationInput.setAttribute('type', 'text');
+        translationInput.setAttribute('id', `translation-${index}`);
+        translationInput.setAttribute('name', `words[${index}].translation`);
+        translationInput.classList.add('input-large-word-pair');
+        translationDiv.appendChild(translationInput);
 
-            const deleteForm = document.createElement('form');
-            deleteForm.setAttribute('method', 'post');
-            deleteForm.classList.add('inline-form');
-            deleteForm.setAttribute('onsubmit', `deleteWord(${wordSetId}, null); return false;`);
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('delete-word-button');
+        deleteButton.setAttribute('title', 'Save the word set to enable deletion');
 
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.classList.add('delete-word-button');
-            deleteForm.appendChild(deleteButton);
+        wordPair.appendChild(wordDiv);
+        wordPair.appendChild(translationDiv);
+        wordPair.appendChild(deleteButton);
+        li.appendChild(wordPair);
+        list.appendChild(li);
+    }
 
-            wordPair.appendChild(wordDiv);
-            wordPair.appendChild(translationDiv);
-            wordPair.appendChild(deleteForm);
-            li.appendChild(wordPair);
-            list.appendChild(li);
+    function deleteWord(wordSetId, wordId) {
+        const url = `/wordSet/${wordSetId}/deleteWord/${wordId}`;
+        fetch(url, { method: 'GET' })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete word.');
+                }
+            })
+            .catch(error => console.error('Error deleting word:', error));
+    }
+
+    function fetchTranslation(wordInput) {
+        const word = wordInput.value;
+        const translationInput = wordInput.parentElement.nextElementSibling.querySelector('input');
+        const currentLang = document.getElementById('language').value;
+        const targetLang = document.getElementById('translationLanguage').value;
+
+        if (word && !translationInput.value) {
+            fetch(`/translate?text=${word}&currentLanguage=${currentLang}&targetLang=${targetLang}`)
+                .then(response => response.text())
+                .then(data => {
+                    translationInput.value = data;
+                })
+                .catch(error => console.error('Error fetching translation:', error));
         }
-
-        function fetchTranslation(wordInput) {
-            const word = wordInput.value;
-            const translationInput = wordInput.parentElement.nextElementSibling.querySelector('input');
-            const currentLang = document.getElementById('language').value;
-            const targetLang = document.getElementById('translationLanguage').value;
-
-            if (word && !translationInput.value) {
-                fetch(`/translate?text=${word}&currentLanguage=${currentLang}&targetLang=${targetLang}`)
-                    .then(response => response.text())
-                    .then(data => {
-                        translationInput.value = data;
-                    })
-                    .catch(error => console.error('Error fetching translation:', error));
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>

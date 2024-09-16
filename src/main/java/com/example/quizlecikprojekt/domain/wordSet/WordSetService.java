@@ -82,44 +82,7 @@ public class WordSetService {
         wordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
     }
 
-    @Transactional
-    public void updateWordsInWordSet(WordSet updatedWordSet, WordSet existingWordSet) {
-        Map<Long, Word> existingWordsMap = mapExistingWords(existingWordSet);
 
-        updateOrAddWords(updatedWordSet, existingWordSet, existingWordsMap);
-
-        removeDeletedWords(updatedWordSet, existingWordSet);
-    }
-
-    public  Map<Long, Word> mapExistingWords(WordSet wordSet) {
-        return wordSet.getWords().stream()
-                .collect(Collectors.toMap(Word::getId, word -> word));
-    }
-
-    public void updateOrAddWords(WordSet updatedWordSet, WordSet existingWordSet, Map<Long, Word> existingWordsMap) {
-        for (Word updatedWord : updatedWordSet.getWords()) {
-            if (updatedWord.getId() != null && existingWordsMap.containsKey(updatedWord.getId())) {
-                Word existingWord = existingWordsMap.get(updatedWord.getId());
-                if (!existingWord.getWord().equals(updatedWord.getWord()) ||
-                        !existingWord.getTranslation().equals(updatedWord.getTranslation())) {
-                    existingWord.setWord(updatedWord.getWord());
-                    existingWord.setTranslation(updatedWord.getTranslation());
-                }
-            } else {
-                updatedWord.setWordSet(existingWordSet);
-                updatedWord.setPoints(0);
-                updatedWord.setLastPracticed(Date.valueOf(LocalDateTime.now().toLocalDate()));
-                existingWordSet.getWords().add(updatedWord);
-            }
-        }
-    }
-
-    public void removeDeletedWords(WordSet updatedWordSet, WordSet existingWordSet) {
-        List<Long> updatedWordIds = updatedWordSet.getWords().stream()
-                .map(Word::getId)
-                .toList();
-        existingWordSet.getWords().removeIf(word -> word.getId() != null && !updatedWordIds.contains(word.getId()));
-    }
 
     public WordSet newWordSet(User user) {
         WordSet wordSet = new WordSet();
