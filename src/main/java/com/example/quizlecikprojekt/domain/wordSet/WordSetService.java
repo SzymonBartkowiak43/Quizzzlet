@@ -5,6 +5,7 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -75,11 +76,46 @@ public class WordSetService {
         LOGGER.info("Word set deleted successfully");
     }
 
-    public void updateWordSetDetails(WordSet wordSet, WordSet wordSetForm) {
+    @Transactional
+    public void updateWordSet(Long id, WordSet wordSetForm) throws NotFoundException {
+        Optional<WordSet> wordSetOptional = getWordSetById(id);
+        if (wordSetOptional.isEmpty()) {
+            throw new NotFoundException("WordSet not found");
+        }
+
+        WordSet wordSet = wordSetOptional.get();
         wordSet.setTitle(wordSetForm.getTitle());
         wordSet.setDescription(wordSetForm.getDescription());
         wordSet.setLanguage(wordSetForm.getLanguage());
         wordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
+
+        List<Word> existingWords = wordSet.getWords();
+        existingWords.size(); // to initialize lazy loading
+        Map<Long, Word> existingWordsMap = existingWords.stream()
+                .collect(Collectors.toMap(Word::getId, word -> word));
+
+        for (Word formWord : wordSetForm.getWords()) {
+            if (formWord.getId() != null && existingWordsMap.containsKey(formWord.getId())) {
+                Word existingWord = existingWordsMap.get(formWord.getId());
+                if (!existingWord.getWord().equals(formWord.getWord()) ||
+                        !existingWord.getTranslation().equals(formWord.getTranslation())) {
+                    existingWord.setWord(formWord.getWord());
+                    existingWord.setTranslation(formWord.getTranslation());
+                }
+            } else {
+                formWord.setWordSet(wordSet);
+                formWord.setPoints(0);
+                formWord.setLastPracticed(Date.valueOf(LocalDateTime.now().toLocalDate()));
+                wordSet.getWords().add(formWord);
+            }
+        }
+
+        List<Long> formWordIds = wordSetForm.getWords().stream()
+                .map(Word::getId)
+                .toList();
+        wordSet.getWords().removeIf(word -> word.getId() != null && !formWordIds.contains(word.getId()));
+
+        saveWordSet(wordSet);
     }
 
 
