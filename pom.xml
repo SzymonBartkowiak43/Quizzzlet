@@ -26,6 +26,7 @@
 <!--                        <artifactId>spring-boot-starter-logging</artifactId>-->
 <!--                    </exclusion>-->
 <!--                </exclusions>-->
+<!--                to trzeba komenyowav ^^^-->
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -36,23 +37,26 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-layout-template-json</artifactId>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>5.1.4</version>
         </dependency>
-
 
 <!---->
 

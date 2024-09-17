@@ -57,9 +57,18 @@ public class UserService {
         }).getId();
     }
 
+    public boolean usernameExists(String username) {
+        return userRepository.findByEmail(username).isPresent();
+    }
+
+    // Modify the registerUserWithDefaultRole method in UserService.java
     @Transactional
     public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
         LOGGER.info("Entering registerUserWithDefaultRole with userRegistrationDto: {}", userRegistrationDto);
+
+        if (usernameExists(userRegistrationDto.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
 
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());

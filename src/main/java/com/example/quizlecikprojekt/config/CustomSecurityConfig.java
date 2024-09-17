@@ -29,6 +29,7 @@ public class CustomSecurityConfig {
         PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
 
         http.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/registration").permitAll()
                 .requestMatchers(PUBLIC_MATCHERS).permitAll()
                 .requestMatchers(h2ConsoleRequestMatcher).permitAll()
                 .anyRequest().authenticated()
