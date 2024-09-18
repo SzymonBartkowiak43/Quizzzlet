@@ -15,6 +15,14 @@
     <h1>Your sets</h1>
     <div th:if="${#lists.isEmpty(wordSets)}" class="no-sets-message">
         <p>You don't have any sets ;/</p>
+        <div class="word-set-card-new">
+            <form th:action="@{/wordSet}" method="post">
+                <button type="submit" class="word-set-link-v2">
+                    <h2>Create a new set</h2>
+                    <p>Click here to create a new word set</p>
+                </button>
+            </form>
+        </div>
     </div>
     <div th:unless="${#lists.isEmpty(wordSets)}">
         <div class="word-sets-container">

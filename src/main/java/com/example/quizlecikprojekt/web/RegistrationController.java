@@ -29,7 +29,12 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String register(UserRegistrationDto userRegistrationDto) {
         LOGGER.info("Entering register with user: {}", userRegistrationDto.getEmail());
-        userService.registerUserWithDefaultRole(userRegistrationDto);
+        try {
+            userService.registerUserWithDefaultRole(userRegistrationDto);
+        } catch (Exception e) {
+            LOGGER.error("Error during registration: {}", e.getMessage());
+            return "redirect:/registration?error";
+        }
         return "redirect:/";
     }
 }
