@@ -1,7 +1,6 @@
 Cel 50 testow do serwisow
 Cel 50 testow do kontrolerow
 
-Stworz profil produkcyjny
 
 dockerek
 dodaj do aplikacji dockerfile
@@ -10,3 +9,4 @@ Dodaj takie cos by uyzytkownik mogl miec znajomych i zeby wyswietlalo ich aktywn
 
 Bledy:::
 
+Zuzia::
