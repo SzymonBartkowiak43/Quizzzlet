@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.web;
 
+import com.example.quizlecikprojekt.deeplyTranzlator.PasswordValidator;
 import com.example.quizlecikprojekt.domain.user.Dto.UserRegistrationDto;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import org.slf4j.Logger;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class RegistrationController {
@@ -27,8 +30,15 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String register(UserRegistrationDto userRegistrationDto) {
+    public String register(UserRegistrationDto userRegistrationDto, Model model) {
         LOGGER.info("Entering register with user: {}", userRegistrationDto.getEmail());
+        List<String> constraintViolations = PasswordValidator.getConstraintViolations(userRegistrationDto.getPassword());
+        if (!constraintViolations.isEmpty()) {
+            LOGGER.error("Password validation failed: {}", constraintViolations);
+            model.addAttribute("constraintViolations", constraintViolations);
+            model.addAttribute("user", userRegistrationDto);
+            return "registration-form";
+        }
         try {
             userService.registerUserWithDefaultRole(userRegistrationDto);
         } catch (Exception e) {

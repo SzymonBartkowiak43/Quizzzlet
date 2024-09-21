@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/styles/styles.css" th:href="@{/styles/styles.css}">
 </head>
 <body>
-<main class="main-content" >
+<main class="main-content">
     <h2 class="list-heading">Zarejestruj się</h2>
     <form action="#" th:action="@{registration}" method="post" class="mc-form" th:object="${user}">
         <label for="username">User name</label>
@@ -16,6 +16,11 @@
         <label for="password">Password</label>
         <input id="password" placeholder="password" type="password" th:field="*{password}">
         <button type="submit">Zarejestruj się</button>
+        <div th:if="${constraintViolations != null}">
+            <ul>
+                <li th:each="violation : ${constraintViolations}" th:text="${violation}"></li>
+            </ul>
+        </div>
     </form>
 </main>
 </body>

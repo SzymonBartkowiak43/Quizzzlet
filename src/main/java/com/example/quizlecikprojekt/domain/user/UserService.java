@@ -61,7 +61,7 @@ public class UserService {
         return userRepository.findByEmail(username).isPresent();
     }
 
-    // Modify the registerUserWithDefaultRole method in UserService.java
+
     @Transactional
     public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
         LOGGER.info("Entering registerUserWithDefaultRole with userRegistrationDto: {}", userRegistrationDto);
