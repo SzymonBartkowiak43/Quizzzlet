@@ -32,13 +32,28 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String register(UserRegistrationDto userRegistrationDto, Model model) {
         LOGGER.info("Entering register with user: {}", userRegistrationDto.getEmail());
+
         List<String> constraintViolations = PasswordValidator.getConstraintViolations(userRegistrationDto.getPassword());
         if (!constraintViolations.isEmpty()) {
             LOGGER.error("Password validation failed: {}", constraintViolations);
             model.addAttribute("constraintViolations", constraintViolations);
             model.addAttribute("user", userRegistrationDto);
-            return "registration-form";
+            return "redirect:/registration?error";
         }
+
+        if (userService.emailExists(userRegistrationDto.getEmail())) {
+            LOGGER.error("User already exists: {}", userRegistrationDto.getEmail());
+            model.addAttribute("constraintViolations", List.of("Email already exists"));
+            model.addAttribute("user", userRegistrationDto);
+            return "redirect:/registration?error";
+        }
+        if (userService.usernameExists(userRegistrationDto.getUsername())) {
+            LOGGER.error("Username already exists: {}", userRegistrationDto.getUsername());
+            model.addAttribute("constraintViolations", List.of("Username already exists"));
+            model.addAttribute("user", userRegistrationDto);
+            return "redirect:/registration?error";
+        }
+
         try {
             userService.registerUserWithDefaultRole(userRegistrationDto);
         } catch (Exception e) {

@@ -34,6 +34,11 @@ public class UserService {
         });
     }
 
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+
     public User getUserByid(Long id) {
         LOGGER.info("Entering getUserByid with id: {}", id);
         return userRepository.findById(id).orElseThrow(() -> {
