@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.deeplyTranzlator.PasswordValidator;
+import com.example.quizlecikprojekt.domain.user.PasswordValidator;
 import com.example.quizlecikprojekt.domain.user.Dto.UserRegistrationDto;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import org.slf4j.Logger;

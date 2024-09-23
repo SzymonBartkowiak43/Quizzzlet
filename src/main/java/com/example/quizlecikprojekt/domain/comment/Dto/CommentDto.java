@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.domain.comment.Dto;
 
 
-import com.example.quizlecikprojekt.deeplyTranzlator.DateTimeFormatterUtil;
+import com.example.quizlecikprojekt.domain.comment.DateTimeFormatterUtil;
 import com.example.quizlecikprojekt.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;

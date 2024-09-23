@@ -1,6 +1,5 @@
-package com.example.quizlecikprojekt.deeplyTranzlator;
+package com.example.quizlecikprojekt.domain.user;
 
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

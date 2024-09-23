@@ -141,7 +141,7 @@ h1 {
 
 .delete-icon {
     position: absolute;
-    scale: 2;
+    scale: 1.4;
     top: 10px;
     right: 10px;
     cursor: pointer;

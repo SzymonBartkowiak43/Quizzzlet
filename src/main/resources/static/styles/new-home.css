@@ -42,12 +42,14 @@ h2 {
 .title {
     font-size: 24px;
     margin-bottom: 10px;
-    text-align: left;
+    text-align: center;
 }
 
 .description {
     font-size: 17px;
-    text-align: left;
+    text-align: justify;
+    line-height: 1.5;
+    margin-bottom: 20px;
 }
 
 /*BLUE*/
@@ -110,8 +112,7 @@ h2 {
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 0 70px rgba(0, 0, 255, 0.5);
-    margin-top: 20px;
-    margin-left: -100px;
+    text-align: center;
 }
 
 .review-button:hover {
@@ -185,8 +186,7 @@ h2 {
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 0 70px rgba(255, 0, 0, 0.5);
-    margin-top: 20px;
-    margin-left: -100px
+    text-align: center;
 }
 
 .watch-button:hover {
@@ -252,8 +252,7 @@ h2 {
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 0 70px rgba(0, 255, 0, 0.5);
-    margin-top: 20px;
-    margin-left: -100px;
+    text-align: center;
 }
 
 .sets-button:hover {

@@ -1,4 +1,4 @@
-package com.example.quizlecikprojekt.deeplyTranzlator;
+package com.example.quizlecikprojekt.domain.comment;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
