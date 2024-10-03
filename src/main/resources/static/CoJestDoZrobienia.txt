@@ -7,6 +7,3 @@ dodaj do aplikacji dockerfile
 
 Dodaj takie cos by uyzytkownik mogl miec znajomych i zeby wyswietlalo ich aktywnosc
 
-Bledy:::
-
-Zuzia::
