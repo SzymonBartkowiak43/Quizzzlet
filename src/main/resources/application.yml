@@ -3,7 +3,14 @@ spring:
     hibernate:
       ddl-auto: validate
   liquibase:
-      change-log: classpath:db/changelog/master.xml
-
+    change-log: classpath:db/changelog/master.xml
+  datasource:
+    url: jdbc:h2:mem:test
+  web:
+    resources:
+      static-locations: classpath:/static/,file:uploads/
 deepl:
-  auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx
+    auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx
+logging:
+  level:
+    org.mongodb.driver: WARN
