@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 @Configuration
 public class CustomSecurityConfig {
     private static final String USER_ROLE = "USER";
@@ -20,30 +19,32 @@ public class CustomSecurityConfig {
     private static final String LOGOUT_URL = "/logout/**";
     private static final String LOGOUT_SUCCESS_URL = "/login?logout";
     private static final String[] PUBLIC_MATCHERS = {
-            "/", "/registration","/home","/styles/**", "/img/**", "/scripts/**", "static/img/**"
+            "/", "/registration", "/home", "/styles/**", "/img/**", "/scripts/**", "static/img/**"
     };
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
+//        PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
 
         http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/registration").permitAll()
-                .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                .requestMatchers(h2ConsoleRequestMatcher).permitAll()
-                .anyRequest().authenticated()
+                        .requestMatchers("/registration").permitAll()
+                        .requestMatchers(PUBLIC_MATCHERS).permitAll()
+//                        .requestMatchers(h2ConsoleRequestMatcher).permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-        .formLogin(login -> login
-                .loginPage(LOGIN_PAGE)
-                .permitAll()
-        )
-        .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL, HttpMethod.GET.name()))
-                .logoutSuccessUrl(LOGOUT_SUCCESS_URL).permitAll()
-        );
-
-        http.csrf(csrf -> csrf.ignoringRequestMatchers(h2ConsoleRequestMatcher));
+                .formLogin(login -> login
+                        .loginPage(LOGIN_PAGE)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL, HttpMethod.GET.name()))
+                        .logoutSuccessUrl(LOGOUT_SUCCESS_URL).permitAll()
+                );
+//
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+      //  http.csrf().disable();
+       // http.headers().frameOptions().sameOrigin();
         http.headers(
                 config -> config.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::sameOrigin
@@ -52,7 +53,6 @@ public class CustomSecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

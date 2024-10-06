@@ -55,6 +55,8 @@ public class RegistrationController {
         }
 
         try {
+            LOGGER.error("Registering user: {}", userRegistrationDto.getEmail());
+            LOGGER.error("Registering user: {}", userRegistrationDto.getUsername());
             userService.registerUserWithDefaultRole(userRegistrationDto);
         } catch (Exception e) {
             LOGGER.error("Error during registration: {}", e.getMessage());

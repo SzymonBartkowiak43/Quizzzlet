@@ -18,6 +18,7 @@ public class Word {
     private String word;
     private String translation;
     private Integer points;
+    @Column(columnDefinition = "TINYINT(1)")
     private boolean star;
     private Date lastPracticed;
 
@@ -38,7 +39,6 @@ public class Word {
             points--;
         }
     }
-
 
 
 }

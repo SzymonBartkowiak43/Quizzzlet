@@ -15,8 +15,9 @@ import java.io.PrintWriter;
 
 public class LogTransferService {
     private final static Logger LOGGER = LoggerFactory.getLogger(LogTransferService.class);
-    private static final String FILE_PATH = "app.json";
-    private static final String CONNECTION_STRING = "mongodb://localhost:27017/logs_Quzilecik";
+    private static final String FILE_PATH = System.getenv().getOrDefault("LOG_FILE_PATH", "app.json");
+    private static final String CONNECTION_STRING = System.getenv().getOrDefault("MONGODB_URI", "mongodb://mongodb:27017/projekt");
+
 
     public void transferLogs() {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {

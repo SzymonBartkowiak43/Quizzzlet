@@ -75,15 +75,21 @@ public class UserService {
             throw new IllegalArgumentException("Username already exists");
         }
 
+        System.out.println("1");
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
         user.setUserName(userRegistrationDto.getUsername());
         String passwordHash = passwordEncoder.encode(userRegistrationDto.getPassword());
         user.setPassword(passwordHash);
+        System.out.println("2");
 
-        UserRole defaultRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
-        user.getRoles().add(defaultRole);
+//        UserRole defaultRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
+//        System.out.println(defaultRole.getName());
+//        System.out.println("WTFFFFFF");
+//        user.getRoles().add(defaultRole);
+        System.out.println("3");
         userRepository.save(user);
+        System.out.println("4");
         LOGGER.info("User registered successfully with default role");
     }
 
