@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
+  docker:
+    compose:
+      file: compose-database.yml
+      stop:
+        command: down
+      profiles:
+        active: dev

@@ -2,10 +2,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-  datasource:
-    url:  jdbc:mysql://mysql:3306/projekt
-    username: root
-    password: admin
   sql:
     init:
       mode: always
