@@ -6,14 +6,18 @@
 ![Ekran główny aplikacji](https://github.com/user-attachments/assets/4e3e2646-5686-41d1-b9b1-ae1c9bdcf783)
 _Ekran główny aplikacji Quizzis_
 
+
 ![Widok quizu](https://github.com/user-attachments/assets/f394d677-376d-435a-8b7a-65e80f156516)
 _Podgląd polecanych filmów_
+
 
 ![Panel użytkownika](https://github.com/user-attachments/assets/f3b2ee2e-a9c8-40eb-8f7e-2fbe5f37a718)
 _Zestawy użytkownika_
 
+
 ![Ekran ustawień](https://github.com/user-attachments/assets/aa4fb8d6-a023-443e-8e61-4137eef94a46)
 _Edycja zestawu_
+
 
 ## Funkcje aplikacji:
 - Tworzenie i rozwiązywanie quizów
