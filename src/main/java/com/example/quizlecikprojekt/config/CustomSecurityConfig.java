@@ -24,12 +24,10 @@ public class CustomSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
 
         http.authorizeHttpRequests(requests -> requests
                         .requestMatchers("/registration").permitAll()
                         .requestMatchers(PUBLIC_MATCHERS).permitAll()
-//                        .requestMatchers(h2ConsoleRequestMatcher).permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -41,10 +39,8 @@ public class CustomSecurityConfig {
                         .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL, HttpMethod.GET.name()))
                         .logoutSuccessUrl(LOGOUT_SUCCESS_URL).permitAll()
                 );
-//
+
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
-      //  http.csrf().disable();
-       // http.headers().frameOptions().sameOrigin();
         http.headers(
                 config -> config.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::sameOrigin

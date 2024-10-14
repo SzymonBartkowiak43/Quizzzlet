@@ -7,16 +7,20 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+
+@Service
 public class LogTransferService {
     private final static Logger LOGGER = LoggerFactory.getLogger(LogTransferService.class);
     private static final String FILE_PATH = System.getenv().getOrDefault("LOG_FILE_PATH", "app.json");
-    private static final String CONNECTION_STRING = System.getenv().getOrDefault("MONGODB_URI", "mongodb://mongodb:27017/projekt");
+    private static final String CONNECTION_STRING = "mongodb://root:admin@mongo:27017/projekt";
+
 
 
     public void transferLogs() {

@@ -8,7 +8,6 @@ services:
     environment:
       - "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/projekt"
       - "SPRING_DATA_MONGODB_URI=mongodb://root:admin@mongo:27017/projekt"
-      - "MONGO_URI=mongodb://root:admin@mongo:27017"
       - "LOG_FILE_PATH=/logs/app.json"
     volumes:
       - ./logs:/logs
