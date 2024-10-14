@@ -78,3 +78,4 @@ _Edycja zestawu_
    ```
 
 6. Aplikacja będzie dostępna pod adresem [http://localhost:8080/](http://localhost:8080/). Możesz teraz zalogować się i przetestować jej działanie.
+   Polecam użyć konta email: admin@wp.com hasło: admin będzie ono odrazu wypełnione danymi testowymi.
