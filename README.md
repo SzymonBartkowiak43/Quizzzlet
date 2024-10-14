@@ -2,6 +2,12 @@
 
 **Quizzis** to aplikacja, która pomoże Ci w nauce języka angielskiego w przyjemny i interaktywny sposób. Dzięki quizom i testom aplikacja wspiera naukę słownictwa, gramatyki oraz innych umiejętności językowych. Nauka nigdy nie była prostsza!
 
+
+
+https://github.com/user-attachments/assets/6b413bf3-0c25-43f5-8a18-e120004259f1
+
+
+
 ## Zrzuty ekranu:
 ![Ekran główny aplikacji](https://github.com/user-attachments/assets/4e3e2646-5686-41d1-b9b1-ae1c9bdcf783)
 _Ekran główny aplikacji Quizzis_
