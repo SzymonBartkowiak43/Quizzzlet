@@ -3,6 +3,11 @@
 
 **Quizzis** is an app that helps you learn English in a fun and interactive way. It supports the learning of vocabulary, grammar and other language skills through flashcards, quizzes and watching videos. Learning has never been easier!
 
+## Video
+https://github.com/user-attachments/assets/0a384748-82de-427c-9431-8f46bc5afcbd
+
+
+
 ## Screenshots:
 ![Ekran główny aplikacji](https://github.com/user-attachments/assets/4e3e2646-5686-41d1-b9b1-ae1c9bdcf783)
 _Home screen of the Quizzis app_
