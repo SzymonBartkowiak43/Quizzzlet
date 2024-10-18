@@ -20,7 +20,7 @@ public class QuizlecikProjektApplication {
         LOGGER.info("QuizlecikProjektApplication started");
     }
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 300000)
     public void transferLogs() {
         logTransferService.transferLogs();
     }

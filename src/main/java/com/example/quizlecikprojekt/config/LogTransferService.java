@@ -21,8 +21,6 @@ public class LogTransferService {
     private static final String FILE_PATH = System.getenv().getOrDefault("LOG_FILE_PATH", "app.json");
     private static final String CONNECTION_STRING = "mongodb://root:admin@mongo:27017/projekt";
 
-
-
     public void transferLogs() {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase("logs_Quzilecik");
@@ -35,18 +33,18 @@ public class LogTransferService {
                     collection.insertOne(doc);
                 }
             } catch (IOException e) {
-                LOGGER.error("Error reading log file: ", e);
+                LOGGER.error("MONGODB - Error reading log file: ", e);
             }
 
             try (PrintWriter writer = new PrintWriter(FILE_PATH)) {
                 writer.print("");
             } catch (IOException e) {
-                LOGGER.error("Error clearing log file: ", e);
+                LOGGER.error("MONGODB - Error clearing log file: ", e);
             }
 
 
         } catch (Exception e) {
-            LOGGER.error("Error connecting to MongoDB: ", e);
+            LOGGER.error("MONGODB - Error connecting to MongoDB: ", e);
         }
     }
 }

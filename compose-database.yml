@@ -22,10 +22,10 @@ services:
       - mysqldb:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "--silent", "--protocol", "tcp" ]
-      interval: 5s
+      interval: 10s
       timeout: 3s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     restart: always
 
 

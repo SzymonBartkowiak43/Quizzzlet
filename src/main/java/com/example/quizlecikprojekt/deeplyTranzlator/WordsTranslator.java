@@ -13,8 +13,6 @@ public class WordsTranslator {
     @Value("${deepl.auth-key}")
     private String authKey;
 
-    public WordsTranslator() {
-    }
 
     public String translate(String text, String currentLanguage, String targetLang) {
         LOGGER.info("Entering translate word: {}, currentLanguage: {}, targetLang: {}", text, currentLanguage, targetLang);

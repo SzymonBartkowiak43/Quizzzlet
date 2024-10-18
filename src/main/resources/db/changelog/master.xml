@@ -12,6 +12,4 @@
     <include file="0004_create_table_user_comments.xml" relativeToChangelogFile="true"/>
     <include file="0006_create_table_video_rating.xml" relativeToChangelogFile="true"/>
 
-
-
 </databaseChangeLog>
