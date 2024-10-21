@@ -1,5 +1,10 @@
 spring:
+  liquibase:
+    enabled: false  # Wyłącza Liquibase
   datasource:
     url: jdbc:mysql://mysql:3306/projekt
     username: root
     password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update

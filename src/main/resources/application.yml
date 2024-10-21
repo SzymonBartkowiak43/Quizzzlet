@@ -1,14 +1,12 @@
 spring:
+  liquibase:
+    enabled: false  # Wyłącza Liquibase
   jpa:
     hibernate:
       ddl-auto: validate
   sql:
     init:
       mode: always
-
-
-  liquibase:
-    change-log: classpath:db/changelog/master.xml
 
   web:
     resources:
