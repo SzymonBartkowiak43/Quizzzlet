@@ -1,4 +1,4 @@
-package com.example.quizlecikprojekt.domain.word.Dto;
+package com.example.quizlecikprojekt.domain.word.dto;
 
 import com.example.quizlecikprojekt.domain.word.Word;
 

@@ -2,7 +2,7 @@ package com.example.quizlecikprojekt.web;
 
 import com.example.quizlecikprojekt.domain.comment.Comment;
 import com.example.quizlecikprojekt.domain.comment.CommentService;
-import com.example.quizlecikprojekt.domain.comment.Dto.CommentDto;
+import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
 import com.example.quizlecikprojekt.domain.rating.RatingService;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;

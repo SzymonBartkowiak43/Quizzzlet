@@ -1,6 +1,4 @@
 spring:
-  liquibase:
-    enabled: false  # Wyłącza Liquibase
   jpa:
     hibernate:
       ddl-auto: validate
@@ -11,10 +9,8 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/,file:uploads/
-
-
 deepl:
-    auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx
+  auth-key: ${DEEPL_AUTH_KEY}
 logging:
   level:
     org.mongodb.driver: WARN

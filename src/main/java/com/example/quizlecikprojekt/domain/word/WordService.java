@@ -1,8 +1,8 @@
 package com.example.quizlecikprojekt.domain.word;
 
 
-import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
-import com.example.quizlecikprojekt.domain.word.Dto.MapperWordToWordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeadDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

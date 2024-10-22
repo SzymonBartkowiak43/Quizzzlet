@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.domain.user;
 
-import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 
 import java.util.Set;
 import java.util.stream.Collectors;

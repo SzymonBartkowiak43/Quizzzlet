@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.domain;
 
-import com.example.quizlecikprojekt.domain.word.Dto.MapperWordToWordToRepeadDto;
-import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
 import com.example.quizlecikprojekt.domain.word.WordService;
