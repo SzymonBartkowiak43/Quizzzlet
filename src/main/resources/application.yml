@@ -10,7 +10,7 @@ spring:
     resources:
       static-locations: classpath:/static/,file:uploads/
 deepl:
-  auth-key: ${DEEPL_AUTH_KEY}
+  auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx
 logging:
   level:
     org.mongodb.driver: WARN
