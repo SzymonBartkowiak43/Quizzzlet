@@ -1,4 +1,4 @@
-package com.example.quizlecikprojekt.domain.comment.Dto;
+package com.example.quizlecikprojekt.domain.comment.dto;
 
 import com.example.quizlecikprojekt.domain.comment.Comment;
 import com.example.quizlecikprojekt.domain.user.UserService;

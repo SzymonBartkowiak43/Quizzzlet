@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.domain.user;
 
-import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
-import com.example.quizlecikprojekt.domain.user.Dto.UserRegistrationDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserRegistrationDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

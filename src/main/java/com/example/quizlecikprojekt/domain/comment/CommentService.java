@@ -1,9 +1,9 @@
 package com.example.quizlecikprojekt.domain.comment;
 
-import com.example.quizlecikprojekt.domain.comment.Dto.CommentDto;
+import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.video.Video;
-import com.example.quizlecikprojekt.domain.comment.Dto.CommentDtoMapper;
+import com.example.quizlecikprojekt.domain.comment.dto.CommentDtoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

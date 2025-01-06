@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.web;
 
 import com.example.quizlecikprojekt.domain.user.UserService;
-import com.example.quizlecikprojekt.domain.word.Dto.WordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
 import com.example.quizlecikprojekt.domain.word.WordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

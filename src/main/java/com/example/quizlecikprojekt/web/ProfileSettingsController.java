@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.domain.user.Dto.UserDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import org.slf4j.Logger;

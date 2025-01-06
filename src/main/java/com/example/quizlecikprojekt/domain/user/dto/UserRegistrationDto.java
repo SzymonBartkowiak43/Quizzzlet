@@ -1,4 +1,4 @@
-package com.example.quizlecikprojekt.domain.user.Dto;
+package com.example.quizlecikprojekt.domain.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;
