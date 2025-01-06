@@ -1,5 +1,75 @@
-name: projekt
+version: '3.8'
 
-include:
-  - compose-database.yml
-  - compose-application.yml
+services:
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer
+    ports:
+      - "8090:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    profiles:
+      - dev
+
+
+  mysql:
+    image: mysql:8.4.0
+    container_name: mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=admin"
+      - "MYSQL_DATABASE=projekt"
+    ports:
+      - "3306"
+    volumes:
+      - mysqldb:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "--silent", "--protocol", "tcp" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    restart: always
+
+
+
+  mongo:
+    image: mongo:6.0.5
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping")' | mongosh --quiet
+      interval: 60s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+
+  application:
+#    build: .
+    image: 140023391826.dkr.ecr.eu-central-1.amazonaws.com/quizletocv:latest
+    container_name: projekt
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/projekt"
+      - "SPRING_DATA_MONGODB_URI=mongodb://root:admin@mongo:27017/projekt"
+      - "LOG_FILE_PATH=/logs/app.json"
+      - "SPRING_PROFILES_ACTIVE=prod"
+    volumes:
+      - ./logs:/logs
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  mysqldb:
+
