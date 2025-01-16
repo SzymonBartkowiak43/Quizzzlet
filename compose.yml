@@ -51,8 +51,8 @@ services:
 
 
   application:
-#    build: .
-    image: 140023391826.dkr.ecr.eu-central-1.amazonaws.com/quizletocv:latest
+    build: .
+#    image: 140023391826.dkr.ecr.eu-central-1.amazonaws.com/quizletocv:latest
     container_name: projekt
     ports:
       - "8080:8080"
