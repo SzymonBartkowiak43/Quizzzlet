@@ -3,8 +3,8 @@
 
 **Quizzis** is an app that helps you learn English in a fun and interactive way. It supports the learning of vocabulary, grammar and other language skills through flashcards, quizzes and watching videos. Learning has never been easier!
 
-If you like to try go to this link: http://161.35.19.191:8080
-and log in with email: example@example.com , password example or create your own account.
+If you like to try, go to this link: <a href="http://161.35.19.191:8080" target="_blank">http://161.35.19.191:8080</a> 
+and log in with email: example@example.com, password example or create your own account.
 
 ## Video
 https://github.com/user-attachments/assets/0a384748-82de-427c-9431-8f46bc5afcbd
