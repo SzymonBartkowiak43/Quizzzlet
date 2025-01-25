@@ -29,6 +29,7 @@ public class CustomSecurityConfig {
                         .requestMatchers("/registration").permitAll()
                         .requestMatchers(PUBLIC_MATCHERS).permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/h2-console").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -41,6 +42,8 @@ public class CustomSecurityConfig {
                 );
 
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console"));
+       // http.headers(headers -> headers.frameOptions().disable());
         http.headers(
                 config -> config.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::sameOrigin
