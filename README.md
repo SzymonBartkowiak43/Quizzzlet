@@ -4,6 +4,10 @@
 **Quizzis** is an app that helps you learn English in a fun and interactive way. It supports the learning of vocabulary, grammar and other language skills through flashcards, quizzes and watching videos. Learning has never been easier!
 
 
+> **Author:**  Szymon Bartkowiak  <br>
+> **Linkedin:** https://www.linkedin.com/in/szymon-bartkowiak-7516532b4/  <br>
+> **Email:** szymon.b4310@gmail.com
+
 ## Video
 https://github.com/user-attachments/assets/0a384748-82de-427c-9431-8f46bc5afcbd
 
