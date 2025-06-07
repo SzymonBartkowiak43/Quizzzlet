@@ -65,7 +65,7 @@ h3 {
     display: flex;
     justify-content: center;
     flex-direction: row;
-    gap:200px;
+    gap: 200px;
 }
 
 .emoji-button {

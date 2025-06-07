@@ -28,14 +28,14 @@ public class Word {
 
     public void addPoint() {
         lastPracticed = new Date(System.currentTimeMillis());
-        if(points < 2) {
+        if (points < 2) {
             points++;
         }
     }
 
     public void subtractPoint() {
         lastPracticed = new Date(System.currentTimeMillis());
-        if(points > 0) {
+        if (points > 0) {
             points--;
         }
     }

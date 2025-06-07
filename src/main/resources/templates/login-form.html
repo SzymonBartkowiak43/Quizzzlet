@@ -3,19 +3,19 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Login in</title>
-    <link rel="stylesheet" href="../static/styles/styles.css" th:href="@{/styles/styles.css}">
+    <link href="../static/styles/styles.css" rel="stylesheet" th:href="@{/styles/styles.css}">
 </head>
 <body>
 <main class="main-content">
     <h2 class="list-heading">Login in</h2>
-    <form action="" th:action="@{/login}" method="post" class="mc-form">
+    <form action="" class="mc-form" method="post" th:action="@{/login}">
 
-        <p th:if="${param.error}"
-           th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"
-           class="mc-form-message">
+        <p class="mc-form-message"
+           th:if="${param.error}"
+           th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
             Login error.
         </p>
-        <p th:if="${param.logout}" class="mc-form-message">
+        <p class="mc-form-message" th:if="${param.logout}">
             You have been logged out, you can log in again.
         </p>
         <label for="username">Adres email</label>

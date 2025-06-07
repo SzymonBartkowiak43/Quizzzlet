@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,22 +28,17 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class RatingServiceTest {
 
-    @Mock
-    private  RatingRepository ratingRepository;
-
-    @Mock
-    private  UserRepository userRepository;
-
-    @Mock
-    private  VideoRepository videoRepository;
-
-    @InjectMocks
-    private RatingService ratingService;
-
     Video video = new Video();
     User user = new User();
     List<Rating> ratings = new ArrayList<>();
-
+    @Mock
+    private RatingRepository ratingRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private VideoRepository videoRepository;
+    @InjectMocks
+    private RatingService ratingService;
 
     @BeforeEach
     public void setUp() {
@@ -192,7 +187,6 @@ public class RatingServiceTest {
         // Then
         verify(ratingRepository, times(0)).save(any(Rating.class));
     }
-
 
 
 }

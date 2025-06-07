@@ -8,6 +8,7 @@ header {
 body {
     background-color: #EDEDED;
 }
+
 .input-large {
     border: 2px solid #EDEDED; /* Add a border */
     height: 60px; /* Increase height */
@@ -17,12 +18,15 @@ body {
     margin-bottom: 20px; /* Add some space below the input */
     border-radius: 10px;
 }
+
 .input-large:hover {
     border-color: #007bff; /* Add a blue border color when the input is hovered */
 }
+
 .input-large:focus {
     border-bottom: 3px solid #ff0000;
 }
+
 #description {
     height: 120px; /* Adjust the height as needed */
     resize: none;

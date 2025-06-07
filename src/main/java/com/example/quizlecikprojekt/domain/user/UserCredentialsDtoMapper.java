@@ -14,6 +14,6 @@ class UserCredentialsDtoMapper {
                 .stream()
                 .map(UserRole::getName)
                 .collect(Collectors.toSet());
-        return new UserDto(email,username, password, roles);
+        return new UserDto(email, username, password, roles);
     }
 }

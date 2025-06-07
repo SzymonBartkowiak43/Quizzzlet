@@ -1,6 +1,5 @@
 package com.example.quizlecikprojekt.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,8 +12,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class CustomSecurityConfig {
-    private static final String USER_ROLE = "USER";
-    private static final String ADMIN_ROLE = "ADMIN";
     private static final String LOGIN_PAGE = "/login";
     private static final String LOGOUT_URL = "/logout/**";
     private static final String LOGOUT_SUCCESS_URL = "/login?logout";
@@ -43,7 +40,7 @@ public class CustomSecurityConfig {
 
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console"));
-       // http.headers(headers -> headers.frameOptions().disable());
+        // http.headers(headers -> headers.frameOptions().disable());
         http.headers(
                 config -> config.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::sameOrigin

@@ -1,9 +1,9 @@
 package com.example.quizlecikprojekt.domain;
 
-import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,16 +22,13 @@ import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 
+    List<User> users = new ArrayList<>();
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private PasswordEncoder passwordEncoder;
-
     @InjectMocks
     private UserService userService;
-
-    List<User> users = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
@@ -98,7 +95,7 @@ public class UserServiceTest {
         assertEquals(user.getId(), id);
     }
 
-//    verifyCurrentPasswordTest
+    //    verifyCurrentPasswordTest
     @Test
     public void verifyCurrentPasswordWithCorrectPasswordTest() {
         //Given
@@ -146,7 +143,7 @@ public class UserServiceTest {
         assertThrows(NoSuchElementException.class, () -> userService.verifyCurrentPassword(email, password));
     }
 
-//  updateUser
+    //  updateUser
     @Test
     public void UpdateUserUpdatePasswordTest() {
         //Given

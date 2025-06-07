@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends CrudRepository<Comment, Long> {
     List<Comment> findByVideo(Video video);
+
     List<Comment> findByVideoId(Long id);
 }

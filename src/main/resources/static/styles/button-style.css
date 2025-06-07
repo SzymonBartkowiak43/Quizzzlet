@@ -45,6 +45,7 @@ header {
     text-decoration: underline; /* Underline text */
     display: inline-block; /* Display inline */
 }
+
 .back-to-set-link:hover {
     color: #0056b3; /* Darker blue color on hover */
 }
@@ -52,11 +53,13 @@ header {
 .save-changes-button {
     display: inline-block; /* Ensure button is displayed inline with the link */
 }
+
 .buttons-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 /*header*/
 
 .add-word-button {
@@ -85,6 +88,7 @@ header {
     border: none;
     cursor: pointer;
 }
+
 .submit-test-button:hover {
     background-color: #007bff;
 }

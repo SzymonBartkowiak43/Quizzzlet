@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="'Video Menu'">Video Menu</title>
-    <link rel="stylesheet" href="../static/styles/video-menu.css" th:href="@{/styles/video-menu.css}">
+    <link href="../static/styles/video-menu.css" rel="stylesheet" th:href="@{/styles/video-menu.css}">
 </head>
 <body>
-<form action="/video/search" method="get" class="search-form">
+<form action="/video/search" class="search-form" method="get">
     <textarea id="search" name="query" placeholder="Type your search here..."></textarea>
     <button type="submit">&#128270;</button>
 </form>
@@ -20,19 +20,21 @@
         <li th:each="video : ${top5BestRatedVideosLast7Days}">
             <div class="iframe-container">
                 <iframe class="movie-trailer" th:src="${video.url}"></iframe>
-                <div class="overlay" th:onclick="|window.location.href='@{/video/{videoId}(videoId=${video.id})}'|"></div>
+                <div class="overlay"
+                     th:onclick="|window.location.href='@{/video/{videoId}(videoId=${video.id})}'|"></div>
             </div>
             <div class="video-details">
-                <a class="title" th:text="${video.title}" th:href="@{/video/{videoId}(videoId=${video.id})}">Video Title</a>
+                <a class="title" th:href="@{/video/{videoId}(videoId=${video.id})}" th:text="${video.title}">Video
+                    Title</a>
                 <div class="rating">
-                    <span th:each="star : ${#numbers.sequence(1, 5)}"
-                          th:classappend="${star <= videoRatings[video.id]} ? 'filled' : 'empty'">&#10084;</span>
+                    <span th:classappend="${star <= videoRatings[video.id]} ? 'filled' : 'empty'"
+                          th:each="star : ${#numbers.sequence(1, 5)}">&#10084;</span>
                 </div>
             </div>
         </li>
     </ul>
 </section>
-<section th:if="${top5BestRatedVideosLast7Days == null}" class="back-button-style">
+<section class="back-button-style" th:if="${top5BestRatedVideosLast7Days == null}">
     <button onclick="window.location.href='/video/showAll'">
         GO BACK
     </button>
@@ -44,13 +46,15 @@
         <li th:each="video : ${videos}">
             <div class="iframe-container">
                 <iframe class="movie-trailer" th:src="${video.url}"></iframe>
-                <div class="overlay" th:onclick="|window.location.href='@{/video/{videoId}(videoId=${video.id})}'|"></div>
+                <div class="overlay"
+                     th:onclick="|window.location.href='@{/video/{videoId}(videoId=${video.id})}'|"></div>
             </div>
             <div class="video-details">
-                <a class="title" th:text="${video.title}" th:href="@{/video/{videoId}(videoId=${video.id})}">Video Title</a>
+                <a class="title" th:href="@{/video/{videoId}(videoId=${video.id})}" th:text="${video.title}">Video
+                    Title</a>
                 <div class="rating">
-                    <span th:each="star : ${#numbers.sequence(1, 5)}"
-                          th:classappend="${star <= videoRatings[video.id]} ? 'filled' : 'empty'">&#10084;</span>
+                    <span th:classappend="${star <= videoRatings[video.id]} ? 'filled' : 'empty'"
+                          th:each="star : ${#numbers.sequence(1, 5)}">&#10084;</span>
                 </div>
             </div>
         </li>
@@ -58,10 +62,10 @@
 </section>
 <section class="add-video-section">
     <form action="/video/addVideo" method="post" th:object="${video}">
-        <input type="text" name="url" placeholder="Video URL" required>
-        <input type="text" name="title" placeholder="Video Title" required>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <button type="submit" class="add-video-button">Add Video</button>
+        <input name="url" placeholder="Video URL" required type="text">
+        <input name="title" placeholder="Video Title" required type="text">
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+        <button class="add-video-button" type="submit">Add Video</button>
     </form>
 </section>
 

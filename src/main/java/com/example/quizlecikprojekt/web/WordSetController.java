@@ -10,21 +10,14 @@ import com.example.quizlecikprojekt.domain.wordSet.WordSetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import java.sql.Date;
-import java.time.LocalDateTime;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequestMapping("/wordSet")
 @Controller
@@ -32,7 +25,6 @@ public class WordSetController {
     private final WordSetService wordSetService;
     private final WordService wordService;
     private final UserService userService;
-    private final static Logger LOGGER = LoggerFactory.getLogger(WordSetController.class);
 
 
     public WordSetController(WordSetService wordSetService, WordService wordService, UserService userService) {
@@ -43,32 +35,26 @@ public class WordSetController {
 
     @GetMapping("")
     public String getWordSets(Model model, Authentication authentication) {
-        LOGGER.info("Entering getWordSets method");
         String email = authentication.getName();
         List<WordSet> wordSets = wordSetService.getWordSetsByEmail(email);
         model.addAttribute("wordSets", wordSets);
-        LOGGER.info("Returning wordSet view");
         return "wordSet";
     }
 
     @PostMapping("")
     public String createWordSet(Authentication authentication) {
-        LOGGER.info("Entering createWordSet method");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getUserByEmail(userDetails.getUsername());
 
-        if(user == null) {
-            LOGGER.error("User not found for email: {}", userDetails.getUsername());
+        if (user == null) {
             return "redirect:/error";
         }
 
         WordSet wordSet = wordSetService.newWordSet(user);
 
         wordSetService.createWordSet(wordSet);
-        LOGGER.info("WordSet created and redirecting to /wordSet");
         return "redirect:/wordSet";
     }
-
 
 
     @PostMapping("/delete")
@@ -79,20 +65,17 @@ public class WordSetController {
 
     @GetMapping("/{id}")
     public String showWords(@PathVariable Long id, Model model) {
-        LOGGER.info("Entering showWords method with id: {}", id);
 
         List<Word> words = wordSetService.getWordsByWordSetId(id);
         Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
 
         if (wordSetOptional.isEmpty()) {
-            LOGGER.warn("WordSet not found for id: {}", id);
             return "redirect:/error";
         }
 
         WordSet wordSet = wordSetOptional.get();
         model.addAttribute("wordSet", wordSet);
         model.addAttribute("words", words);
-        LOGGER.info("Returning wordSetMenu view for id: {}", id);
         return "wordSetMenu";
     }
 

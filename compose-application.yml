@@ -7,8 +7,6 @@ services:
       - "8080:8080"
     environment:
       - "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/projekt"
-      - "SPRING_DATA_MONGODB_URI=mongodb://root:admin@mongo:27017/projekt"
-      - "LOG_FILE_PATH=/logs/app.json"
       - "SPRING_PROFILES_ACTIVE=prod"
     volumes:
       - ./logs:/logs

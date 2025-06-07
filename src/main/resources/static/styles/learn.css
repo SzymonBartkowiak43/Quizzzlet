@@ -11,6 +11,7 @@ form {
     padding: 20px;
     border-radius: 8px;
 }
+
 input[type="text"] {
     width: 100%;
     padding: 8px;
@@ -31,7 +32,7 @@ input[type="text"] {
     padding: 30px;
     background-color: #ffffff;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #e0e0e0;
     text-align: center;
 }

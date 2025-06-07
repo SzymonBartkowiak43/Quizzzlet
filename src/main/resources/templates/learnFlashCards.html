@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Flashcards</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/flash-card.css" th:href="@{/styles/flash-card.css}">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../static/styles/flash-card.css" rel="stylesheet" th:href="@{/styles/flash-card.css}">
 </head>
 <body>
 <main class="main-content">
@@ -21,19 +21,19 @@
             </div>
         </div>
     </div>
-    <h3 >Do you know this word?</h3>
+    <h3>Do you know this word?</h3>
     <div class="buttons-container">
-        <form th:action="@{/wordSet/{id}/flashCards/like(id=${wordSetId})}" method="post">
-            <input type="hidden" name="wordId" th:value="${words[nextWordIndex].id}">
-            <button type="submit" class="emoji-button like-button">👍</button>
+        <form method="post" th:action="@{/wordSet/{id}/flashCards/like(id=${wordSetId})}">
+            <input name="wordId" th:value="${words[nextWordIndex].id}" type="hidden">
+            <button class="emoji-button like-button" type="submit">👍</button>
         </form>
-        <form th:action="@{/wordSet/{id}/flashCards/dislike(id=${wordSetId})}" method="post">
-            <input type="hidden" name="wordId" th:value="${words[nextWordIndex].id}">
-            <button type="submit" class="emoji-button dislike-button">👎</button>
+        <form method="post" th:action="@{/wordSet/{id}/flashCards/dislike(id=${wordSetId})}">
+            <input name="wordId" th:value="${words[nextWordIndex].id}" type="hidden">
+            <button class="emoji-button dislike-button" type="submit">👎</button>
         </form>
     </div>
-    <input type="hidden" id="wordSetId" th:value="${wordSetId}">
-    <input type="hidden" id="wordId" th:value="${words[nextWordIndex].id}">
+    <input id="wordSetId" th:value="${wordSetId}" type="hidden">
+    <input id="wordId" th:value="${words[nextWordIndex].id}" type="hidden">
 </main>
 </body>
 </html>

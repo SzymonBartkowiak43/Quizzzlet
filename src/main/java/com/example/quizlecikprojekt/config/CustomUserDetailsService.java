@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.config;
 
-import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

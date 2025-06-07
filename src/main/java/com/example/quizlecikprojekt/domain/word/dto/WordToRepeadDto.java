@@ -16,6 +16,7 @@ public class WordToRepeadDto {
         this.translation = translation;
         this.isCorrect = isCorrect;
     }
+
     public WordToRepeadDto() {
 
     }

@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Learning Test</title>
-    <link rel="stylesheet" href="../static/styles/learn.css" th:href="@{/styles/learn.css}">
-    <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
+    <link href="../static/styles/learn.css" rel="stylesheet" th:href="@{/styles/learn.css}">
+    <link href="../static/styles/button-style.css" rel="stylesheet" th:href="@{/styles/button-style.css}">
 </head>
 <body>
-    <div class="navigation-bar">
-        <a th:href="@{/wordSet/{id}(id=${wordSetId})}" class="back-button">Back to Word Sets</a>
-    </div>
-    <form th:action="@{/wordSet/{id}/submitTest(id=${wordSetId})}" method="post">
-        <ol>
-            <li th:each="word : ${words}">
-                <label th:text="${word.word}"></label>
-                <input type="text" th:name="${'answer_' + word.id}" placeholder="Your answer here">
-            </li>
-        </ol>
-        <button type="submit" class="submit-test-button">Submit Test</button>
-    </form>
+<div class="navigation-bar">
+    <a class="back-button" th:href="@{/wordSet/{id}(id=${wordSetId})}">Back to Word Sets</a>
+</div>
+<form method="post" th:action="@{/wordSet/{id}/submitTest(id=${wordSetId})}">
+    <ol>
+        <li th:each="word : ${words}">
+            <label th:text="${word.word}"></label>
+            <input placeholder="Your answer here" th:name="${'answer_' + word.id}" type="text">
+        </li>
+    </ol>
+    <button class="submit-test-button" type="submit">Submit Test</button>
+</form>
 </body>
 </html>

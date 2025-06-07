@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Test Result</title>
-    <link rel="stylesheet" href="../static/styles/learn.css" th:href="@{/styles/learn.css}">
-    <link rel="stylesheet" href="../static/styles/button-style.css" th:href="@{/styles/button-style.css}">
-    <link rel="stylesheet" href="../static/styles/header.css" th:href="@{/styles/header.css}">
+    <link href="../static/styles/learn.css" rel="stylesheet" th:href="@{/styles/learn.css}">
+    <link href="../static/styles/button-style.css" rel="stylesheet" th:href="@{/styles/button-style.css}">
+    <link href="../static/styles/header.css" rel="stylesheet" th:href="@{/styles/header.css}">
 </head>
 <body>
 <div class="test-result-container">
@@ -18,10 +18,10 @@
     <div th:if="${uncorrectedUserAnswers.size() > 0}">
         <h2>Incorrect Answers</h2>
         <ul class="incorrect-answers-list">
-            <li th:each="word, stat : ${uncorrectedWords}" class="incorrect-answer-item">
+            <li class="incorrect-answer-item" th:each="word, stat : ${uncorrectedWords}">
                 <p>Word: <span th:text="${word.word}"></span></p>
-                <p>Your Answer: <span th:text="${uncorrectedUserAnswers[stat.index]}" class="user-answer"></span></p>
-                <p>Correct Answer: <span th:text="${word.translation}" class="correct-answer"></span></p>
+                <p>Your Answer: <span class="user-answer" th:text="${uncorrectedUserAnswers[stat.index]}"></span></p>
+                <p>Correct Answer: <span class="correct-answer" th:text="${word.translation}"></span></p>
             </li>
         </ul>
     </div>
@@ -29,14 +29,14 @@
     <div th:if="${correctWords.size() > 0}">
         <h2>Correct Answers</h2>
         <ul class="correct-answers-list">
-            <li th:each="word, stat : ${correctWords}" class="correct-answer-item">
+            <li class="correct-answer-item" th:each="word, stat : ${correctWords}">
                 <p>Word: <span th:text="${word.word}"></span></p>
-                <p>Your Answer: <span th:text="${word.translation}" class="correct-answer"></span></p>
+                <p>Your Answer: <span class="correct-answer" th:text="${word.translation}"></span></p>
             </li>
         </ul>
     </div>
 
-    <a href="/wordSet" class="back-button">Back to Word Sets</a>
+    <a class="back-button" href="/wordSet">Back to Word Sets</a>
 </div>
 
 </body>

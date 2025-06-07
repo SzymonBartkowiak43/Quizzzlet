@@ -1,10 +1,10 @@
 package com.example.quizlecikprojekt.domain;
 
-import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeadDto;
-import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
 import com.example.quizlecikprojekt.domain.word.WordService;
+import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -77,7 +77,7 @@ public class WordServiceTest {
             assertFalse(dto.isCorrect());
             assertTrue(wordsToRepeat.stream().anyMatch(word -> word.getWord().equals(dto.getWord())));
             assertTrue(wordsToRepeat.stream().anyMatch(word -> word.getTranslation().equals(dto.getTranslation())));
-            for(Word word : wordsToRepeat) {
+            for (Word word : wordsToRepeat) {
                 assertFalse(word.getWord().equals(dto.getWord()) && word.getTranslation().equals(dto.getTranslation()));
             }
 
@@ -85,4 +85,4 @@ public class WordServiceTest {
     }
 
 
-    }
+}

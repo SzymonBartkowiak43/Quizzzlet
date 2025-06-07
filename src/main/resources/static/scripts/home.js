@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const flashcards = document.querySelectorAll('.flashcard');
     flashcards.forEach(flashcard => {
-        flashcard.addEventListener('click', function() {
+        flashcard.addEventListener('click', function () {
             const word = flashcard.querySelector('.flashcard-word').textContent;
             const translation = flashcard.querySelector('.flashcard-translation').textContent;
             checkAnswer(word, translation, flashcard);
@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const span = document.getElementsByClassName("delette-comment")[0];
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
+    span.onclick = function () {
         modal.style.display = "none";
         confetti.stop();
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
             confetti.stop();

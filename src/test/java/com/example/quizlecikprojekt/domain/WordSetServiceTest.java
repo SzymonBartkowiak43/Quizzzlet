@@ -14,20 +14,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class WordSetServiceTest {
     @Mock
-    private  WordSetRepository wordSetRepository;
+    private WordSetRepository wordSetRepository;
 
     @Mock
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    private  WordRepository wordRepository;
+    private WordRepository wordRepository;
 
     @InjectMocks
     private WordSetService wordSetService;

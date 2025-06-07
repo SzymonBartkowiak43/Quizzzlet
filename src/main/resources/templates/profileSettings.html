@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.thymeleaf.org"
-      layout:decorate="~{layout}">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Profile Settings</title>
-    <link rel="stylesheet" href="../static/styles/profile-settings.css" th:href="@{/styles/profile-settings.css}">
+    <link href="../static/styles/profile-settings.css" rel="stylesheet" th:href="@{/styles/profile-settings.css}">
 </head>
 <body>
 <main class="main-frame">
     <h1>Profile Settings</h1>
-    <form th:action="@{/profileSettings}" method="post" >
+    <form method="post" th:action="@{/profileSettings}">
         <div>
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" th:value="${user.email}" readonly>
+            <input id="email" name="email" readonly th:value="${user.email}" type="email">
         </div>
         <div>
             <label for="userName">User name:</label>
-            <input type="userName" id="userName" name="userName" th:value="${user.userName}" required>
+            <input id="userName" name="userName" required th:value="${user.userName}" type="userName">
         </div>
         <div>
             <label for="currentPassword">Current Password:</label>
-            <input type="password" id="currentPassword" name="currentPassword" required>
+            <input id="currentPassword" name="currentPassword" required type="password">
         </div>
         <div>
             <label for="newPassword">New Password:</label>
-            <input type="password" id="newPassword" name="newPassword">
+            <input id="newPassword" name="newPassword" type="password">
         </div>
         <button type="submit">Update</button>
     </form>

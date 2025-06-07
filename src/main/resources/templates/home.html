@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="../static/styles/new-home.css" th:href="@{/styles/new-home.css}">
+    <link href="../static/styles/new-home.css" rel="stylesheet" th:href="@{/styles/new-home.css}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -17,21 +17,27 @@
     <div class="centered-frame-blue blue-frame">
         <div class="content-frame-blue" onclick="location.href='/review'">
             <h2 class="title">Review Previous Word</h2>
-            <p class="description">Here you can review the words you have previously learned. This section allows you to revisit and reinforce your vocabulary knowledge, ensuring better retention and understanding of the words you have studied.</p>
+            <p class="description">Here you can review the words you have previously learned. This section allows you to
+                revisit and reinforce your vocabulary knowledge, ensuring better retention and understanding of the
+                words you have studied.</p>
             <button class="review-button" onclick="location.href='/review'">REVIEW WORD</button>
         </div>
     </div>
     <div class="centered-frame-red red-frame">
         <div class="content-frame-red" onclick="location.href='/video/1'">
             <h2 class="title">Watch Video</h2>
-            <p class="description">Watch English videos to improve your language skills. This section provides a variety of videos that cover different aspects of the English language, including grammar, vocabulary, pronunciation, and more.</p>
+            <p class="description">Watch English videos to improve your language skills. This section provides a variety
+                of videos that cover different aspects of the English language, including grammar, vocabulary,
+                pronunciation, and more.</p>
             <button class="watch-button" onclick="location.href='/video/1'">LET'S WATCH</button>
         </div>
     </div>
     <div class="centered-frame-green green-frame" onclick="location.href='/wordSet'">
         <div class="content-frame-green">
             <h2 class="title">My Sets</h2>
-            <p class="description">Explore your personalized sets! Create, manage your custom flashcard sets to enhance your learning experience. Dive into a world of tailored content that suits your study needs and track your progress as you master new topics.</p>
+            <p class="description">Explore your personalized sets! Create, manage your custom flashcard sets to enhance
+                your learning experience. Dive into a world of tailored content that suits your study needs and track
+                your progress as you master new topics.</p>
             <button class="sets-button" onclick="location.href='/wordSet'">GO TO SETS</button>
         </div>
     </div>

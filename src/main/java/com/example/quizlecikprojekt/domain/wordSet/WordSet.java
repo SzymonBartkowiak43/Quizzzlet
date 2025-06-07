@@ -1,4 +1,3 @@
-
 package com.example.quizlecikprojekt.domain.wordSet;
 
 
@@ -26,7 +25,7 @@ public class WordSet {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany( mappedBy = "wordSet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Word> words;
 
 

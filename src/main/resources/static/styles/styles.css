@@ -1,4 +1,3 @@
-
 /*--FORMULARZ LOGOWANIA--*/
 body {
     font-family: Arial, sans-serif;
@@ -72,6 +71,7 @@ body {
     color: #ff0000;
     margin-bottom: 10px;
 }
+
 .registration-link {
     margin-top: 20px;
     font-size: 14px;
@@ -88,4 +88,5 @@ body {
     color: #0056b3;
     text-decoration: underline;
 }
+
 /*---------------------*/

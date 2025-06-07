@@ -70,6 +70,7 @@ public class CommentServiceTest {
         verify(commentRepository, times(1)).findByVideoId(videoId);
         verify(commentDtoMapper, times(1)).toDto(Collections.emptyList());
     }
+
     @Test
     void givenValidContentUserAndVideoAddCommentTest() {
         // Given

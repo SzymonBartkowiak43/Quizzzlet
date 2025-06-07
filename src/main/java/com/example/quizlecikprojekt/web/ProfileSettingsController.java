@@ -1,8 +1,8 @@
 package com.example.quizlecikprojekt.web;
 
-import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,6 @@ import java.util.Optional;
 @Controller
 public class ProfileSettingsController {
     private final UserService userService;
-    private final static Logger LOGGER = LoggerFactory.getLogger(ProfileSettingsController.class);
 
 
     public ProfileSettingsController(UserService userService) {
@@ -27,10 +26,8 @@ public class ProfileSettingsController {
 
     @GetMapping("/profileSettings")
     public String showProfileSettingsForm(Model model) {
-        LOGGER.info("Entering showProfileSettingsForm");
         String email = getCurrentUserEmail();
         userService.findCredentialsByEmail(email).ifPresent(userDto -> model.addAttribute("user", userDto));
-        LOGGER.info("Returning profileSettings form for email: {}", email);
         return "profileSettings";
     }
 
@@ -41,7 +38,6 @@ public class ProfileSettingsController {
                                         @RequestParam Optional<String> newPassword,
                                         Model model) {
 
-        LOGGER.info("Entering updateProfileSettings with email: {}", email);
 
         if (userService.verifyCurrentPassword(email, currentPassword)) {
             UserDto userDto = new UserDto();
@@ -63,16 +59,13 @@ public class ProfileSettingsController {
 
             if (updated) {
                 userService.updateUser(userDto);
-                LOGGER.info("Profile updated for email: {}", email);
                 return "redirect:/profileSettings?success";
             } else {
-                LOGGER.info("No changes detected for email: {}", email);
                 model.addAttribute("error", "No changes detected.");
                 return "profileSettings";
             }
 
         } else {
-            LOGGER.warn("Current password is incorrect for email: {}", email);
             model.addAttribute("error", "Current password is incorrect.");
             return "error";
         }

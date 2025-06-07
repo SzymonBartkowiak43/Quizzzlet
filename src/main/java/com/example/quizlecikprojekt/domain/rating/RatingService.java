@@ -18,7 +18,6 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
-    private final static Logger LOGGER = LoggerFactory.getLogger(RatingService .class);
 
     public RatingService(RatingRepository ratingRepository, UserRepository userRepository, VideoRepository videoRepository) {
         this.ratingRepository = ratingRepository;
@@ -27,7 +26,6 @@ public class RatingService {
     }
 
     public void addOrUpdateRating(String userEmail, long videoId, int rating) {
-        LOGGER.info("Entering addOrUpdateRating with userEmail: {}, videoId: {}, rating: {}", userEmail, videoId, rating);
         try {
             Rating ratingToSave = ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
                     .orElseGet(Rating::new);
@@ -45,16 +43,12 @@ public class RatingService {
             ratingToSave.setDateAndTime(LocalDateTime.now());
 
             ratingRepository.save(ratingToSave);
-            LOGGER.info("Rating successfully saved for userEmail: {}, videoId: {}", userEmail, videoId);
         } catch (NoSuchElementException e) {
-            LOGGER.error("Entity not found: {}", e.getMessage());
         } catch (Exception e) {
-            LOGGER.error("Error in addOrUpdateRating: {}", e.getMessage());
         }
     }
 
     public Optional<Integer> getUserRatingForVideo(String userEmail, long videoId) {
-        LOGGER.info("Entering getUserRatingForVideo with userEmail: {}, videoId: {}", userEmail, videoId);
         return ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
                 .map(Rating::getRating);
     }

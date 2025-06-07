@@ -3,18 +3,18 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Register | MovieClub</title>
-    <link rel="stylesheet" href="../static/styles/styles.css" th:href="@{/styles/styles.css}">
+    <link href="../static/styles/styles.css" rel="stylesheet" th:href="@{/styles/styles.css}">
 </head>
 <body>
 <main class="main-content">
     <h2 class="list-heading">Register</h2>
-    <form action="#" th:action="@{registration}" method="post" class="mc-form" th:object="${user}">
+    <form action="#" class="mc-form" method="post" th:action="@{registration}" th:object="${user}">
         <label for="username">User name</label>
-        <input id="username" type="text" placeholder="User name" th:field="*{username}">
+        <input id="username" placeholder="User name" th:field="*{username}" type="text">
         <label for="email">Adres email</label>
-        <input id="email" type="email" placeholder="email" th:field="*{email}">
+        <input id="email" placeholder="email" th:field="*{email}" type="email">
         <label for="password">Password</label>
-        <input id="password" placeholder="password" type="password" th:field="*{password}">
+        <input id="password" placeholder="password" th:field="*{password}" type="password">
         <button type="submit">Register</button>
         <div th:if="${constraintViolations != null}">
             <ul>

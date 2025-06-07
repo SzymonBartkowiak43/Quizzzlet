@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
 
-<changeSet id="0003" author="szymon">
-    <createTable tableName="word">
-        <column name="id" type="BIGINT" autoIncrement="true">
-            <constraints nullable="false" primaryKey="true"/>
-        </column>
-        <column name="word_set_id" type="BIGINT"/>
-        <column name="word" type="VARCHAR(250)"/>
-        <column name="translation" type="VARCHAR(250)"/>
-        <column name="points" type="INT"/>
-        <column name="star" type="BOOLEAN"/>
-        <column name="last_practiced" type="DATE"/>
-    </createTable>
+    <changeSet id="0003" author="szymon">
+        <createTable tableName="word">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="word_set_id" type="BIGINT"/>
+            <column name="word" type="VARCHAR(250)"/>
+            <column name="translation" type="VARCHAR(250)"/>
+            <column name="points" type="INT"/>
+            <column name="star" type="BOOLEAN"/>
+            <column name="last_practiced" type="DATE"/>
+        </createTable>
 
-    <addForeignKeyConstraint
-            baseTableName="word"
-            baseColumnNames="word_set_id"
-            constraintName="fk_word"
-            referencedTableName="word_set"
-            referencedColumnNames="id"/>
-</changeSet>
+        <addForeignKeyConstraint
+                baseTableName="word"
+                baseColumnNames="word_set_id"
+                constraintName="fk_word"
+                referencedTableName="word_set"
+                referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
