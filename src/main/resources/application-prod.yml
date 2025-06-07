@@ -1,10 +1,17 @@
 spring:
-  liquibase:
-    enabled: false  # Wyłącza Liquibase
+  config:
+    activate:
+      on-profile: prod
   datasource:
-    url: jdbc:mysql://mysql:3306/projekt
+    url: jdbc:mysql://localhost:3306/projekt
     username: root
     password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
+  liquibase:
+    enabled: false
