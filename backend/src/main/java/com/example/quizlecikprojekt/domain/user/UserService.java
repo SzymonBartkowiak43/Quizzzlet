@@ -46,15 +46,18 @@ public class UserService {
 
 
     public Long getUserIdByUsername(String username) {
-        return userRepository.findByEmail(username).orElseThrow(() -> {
-            return new RuntimeException("User not found");
-        }).getId();
+        return userRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getId();
     }
 
     public boolean usernameExists(String username) {
-        return userRepository.findByEmail(username).isPresent();
+        return userRepository.findByUserName(username).isPresent();
     }
 
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUserName(username);
+    }
 
     @Transactional
     public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {

@@ -1,8 +1,6 @@
 package com.example.quizlecikprojekt.domain.video;
 
 import com.example.quizlecikprojekt.domain.rating.RatingService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +27,7 @@ public class VideoService {
         return (List<Video>) videoRepository.findAll();
     }
 
-    public void addVideo(String url, String title, Long userId) {
+    public Video addVideo(String url, String title, Long userId) {
 
         try {
             url = "https://www.youtube.com/embed/" + url.substring(url.indexOf("v=") + 2);
@@ -43,6 +41,7 @@ public class VideoService {
         video.setUserId(userId);
         video.setDateAndTime(java.time.LocalDateTime.now());
         videoRepository.save(video);
+        return video;
     }
 
     public List<Video> findTop4BestRatedVideosLast7Days() {

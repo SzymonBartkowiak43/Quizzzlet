@@ -2,56 +2,57 @@ package com.example.quizlecikprojekt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class CustomSecurityConfig {
-    private static final String LOGIN_PAGE = "/login";
-    private static final String LOGOUT_URL = "/logout/**";
-    private static final String LOGOUT_SUCCESS_URL = "/login?logout";
-    private static final String[] PUBLIC_MATCHERS = {
-            "/", "/registration", "/home", "/styles/**", "/img/**", "/scripts/**", "static/img/**"
-    };
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/registration").permitAll()
-                        .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/h2-console").permitAll()
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .formLogin(login -> login
-                        .loginPage(LOGIN_PAGE)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL, HttpMethod.GET.name()))
-                        .logoutSuccessUrl(LOGOUT_SUCCESS_URL).permitAll()
                 );
-
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console"));
-        // http.headers(headers -> headers.frameOptions().disable());
-        http.headers(
-                config -> config.frameOptions(
-                        HeadersConfigurer.FrameOptionsConfig::sameOrigin
-                )
-        );
 
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

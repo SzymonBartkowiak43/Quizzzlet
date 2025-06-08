@@ -4,8 +4,6 @@ import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
 import com.example.quizlecikprojekt.domain.comment.dto.CommentDtoMapper;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.video.Video;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,7 +24,7 @@ public class CommentService {
         return commentDtoMapper.toDto(ListOfComments);
     }
 
-    public void addComment(String content, User user, Video video) {
+    public Comment addComment(String content, User user, Video video) {
         if (content.isBlank()) {
             throw new IllegalArgumentException("Content cannot be empty");
         } else {
@@ -38,6 +36,7 @@ public class CommentService {
             commentRepository.save(comment);
         }
 
+        return null;
     }
 
     public void deleteComment(Long id) {
