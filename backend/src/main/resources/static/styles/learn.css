@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+}
+
+form {
+    box-shadow: 0 50px 60px rgba(0, 0, 255, 0.5);
+    background-color: white;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+.navigation-bar {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 20px;
+}
+
+/* Test Result Styles */
+.test-result-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.test-result-heading {
+    color: #444;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.incorrect-answers-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.incorrect-answer-item {
+    background-color: #f8d7da;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    margin-bottom: 20px; /* Add space between words */
+    border: 1px solid #ccc; /* Add frame around each word */
+}
+
+.correct-answer-item {
+    background-color: #aad79f;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    margin-bottom: 20px; /* Add space between words */
+    border: 1px solid #ccc; /* Add frame around each word */
+}
+
+.correct-answers-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.correct-answer {
+    color: #155724;
+    font-weight: bold;
+}
+
+.user-answer {
+    color: #ff0018;
+    font-weight: bold;
+}

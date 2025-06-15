@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="../static/styles/review.css" rel="stylesheet" th:href="@{/styles/review.css}">
+    <link href="../static/styles/button-style.css" rel="stylesheet" th:href="@{/styles/button-style.css}">
+</head>
+<body>
+<main class="main-div">
+    <h2>Find incorrect flashcards</h2>
+    <div class="flashcard-container">
+        <div class="flashcard" th:data-id="${word}" th:each="word, iterStat : ${wordsToRepeat}"
+             th:if="${iterStat.index < 8}">
+            <div class="flashcard-front">
+                <p class="flashcard-word" th:text="${word.word}">Word</p>
+            </div>
+            <div class="flashcard-back">
+                <p class="flashcard-translation" th:text="${word.translation}">Translation</p>
+            </div>
+        </div>
+    </div>
+    <div class="reload-button-container">
+        <button class="reload-button" onclick="location.reload()">Reload</button>
+    </div>
+</main>
+
+<!-- Modal Popup -->
+<div class="modal" id="popupModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="popupMessage"></p>
+    </div>
+</div>
+
+<script src="../static/scripts/confetti.js" th:src="@{/scripts/confetti.js}"></script>
+<script src="../static/scripts/home.js" th:src="@{/scripts/home.js}"></script>
+</body>
+</html>

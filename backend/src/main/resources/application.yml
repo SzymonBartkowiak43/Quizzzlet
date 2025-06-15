@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: dev
+  web:
+    resources:
+      static-locations: classpath:/static/,file:uploads/
+  docker:
+    compose:
+      file: compose-database.yml
+      stop:
+        command: down
+      profiles:
+        active: dev
+
+deepl:
+  auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx
+
+logging:
+  level:
+    org.mongodb.driver: WARN

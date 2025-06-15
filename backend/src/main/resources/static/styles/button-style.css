@@ -1,0 +1,139 @@
+.edit-button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding around the text */
+    text-decoration: none; /* Remove underline from links */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Bold font */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    margin-top: 20px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3; /* Darker blue background on hover */
+    color: #ffffff; /* Keep text white on hover */
+}
+
+/*Header*/
+header {
+    background-color: #EDEDED;
+    margin-bottom: 20px; /* Add space between header and body */
+}
+
+.save-changes-button {
+    background-color: #007bff; /* Green background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding around the text */
+    text-decoration: none; /* Remove underline from links */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Bold font */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    margin-top: 20px; /* Spacing from other elements */
+    margin-right: 40px;
+}
+
+.save-changes-button:hover {
+    background-color: #0056b3; /* Darker green background on hover */
+    color: #ffffff; /* Keep text white on hover */
+}
+
+.back-to-set-link {
+    color: #007bff; /* Blue color */
+    margin-top: 20px; /* Top margin */
+    margin-right: 20px; /* Right margin */
+    margin-left: 40px;
+    text-decoration: underline; /* Underline text */
+    display: inline-block; /* Display inline */
+}
+
+.back-to-set-link:hover {
+    color: #0056b3; /* Darker blue color on hover */
+}
+
+.save-changes-button {
+    display: inline-block; /* Ensure button is displayed inline with the link */
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/*header*/
+
+.add-word-button {
+    background-color: white; /* White background */
+    height: 100px;
+    width: 100%;
+    color: black; /* Black text color */
+    padding: 10px 20px; /* Padding around the text */
+    font-size: 20px; /* Larger font size */
+    border: 2px solid black; /* Black border */
+    cursor: pointer; /* Cursor changes to pointer on hover */
+    display: block; /* Ensure the button is a block element to fill width */
+    margin: 20px auto; /* Margin top for spacing and auto to center horizontally */
+    border-radius: 5px; /* Slightly rounded corners */
+}
+
+.add-word-button:hover {
+    color: #007bff;
+}
+
+.submit-test-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-test-button:hover {
+    background-color: #007bff;
+}
+
+.back-button {
+    display: inline-block; /* Allows for margin and padding adjustments */
+    padding: 8px 12px; /* Padding around the text for better visibility */
+    background-color: #007bff; /* Primary button color */
+    color: white; /* Text color */
+    text-decoration: none; /* Removes underline from link */
+    border-radius: 5px; /* Rounded corners for a modern look */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker shade on hover for visual feedback */
+    color: #ffffff; /* Ensures text color remains white on hover */
+}
+
+.reload-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Optional: Add some margin to the top */
+}
+
+.reload-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.reload-button:hover {
+    background-color: #0056b3;
+}
+
+.reload-button:active {
+    background-color: #004494;
+}

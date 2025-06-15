@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Flashcards Result</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../static/styles/flash-card-result.css" rel="stylesheet" th:href="@{/styles/flash-card-result.css}">
+    <link href="../static/styles/header.css" rel="stylesheet" th:href="@{/styles/header.css}">
+</head>
+<body>
+<header>
+    <div th:replace="layout :: header"></div>
+</header>
+<main class="main-content-result">
+    <h1>Flashcards Result</h1>
+    <p>Your Score: <span th:text="${score}">0</span></p>
+    <h2>Uncorrected Words</h2>
+    <ul>
+        <li th:each="word : ${uncorrectedWords}" th:text="${word.word} + ' - ' + ${word.translation}">Word -
+            Translation
+        </li>
+    </ul>
+    <a th:href="@{/wordSet/{id}/flashCards(id=${wordSetId})}">Try Again</a>
+</main>
+</body>
+</html>

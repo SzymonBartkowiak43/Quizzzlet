@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoje Zestawy</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../static/styles/wordsets.css" rel="stylesheet" th:href="@{/styles/wordsets.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+<main class="main-content">
+    <h1>Your sets</h1>
+    <div class="no-sets-message" th:if="${#lists.isEmpty(wordSets)}">
+        <p>You don't have any sets ;/</p>
+        <div class="word-set-card-new">
+            <form method="post" th:action="@{/wordSet}">
+                <button class="word-set-link-v2" type="submit">
+                    <h2>Create a new set</h2>
+                    <p>Click here to create a new word set</p>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div th:unless="${#lists.isEmpty(wordSets)}">
+        <div class="word-sets-container">
+            <div class="word-set-card" th:each="wordSet : ${wordSets}">
+                <a class="word-set-link" th:href="@{/wordSet/{id}(id=${wordSet.id})}">
+                    <h2 class="word-set-title" th:text="${wordSet.title}">Tytuł zestawu</h2>
+                    <p class="word-set-description" th:text="${wordSet.description}">Opis zestawu</p>
+                </a>
+                <i class="fa fa-trash-o delete-icon" th:onclick="'showDeleteModal(' + ${wordSet.id} + ')'"></i>
+            </div>
+            <div class="word-set-card-new">
+                <form method="post" th:action="@{/wordSet}">
+                    <button class="word-set-link-v2" type="submit">
+                        <h2>Create a new set</h2>
+                        <p>Click here to create a new word set</p>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal" id="deleteModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <p>Are you sure you want to delete this word set?</p>
+        <div class="modal-buttons">
+            <form id="deleteForm" method="post" th:action="@{/wordSet/delete}">
+                <input id="wordSetIdToDelete" name="wordSetIdToDelete" type="hidden">
+                <button type="submit">Yes</button>
+                <button onclick="closeDeleteModal()" type="button">No</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        closeDeleteModal();
+    });
+
+    function showDeleteModal(wordSetId) {
+        document.getElementById('wordSetIdToDelete').value = wordSetId;
+        document.getElementById('deleteModal').style.display = 'block';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+</script>
+</body>
+</html>

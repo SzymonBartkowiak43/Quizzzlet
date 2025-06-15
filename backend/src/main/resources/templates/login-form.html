@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Login in</title>
+    <link href="../static/styles/styles.css" rel="stylesheet" th:href="@{/styles/styles.css}">
+</head>
+<body>
+<main class="main-content">
+    <h2 class="list-heading">Login in</h2>
+    <form action="" class="mc-form" method="post" th:action="@{/login}">
+
+        <p class="mc-form-message"
+           th:if="${param.error}"
+           th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+            Login error.
+        </p>
+        <p class="mc-form-message" th:if="${param.logout}">
+            You have been logged out, you can log in again.
+        </p>
+        <label for="username">Adres email</label>
+        <input id="username" name="username" placeholder="e-mail">
+        <label for="password">Password</label>
+        <input id="password" name="password" placeholder="password" type="password">
+        <button type="submit">Login in</button>
+        <p class="registration-link">Don't have an account yet? <a href="#" th:href="@{registration}">Register</a></p>
+    </form>
+</main>
+</body>
+</html>
