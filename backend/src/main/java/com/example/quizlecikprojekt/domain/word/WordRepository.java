@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.domain.word;
 
-import com.example.quizlecikprojekt.domain.wordSet.WordSet;
+import com.example.quizlecikprojekt.domain.wordset.WordSet;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

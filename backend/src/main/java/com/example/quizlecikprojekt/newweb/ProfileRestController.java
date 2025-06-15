@@ -3,9 +3,8 @@ package com.example.quizlecikprojekt.newweb;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.user.dto.UserDto;
-import com.example.quizlecikprojekt.newweb.dto.*;
+import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
 import com.example.quizlecikprojekt.newweb.dto.profil.*;
-import com.example.quizlecikprojekt.newweb.dto.profil.UserProfileResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +70,7 @@ public class ProfileRestController {
 
             String email = authentication.getName();
 
-            // Weryfikuj obecne hasło
-            if (!userService.verifyCurrentPassword(email, request.getCurrentPassword())) {
+            if (!userService.verifyCurrentPassword(email, request.currentPassword())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.error("Current password is incorrect"));
             }
@@ -83,28 +81,26 @@ public class ProfileRestController {
 
             boolean updated = false;
 
-            // Sprawdź czy nazwa użytkownika się zmieniła
-            if (request.getUserName() != null &&
-                    !request.getUserName().trim().isEmpty() &&
-                    !request.getUserName().equals(currentUser.getUserName())) {
 
-                // Sprawdź czy nowa nazwa użytkownika już istnieje
-                if (userService.usernameExists(request.getUserName())) {
+            if (request.userName() != null &&
+                    !request.userName().trim().isEmpty() &&
+                    !request.userName().equals(currentUser.getUserName())) {
+
+                if (userService.usernameExists(request.userName())) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(ApiResponse.error("Username already exists"));
                 }
 
-                userDto.setUserName(request.getUserName());
+                userDto.setUserName(request.userName());
                 updated = true;
-                logger.debug("Username will be updated for user: {} to: {}", email, request.getUserName());
+                logger.debug("Username will be updated for user: {} to: {}", email, request.userName());
             }
 
-            // Sprawdź czy hasło się zmieniło
-            if (request.getNewPassword() != null &&
-                    !request.getNewPassword().trim().isEmpty() &&
-                    !request.getNewPassword().equals(request.getCurrentPassword())) {
+            if (request.newPassword() != null &&
+                    !request.newPassword().trim().isEmpty() &&
+                    !request.newPassword().equals(request.currentPassword())) {
 
-                userDto.setPassword(request.getNewPassword());
+                userDto.setPassword(request.newPassword());
                 updated = true;
                 logger.debug("Password will be updated for user: {}", email);
             }
@@ -148,10 +144,9 @@ public class ProfileRestController {
             }
 
             String email = authentication.getName();
-            boolean isValid = userService.verifyCurrentPassword(email, request.getPassword());
+            boolean isValid = userService.verifyCurrentPassword(email, request.password());
 
-            PasswordVerificationResponse response = new PasswordVerificationResponse();
-            response.setValid(isValid);
+            PasswordVerificationResponse response = new PasswordVerificationResponse(isValid);
 
             if (isValid) {
                 logger.debug("Password verification successful for user: {}", email);
@@ -181,21 +176,19 @@ public class ProfileRestController {
 
             String email = authentication.getName();
 
-            // Weryfikuj obecne hasło
-            if (!userService.verifyCurrentPassword(email, request.getCurrentPassword())) {
+            if (!userService.verifyCurrentPassword(email, request.currentPassword())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.error("Current password is incorrect"));
             }
 
-            // Sprawdź czy nowe hasło jest różne od obecnego
-            if (request.getCurrentPassword().equals(request.getNewPassword())) {
+            if (request.currentPassword().equals(request.newPassword())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.error("New password must be different from current password"));
             }
 
             UserDto userDto = new UserDto();
             userDto.setEmail(email);
-            userDto.setPassword(request.getNewPassword());
+            userDto.setPassword(request.newPassword());
 
             userService.updateUser(userDto);
 
@@ -222,33 +215,29 @@ public class ProfileRestController {
 
             String email = authentication.getName();
 
-            // Weryfikuj obecne hasło
-            if (!userService.verifyCurrentPassword(email, request.getCurrentPassword())) {
+            if (!userService.verifyCurrentPassword(email, request.currentPassword())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.error("Current password is incorrect"));
             }
 
             User currentUser = userService.getUserByEmail(email);
 
-            // Sprawdź czy nowa nazwa użytkownika jest różna
-            if (request.getNewUsername().equals(currentUser.getUserName())) {
+            if (request.newUsername().equals(currentUser.getUserName())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.error("New username must be different from current username"));
             }
 
-            // Sprawdź czy nowa nazwa użytkownika już istnieje
-            if (userService.usernameExists(request.getNewUsername())) {
+            if (userService.usernameExists(request.newUsername())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.error("Username already exists"));
             }
 
             UserDto userDto = new UserDto();
             userDto.setEmail(email);
-            userDto.setUserName(request.getNewUsername());
+            userDto.setUserName(request.newUsername());
 
             userService.updateUser(userDto);
 
-            // Pobierz zaktualizowane dane
             Optional<UserDto> updatedUserDtoOptional = userService.findCredentialsByEmail(email);
             if (updatedUserDtoOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -257,7 +246,7 @@ public class ProfileRestController {
 
             UserProfileResponse response = mapToUserProfileResponse(updatedUserDtoOptional.get());
 
-            logger.info("Username changed successfully for user: {} to: {}", email, request.getNewUsername());
+            logger.info("Username changed successfully for user: {} to: {}", email, request.newUsername());
             return ResponseEntity.ok(ApiResponse.success("Username changed successfully", response));
 
         } catch (Exception e) {
@@ -268,12 +257,7 @@ public class ProfileRestController {
         }
     }
 
-    // Helper method
     private UserProfileResponse mapToUserProfileResponse(UserDto userDto) {
-        UserProfileResponse response = new UserProfileResponse();
-        response.setEmail(userDto.getEmail());
-        response.setUserName(userDto.getUserName());
-        // Nie zwracamy hasła w response ze względów bezpieczeństwa
-        return response;
+        return new UserProfileResponse(userDto.getEmail(), userDto.getUserName());
     }
 }

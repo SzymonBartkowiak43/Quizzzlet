@@ -2,8 +2,8 @@ package com.example.quizlecikprojekt.newweb;
 
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.word.WordService;
-import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
-import com.example.quizlecikprojekt.newweb.dto.*;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeatDto;
+import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
 import com.example.quizlecikprojekt.newweb.dto.review.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -13,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -45,7 +48,7 @@ public class ReviewRestController {
             String userEmail = authentication.getName();
             Long userId = userService.getUserIdByUsername(userEmail);
 
-            List<WordToRepeadDto> wordsToRepeat = wordService.getWordsToRepeat(userId);
+            List<WordToRepeatDto> wordsToRepeat = wordService.getWordsToRepeat(userId);
 
             if (wordsToRepeat.isEmpty()) {
                 return ResponseEntity.ok(ApiResponse.success("No words to review",
@@ -75,12 +78,12 @@ public class ReviewRestController {
             reviewSessions.put(sessionId, session);
 
             // Przygotuj odpowiedź
-            List<WordToRepeadResponse> initialWords = wordsToRepeat.stream()
+            List<WordToRepeatResponse> initialWords = wordsToRepeat.stream()
                     .limit(8)
-                    .map(this::mapToWordToRepeadResponse)
+                    .map(this::mapToWordToRepeatResponse)
                     .toList();
 
-            WordToRepeadResponse currentWord = mapToWordToRepeadResponse(wordsToRepeat.get(0));
+            WordToRepeatResponse currentWord = mapToWordToRepeatResponse(wordsToRepeat.get(0));
 
             ReviewStartResponse response = new ReviewStartResponse(
                     sessionId,
@@ -132,10 +135,10 @@ public class ReviewRestController {
 
             // Tasuj słowa i pobierz pierwsze
             Collections.shuffle(session.getWordsToRepeat());
-            WordToRepeadDto nextWord = session.getWordsToRepeat().get(0);
+            WordToRepeatDto nextWord = session.getWordsToRepeat().get(0);
             session.setSystemAddCorrectWord(nextWord.isCorrect());
 
-            WordToRepeadResponse wordResponse = mapToWordToRepeadResponse(nextWord);
+            WordToRepeatResponse wordResponse = mapToWordToRepeatResponse(nextWord);
             NextWordResponse response = new NextWordResponse(
                     wordResponse,
                     session.getCorrectWordOnView(),
@@ -171,16 +174,14 @@ public class ReviewRestController {
                         .body(ApiResponse.error("Invalid review session"));
             }
 
-            // Sprawdź czy to sesja tego użytkownika
             if (!sessionId.contains(userEmail.hashCode() + "")) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied to session"));
             }
 
-            // Znajdź słowo w sesji
-            WordToRepeadDto wordToCheck = session.getWordsToRepeat().stream()
-                    .filter(w -> w.getWord().equals(request.getWord()) &&
-                            w.getTranslation().equals(request.getTranslation()))
+            WordToRepeatDto wordToCheck = session.getWordsToRepeat().stream()
+                    .filter(w -> w.word().equals(request.word()) &&
+                            w.translation().equals(request.translation()))
                     .findFirst()
                     .orElse(null);
 
@@ -189,21 +190,17 @@ public class ReviewRestController {
                         .body(ApiResponse.error("Word not found in current session"));
             }
 
-            // Aktualizuj licznik poprawnych odpowiedzi
-            boolean wasUserCorrect = request.isUserCorrect();
+            boolean wasUserCorrect = request.userCorrect();
             int newCorrectCount = session.getCorrectWordOnView();
 
             if (!wordToCheck.isCorrect() && wasUserCorrect) {
-                // Słowo było błędne, ale użytkownik odpowiedział poprawnie
                 if (session.isSystemAddCorrectWord()) {
                     newCorrectCount++;
                 }
-            } else if (wordToCheck.isCorrect() && !wasUserCorrect) {
-                // Słowo było poprawne, ale użytkownik odpowiedział błędnie
-                if (!session.isSystemAddCorrectWord()) {
+            } else if (wordToCheck.isCorrect() && !wasUserCorrect && !session.isSystemAddCorrectWord()) {
                     newCorrectCount--;
                 }
-            }
+
 
             session.setCorrectWordOnView(Math.max(0, newCorrectCount));
 
@@ -244,7 +241,6 @@ public class ReviewRestController {
                         .body(ApiResponse.error("Invalid review session"));
             }
 
-            // Sprawdź czy to sesja tego użytkownika
             if (!sessionId.contains(userEmail.hashCode() + "")) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied to session"));
@@ -277,7 +273,6 @@ public class ReviewRestController {
 
             String userEmail = authentication.getName();
 
-            // Sprawdź czy to sesja tego użytkownika
             if (!sessionId.contains(userEmail.hashCode() + "")) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied to session"));
@@ -299,41 +294,61 @@ public class ReviewRestController {
         }
     }
 
-    // Helper methods
     private String generateSessionId(String userEmail) {
         return "review_" + userEmail.hashCode() + "_" + System.currentTimeMillis();
     }
 
-    private WordToRepeadResponse mapToWordToRepeadResponse(WordToRepeadDto dto) {
-        WordToRepeadResponse response = new WordToRepeadResponse();
-        response.setWord(dto.getWord());
-        response.setTranslation(dto.getTranslation());
-        response.setCorrect(dto.isCorrect());
-        return response;
+    private WordToRepeatResponse mapToWordToRepeatResponse(WordToRepeatDto dto) {
+        return new WordToRepeatResponse(dto.word(),dto.translation(), dto.isCorrect());
     }
 
     // Session class
     private static class ReviewSession {
         private Long userId;
-        private List<WordToRepeadDto> wordsToRepeat;
+        private List<WordToRepeatDto> wordsToRepeat;
         private int correctWordOnView;
         private int currentWordIndex;
         private boolean systemAddCorrectWord;
 
         // Getters and setters
-        public Long getUserId() { return userId; }
-        public void setUserId(Long userId) { this.userId = userId; }
+        public Long getUserId() {
+            return userId;
+        }
 
-        public List<WordToRepeadDto> getWordsToRepeat() { return wordsToRepeat; }
-        public void setWordsToRepeat(List<WordToRepeadDto> wordsToRepeat) { this.wordsToRepeat = wordsToRepeat; }
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
 
-        public int getCorrectWordOnView() { return correctWordOnView; }
-        public void setCorrectWordOnView(int correctWordOnView) { this.correctWordOnView = correctWordOnView; }
+        public List<WordToRepeatDto> getWordsToRepeat() {
+            return wordsToRepeat;
+        }
 
-        public int getCurrentWordIndex() { return currentWordIndex; }
-        public void setCurrentWordIndex(int currentWordIndex) { this.currentWordIndex = currentWordIndex; }
+        public void setWordsToRepeat(List<WordToRepeatDto> wordsToRepeat) {
+            this.wordsToRepeat = wordsToRepeat;
+        }
 
-        public boolean isSystemAddCorrectWord() { return systemAddCorrectWord; }
-        public void setSystemAddCorrectWord(boolean systemAddCorrectWord) { this.systemAddCorrectWord = systemAddCorrectWord; }
+        public int getCorrectWordOnView() {
+            return correctWordOnView;
+        }
+
+        public void setCorrectWordOnView(int correctWordOnView) {
+            this.correctWordOnView = correctWordOnView;
+        }
+
+        public int getCurrentWordIndex() {
+            return currentWordIndex;
+        }
+
+        public void setCurrentWordIndex(int currentWordIndex) {
+            this.currentWordIndex = currentWordIndex;
+        }
+
+        public boolean isSystemAddCorrectWord() {
+            return systemAddCorrectWord;
+        }
+
+        public void setSystemAddCorrectWord(boolean systemAddCorrectWord) {
+            this.systemAddCorrectWord = systemAddCorrectWord;
+        }
     }
 }

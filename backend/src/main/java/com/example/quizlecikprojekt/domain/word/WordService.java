@@ -1,25 +1,22 @@
 package com.example.quizlecikprojekt.domain.word;
 
 
-import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeadDto;
-import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeatDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WordService {
     private final WordRepository wordRepository;
-    private final MapperWordToWordToRepeadDto mapperWordToWordToRepeadDto;
 
 
     public WordService(WordRepository wordRepository) {
         this.wordRepository = wordRepository;
-        mapperWordToWordToRepeadDto = new MapperWordToWordToRepeadDto();
     }
 
     public void saveWord(Word word) {
@@ -31,40 +28,50 @@ public class WordService {
         wordRepository.deleteById(wordId);
     }
 
-    public Word getWordById(Long wordId) {
-        return wordRepository.findById(wordId).orElse(null);
-    }
 
-    public List<WordToRepeadDto> getWordsToRepeat(Long userId) {
+    public List<WordToRepeatDto> getCorrectWordsAndCreateUncoredWords(Long userId) {
         List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
-
-        List<WordToRepeadDto> collect = wordsToRepeat.stream()
-                .map(mapperWordToWordToRepeadDto::mapWordToWordToRepeadDto)
-                .toList();
-        List<WordToRepeadDto> unccorectWords = getCorrectWordsAndCreateUncoredWords(userId);
-
-        List<WordToRepeadDto> allWords = new ArrayList<>();
-        allWords.addAll(collect);
-        allWords.addAll(unccorectWords);
-
-        return allWords;
-    }
-
-    public List<WordToRepeadDto> getCorrectWordsAndCreateUncoredWords(Long userId) {
-        List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
-        List<WordToRepeadDto> unccorectWords = new ArrayList<>();
+        List<WordToRepeatDto> uncorrectedWords = new ArrayList<>();
         for (int i = 0; i < wordsToRepeat.size(); i++) {
             try {
                 int randomWord = (int) (Math.random() * wordsToRepeat.size());
-                int randomTranzlation = (int) (Math.random() * wordsToRepeat.size());
-                if (randomWord != randomTranzlation) {
-                    unccorectWords.add(new WordToRepeadDto(wordsToRepeat.get(randomWord).getWord(), wordsToRepeat.get(randomTranzlation).getTranslation(), false));
+                int randomTranslation = (int) (Math.random() * wordsToRepeat.size());
+                if (randomWord != randomTranslation) {
+                    uncorrectedWords.add(new WordToRepeatDto(wordsToRepeat.get(randomWord).getWord(), wordsToRepeat.get(randomTranslation).getTranslation(), false));
                 }
             } catch (Exception e) {
 
             }
         }
-        return unccorectWords;
+        return uncorrectedWords;
     }
 
+    public List<WordToRepeatDto> getWordsToRepeat(Long userId) {
+        try {
+            List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
+
+            if (wordsToRepeat.isEmpty()) {
+                return List.of();
+            }
+
+            List<WordToRepeatDto> correctWords = new ArrayList<>();
+
+            for (Word word : wordsToRepeat) {
+                word.setLastPracticed(Date.valueOf(LocalDate.now()));
+
+                correctWords.add(new WordToRepeatDto(
+                        word.getWord(),
+                        word.getTranslation(),
+                        true
+                ));
+            }
+
+            wordRepository.saveAll(wordsToRepeat);
+
+            return correctWords;
+
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
 }

@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 
 public class PasswordValidator {
-    private final static int MIN_LENGTH = 10;
+    private static final int MIN_LENGTH = 10;
     private static final String LOWERCASE_CONSTRAINT = "Password should contain at least one lowercase letter.";
     private static final String UPPERCASE_CONSTRAINT = "Password should contain at least one uppercase letter.";
     private static final String DIGIT_CONSTRAINT = "Password should contain at least one digit.";

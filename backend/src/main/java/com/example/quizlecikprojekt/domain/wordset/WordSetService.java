@@ -1,13 +1,14 @@
-package com.example.quizlecikprojekt.domain.wordSet;
+package com.example.quizlecikprojekt.domain.wordset;
 
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
+import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundException;
+import com.example.quizlecikprojekt.domain.wordset.exception.WordSetOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -24,11 +25,16 @@ public class WordSetService {
     private final WordSetRepository wordSetRepository;
     private final UserRepository userRepository;
     private final WordRepository wordRepository;
+    private final WordSetTransactionalService transactionalService;
 
-    public WordSetService(WordSetRepository wordSetRepository, UserRepository userRepository, WordRepository wordRepository) {
+    public WordSetService(WordSetRepository wordSetRepository,
+                          UserRepository userRepository,
+                          WordRepository wordRepository,
+                          WordSetTransactionalService transactionalService) {
         this.wordSetRepository = wordSetRepository;
         this.userRepository = userRepository;
         this.wordRepository = wordRepository;
+        this.transactionalService = transactionalService;
     }
 
     public List<WordSet> getWordSetsByEmail(String email) {
@@ -71,95 +77,84 @@ public class WordSetService {
         return getWordsByWordSetId(wordSetId).size();
     }
 
-    @Transactional
-    public WordSet saveWordSet(WordSet wordSet) {
-        try {
-            WordSet savedWordSet = wordSetRepository.save(wordSet);
-            logger.info("WordSet saved successfully with id: {}", savedWordSet.getId());
-            return savedWordSet;
-        } catch (Exception e) {
-            logger.error("Error saving WordSet: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to save WordSet", e);
-        }
-    }
-
-    @Transactional
     public WordSet createWordSet(WordSet wordSet) {
         try {
-            // @PrePersist automatycznie ustawi timestamps
-            WordSet createdWordSet = wordSetRepository.save(wordSet);
-            logger.info("WordSet created successfully for user: {} with id: {}",
-                    wordSet.getUser().getEmail(), createdWordSet.getId());
-            return createdWordSet;
+            return transactionalService.createWordSet(wordSet);
         } catch (Exception e) {
-            logger.error("Error creating WordSet for user: {}", wordSet.getUser().getEmail(), e);
-            throw new RuntimeException("Failed to create WordSet", e);
+            String userEmail = wordSet.getUser() != null ? wordSet.getUser().getEmail() : "unknown";
+            logger.error("Failed to create WordSet for user: {}", userEmail, e);
+            throw new WordSetOperationException("Failed to create WordSet for user: " + userEmail, e);
         }
     }
 
-    @Transactional
     public void deleteWordSet(Long id) {
         try {
             Optional<WordSet> wordSetOptional = getWordSetById(id);
             if (wordSetOptional.isEmpty()) {
-                throw new RuntimeException("WordSet not found with id: " + id);
+                throw new WordSetNotFoundException("WordSet not found with id: " + id);
             }
 
             WordSet wordSet = wordSetOptional.get();
-            logger.info("Deleting WordSet with id: {} for user: {}", id, wordSet.getUser().getEmail());
+            logger.info("Attempting to delete WordSet with id: {} for user: {}",
+                    id, wordSet.getUser().getEmail());
 
-            wordSetRepository.deleteById(id);
-            logger.info("WordSet deleted successfully with id: {}", id);
+            transactionalService.deleteWordSet(id);
+
+        } catch (WordSetNotFoundException e) {
+            logger.error("WordSet not found for deletion with id: {}", id);
+            throw e;
         } catch (Exception e) {
             logger.error("Error deleting WordSet with id: {}", id, e);
-            throw new RuntimeException("Failed to delete WordSet", e);
+            throw new WordSetOperationException("Failed to delete WordSet with id: " + id, e);
         }
     }
 
-    @Transactional
     public WordSet updateWordSet(Long id, WordSet wordSetForm) {
         try {
             Optional<WordSet> wordSetOptional = getWordSetById(id);
             if (wordSetOptional.isEmpty()) {
-                throw new RuntimeException("WordSet not found with id: " + id);
+                throw new WordSetNotFoundException("WordSet not found with id: " + id);
             }
 
-            WordSet existingWordSet = wordSetOptional.get();
+            WordSet existingWordSet = prepareWordSetForUpdate(wordSetForm, wordSetOptional);
 
-            // Aktualizuj podstawowe pola
-            if (wordSetForm.getTitle() != null) {
-                existingWordSet.setTitle(wordSetForm.getTitle());
-            }
-            if (wordSetForm.getDescription() != null) {
-                existingWordSet.setDescription(wordSetForm.getDescription());
-            }
-            if (wordSetForm.getLanguage() != null) {
-                existingWordSet.setLanguage(wordSetForm.getLanguage());
-            }
-            if (wordSetForm.getTranslationLanguage() != null) {
-                existingWordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
-            }
-
-            // @PreUpdate automatycznie ustawi updatedAt
-
-            // Jeśli mamy słowa do zaktualizowania
             if (wordSetForm.getWords() != null && !wordSetForm.getWords().isEmpty()) {
                 updateWords(existingWordSet, wordSetForm.getWords());
             }
 
-            WordSet updatedWordSet = saveWordSet(existingWordSet);
+            WordSet updatedWordSet = transactionalService.updateWordSet(existingWordSet);
             logger.info("WordSet updated successfully with id: {}", id);
             return updatedWordSet;
 
+        } catch (WordSetNotFoundException e) {
+            logger.error("WordSet not found for update with id: {}", id);
+            throw e;
         } catch (Exception e) {
             logger.error("Error updating WordSet with id: {}", id, e);
-            throw new RuntimeException("Failed to update WordSet", e);
+            throw new WordSetOperationException("Failed to update WordSet with id: " + id, e);
         }
+    }
+
+    private static WordSet prepareWordSetForUpdate(WordSet wordSetForm, Optional<WordSet> wordSetOptional) {
+        WordSet existingWordSet = wordSetOptional.get();
+
+        if (wordSetForm.getTitle() != null) {
+            existingWordSet.setTitle(wordSetForm.getTitle());
+        }
+        if (wordSetForm.getDescription() != null) {
+            existingWordSet.setDescription(wordSetForm.getDescription());
+        }
+        if (wordSetForm.getLanguage() != null) {
+            existingWordSet.setLanguage(wordSetForm.getLanguage());
+        }
+        if (wordSetForm.getTranslationLanguage() != null) {
+            existingWordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
+        }
+        return existingWordSet;
     }
 
     private void updateWords(WordSet wordSet, List<Word> newWords) {
         List<Word> existingWords = wordSet.getWords();
-        existingWords.size(); // Initialize lazy loading
 
         Map<Long, Word> existingWordsMap = existingWords.stream()
                 .collect(Collectors.toMap(Word::getId, word -> word));
@@ -193,13 +188,8 @@ public class WordSetService {
         wordSet.setDescription("Description");
         wordSet.setLanguage("pl");
         wordSet.setTranslationLanguage("en");
-        // createdAt i updatedAt będą ustawione przez @PrePersist
 
         logger.debug("Created new WordSet template for user: {}", user.getEmail());
         return wordSet;
-    }
-
-    public boolean wordSetExists(Long wordSetId) {
-        return wordSetRepository.existsById(wordSetId);
     }
 }

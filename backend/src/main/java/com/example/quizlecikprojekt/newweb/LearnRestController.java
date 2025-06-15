@@ -2,7 +2,7 @@ package com.example.quizlecikprojekt.newweb;
 
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordService;
-import com.example.quizlecikprojekt.domain.wordSet.WordSetService;
+import com.example.quizlecikprojekt.domain.wordset.WordSetService;
 import com.example.quizlecikprojekt.newweb.dto.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -12,7 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -25,15 +28,12 @@ public class LearnRestController {
     private final WordSetService wordSetService;
     private final WordService wordService;
 
-    // Session storage dla aktywnych sesji uczenia - w produkcji lepiej użyć Redis
     private final Map<String, FlashCardSession> flashCardSessions = new ConcurrentHashMap<>();
 
     public LearnRestController(WordSetService wordSetService, WordService wordService) {
         this.wordSetService = wordSetService;
         this.wordService = wordService;
     }
-
-    // === FLASHCARDS ENDPOINTS ===
 
     @PostMapping("/{id}/flashcards/start")
     public ResponseEntity<ApiResponse<FlashCardStartResponse>> startFlashCards(
@@ -47,8 +47,7 @@ public class LearnRestController {
 
             String userEmail = authentication.getName();
 
-            // Sprawdź dostęp do WordSet
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) { // Poprawiona logika!
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
@@ -59,10 +58,8 @@ public class LearnRestController {
                         .body(ApiResponse.error("Word set is empty"));
             }
 
-            // Tasuj słowa
             Collections.shuffle(words);
 
-            // Utwórz sesję
             String sessionId = generateSessionId(userEmail, id);
             FlashCardSession session = new FlashCardSession();
             session.setWordSetId(id);
@@ -73,11 +70,12 @@ public class LearnRestController {
 
             flashCardSessions.put(sessionId, session);
 
-            FlashCardStartResponse response = new FlashCardStartResponse();
-            response.setSessionId(sessionId);
-            response.setTotalWords(words.size());
-            response.setCurrentWord(mapToWordResponse(words.get(0)));
-            response.setCurrentIndex(0);
+            FlashCardStartResponse response = new FlashCardStartResponse(
+                    sessionId,
+                    words.size(),
+                    0,
+                    mapToWordResponse(words.getFirst())
+            );
 
             logger.info("FlashCard session started for user: {} on wordSet: {}", userEmail, id);
             return ResponseEntity.ok(ApiResponse.success("FlashCard session started", response));
@@ -103,14 +101,12 @@ public class LearnRestController {
 
             String userEmail = authentication.getName();
 
-            // Sprawdź sesję
             FlashCardSession session = flashCardSessions.get(sessionId);
             if (session == null || !session.getWordSetId().equals(id)) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Invalid session"));
             }
 
-            // Sprawdź czy to właściwa sesja użytkownika
             if (!sessionId.contains(userEmail.hashCode() + "")) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied to session"));
@@ -123,14 +119,12 @@ public class LearnRestController {
 
             Word currentWord = session.getWords().get(session.getCurrentIndex());
 
-            // Sprawdź czy ID słowa się zgadza
-            if (!currentWord.getId().equals(request.getWordId())) {
+            if (!currentWord.getId().equals(request.wordId())) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Word ID mismatch"));
             }
 
-            // Przetwórz odpowiedź
-            if (request.isCorrect()) {
+            if (request.correct()) {
                 currentWord.addPoint();
                 session.setScore(session.getScore() + 1);
                 logger.debug("User {} answered correctly for word: {}", userEmail, currentWord.getId());
@@ -140,32 +134,37 @@ public class LearnRestController {
                 logger.debug("User {} answered incorrectly for word: {}", userEmail, currentWord.getId());
             }
 
-            // Zapisz zmiany w słowie
             wordService.saveWord(currentWord);
 
-            // Przejdź do następnego słowa
             session.setCurrentIndex(session.getCurrentIndex() + 1);
 
-            FlashCardAnswerResponse response = new FlashCardAnswerResponse();
-            response.setScore(session.getScore());
-            response.setCurrentIndex(session.getCurrentIndex());
-            response.setTotalWords(session.getWords().size());
+            FlashCardAnswerResponse response;
 
-            // Sprawdź czy to koniec sesji
             if (session.getCurrentIndex() >= session.getWords().size()) {
-                response.setCompleted(true);
-                response.setUncorrectedWords(session.getUncorrectedWords().stream()
-                        .map(this::mapToWordResponse)
-                        .toList());
+                response = new FlashCardAnswerResponse(
+                        session.getScore(),
+                        session.getCurrentIndex(),
+                        session.getWords().size(),
+                        true,
+                        null, // nextWord
+                        session.getUncorrectedWords().stream()
+                                .map(this::mapToWordResponse)
+                                .toList()
+                );
 
-                // Usuń sesję po zakończeniu
                 flashCardSessions.remove(sessionId);
 
                 logger.info("FlashCard session completed for user: {} on wordSet: {} with score: {}/{}",
                         userEmail, id, session.getScore(), session.getWords().size());
             } else {
-                response.setCompleted(false);
-                response.setNextWord(mapToWordResponse(session.getWords().get(session.getCurrentIndex())));
+                response = new FlashCardAnswerResponse(
+                        session.getScore(),
+                        session.getCurrentIndex(),
+                        session.getWords().size(),
+                        false,
+                        mapToWordResponse(session.getWords().get(session.getCurrentIndex())),
+                        null // uncorrectedWords
+                );
             }
 
             return ResponseEntity.ok(ApiResponse.success("Answer processed", response));
@@ -176,8 +175,6 @@ public class LearnRestController {
                     .body(ApiResponse.error("Failed to process answer"));
         }
     }
-
-    // === TEST ENDPOINTS ===
 
     @PostMapping("/{id}/test/start")
     public ResponseEntity<ApiResponse<TestStartResponse>> startTest(
@@ -191,7 +188,7 @@ public class LearnRestController {
 
             String userEmail = authentication.getName();
 
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) { // Poprawiona logika!
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
@@ -204,10 +201,11 @@ public class LearnRestController {
 
             Collections.shuffle(words);
 
-            TestStartResponse response = new TestStartResponse();
-            response.setWordSetId(id);
-            response.setWords(words.stream().map(this::mapToWordResponse).toList());
-            response.setTotalQuestions(words.size());
+            TestStartResponse response = new TestStartResponse(
+                    id,
+                    words.stream().map(this::mapToWordResponse).toList(),
+                    words.size()
+            );
 
             logger.info("Test started for user: {} on wordSet: {}", userEmail, id);
             return ResponseEntity.ok(ApiResponse.success("Test started", response));
@@ -232,17 +230,17 @@ public class LearnRestController {
 
             String userEmail = authentication.getName();
 
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) { // Poprawiona logika!
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
 
             List<Word> words = wordSetService.getWordsByWordSetId(id);
-            Map<Long, String> userAnswers = request.getAnswers();
+            Map<Long, String> userAnswers = request.answers();
 
             List<TestAnswerResult> results = new ArrayList<>();
-            List<Word> correctWords = new ArrayList<>();
-            List<Word> incorrectWords = new ArrayList<>();
+            List<WordResponse> correctWords = new ArrayList<>();
+            List<WordResponse> incorrectWords = new ArrayList<>();
             int score = 0;
 
             for (Word word : words) {
@@ -254,30 +252,32 @@ public class LearnRestController {
                     isCorrect = true;
                     score++;
                     word.addPoint();
-                    correctWords.add(word);
+                    correctWords.add(mapToWordResponse(word));
                 } else {
                     word.subtractPoint();
-                    incorrectWords.add(word);
+                    incorrectWords.add(mapToWordResponse(word));
                 }
 
                 wordService.saveWord(word);
 
-                TestAnswerResult result = new TestAnswerResult();
-                result.setWordId(word.getId());
-                result.setWord(word.getWord());
-                result.setCorrectAnswer(word.getTranslation());
-                result.setUserAnswer(userAnswer != null ? userAnswer : "");
-                result.setCorrect(isCorrect);
+                TestAnswerResult result = new TestAnswerResult(
+                        word.getId(),
+                        word.getWord(),
+                        word.getTranslation(),
+                        userAnswer != null ? userAnswer : "",
+                        isCorrect
+                );
                 results.add(result);
             }
 
-            TestResultResponse response = new TestResultResponse();
-            response.setScore(score);
-            response.setTotalQuestions(words.size());
-            response.setPercentage((score * 100.0) / words.size());
-            response.setResults(results);
-            response.setCorrectWords(correctWords.stream().map(this::mapToWordResponse).toList());
-            response.setIncorrectWords(incorrectWords.stream().map(this::mapToWordResponse).toList());
+            TestResultResponse response = new TestResultResponse(
+                    score,
+                    words.size(),
+                    (score * 100.0) / words.size(),
+                    results,
+                    correctWords,
+                    incorrectWords
+            );
 
             logger.info("Test completed for user: {} on wordSet: {} with score: {}/{}",
                     userEmail, id, score, words.size());
@@ -291,23 +291,20 @@ public class LearnRestController {
         }
     }
 
-    // === HELPER METHODS ===
-
     private String generateSessionId(String userEmail, Long wordSetId) {
         return "fc_" + userEmail.hashCode() + "_" + wordSetId + "_" + System.currentTimeMillis();
     }
 
     private WordResponse mapToWordResponse(Word word) {
-        WordResponse response = new WordResponse();
-        response.setId(word.getId());
-        response.setWord(word.getWord());
-        response.setTranslation(word.getTranslation());
-        response.setPoints(word.getPoints());
-        response.setLastPracticed(word.getLastPracticed());
-        return response;
+        return new WordResponse(
+                word.getId(),
+                word.getWord(),
+                word.getTranslation(),
+                word.getPoints(),
+                word.getLastPracticed()
+        );
     }
 
-    // === SESSION CLASS ===
     private static class FlashCardSession {
         private Long wordSetId;
         private List<Word> words;
@@ -315,7 +312,6 @@ public class LearnRestController {
         private int score;
         private List<Word> uncorrectedWords;
 
-        // Getters and setters
         public Long getWordSetId() { return wordSetId; }
         public void setWordSetId(Long wordSetId) { this.wordSetId = wordSetId; }
 

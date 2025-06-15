@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.domain.word;
 
 
-import com.example.quizlecikprojekt.domain.wordSet.WordSet;
+import com.example.quizlecikprojekt.domain.wordset.WordSet;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

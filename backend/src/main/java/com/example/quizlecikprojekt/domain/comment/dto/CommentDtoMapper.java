@@ -1,26 +1,15 @@
 package com.example.quizlecikprojekt.domain.comment.dto;
 
 import com.example.quizlecikprojekt.domain.comment.Comment;
-import com.example.quizlecikprojekt.domain.user.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CommentDtoMapper {
-    private final UserService userService;
-
-    public CommentDtoMapper(UserService userService) {
-        this.userService = userService;
-    }
 
     public CommentDto toDto(Comment comment) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(comment.getId());
-        commentDto.setContent(comment.getContent());
-        commentDto.setUser(comment.getUser());
-        commentDto.setDateAndTime(comment.getDateAndTime());
-        return commentDto;
+        return new CommentDto(comment.getId(), comment.getContent(),comment.getUser(),comment.getCreatedAt());
     }
 
     public List<CommentDto> toDto(List<Comment> comments) {

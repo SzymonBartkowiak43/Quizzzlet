@@ -1,4 +1,4 @@
-package com.example.quizlecikprojekt.domain.wordSet;
+package com.example.quizlecikprojekt.domain.wordset;
 
 
 import com.example.quizlecikprojekt.domain.user.User;

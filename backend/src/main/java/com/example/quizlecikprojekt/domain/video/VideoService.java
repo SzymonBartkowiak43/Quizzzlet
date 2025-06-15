@@ -18,9 +18,7 @@ public class VideoService {
     }
 
     public Video findById(Long id) {
-        return videoRepository.findById(id).orElseThrow(() -> {
-            return new RuntimeException("Video not found");
-        });
+        return videoRepository.findById(id).orElseThrow(() -> new RuntimeException("Video not found"));
     }
 
     public List<Video> findAll() {
@@ -39,7 +37,7 @@ public class VideoService {
         video.setUrl(url);
         video.setTitle(title);
         video.setUserId(userId);
-        video.setDateAndTime(java.time.LocalDateTime.now());
+        video.setCreatedAt(java.time.LocalDateTime.now());
         videoRepository.save(video);
         return video;
     }
@@ -49,14 +47,14 @@ public class VideoService {
         return all.stream()
                 .sorted((v1, v2) -> Double.compare(ratingService.getAverageRatingForVideoInLast7Days(v2.getId()), ratingService.getAverageRatingForVideoInLast7Days(v1.getId())))
                 .limit(4)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Video> searchVideosByTitle(String query) {
         List<Video> allVideos = (List<Video>) videoRepository.findAll();
         return allVideos.stream()
                 .filter(video -> video.getTitle().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

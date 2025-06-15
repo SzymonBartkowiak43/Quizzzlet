@@ -37,34 +37,30 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody UserRegistrationDto userRegistrationDto) {
         try {
-            // Validate password
-            List<String> constraintViolations = PasswordValidator.getConstraintViolations(userRegistrationDto.getPassword());
+            List<String> constraintViolations = PasswordValidator.getConstraintViolations(userRegistrationDto.password());
             if (!constraintViolations.isEmpty()) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Password validation failed", constraintViolations));
             }
 
-            // Check if email exists
-            if (userService.emailExists(userRegistrationDto.getEmail())) {
+            if (userService.emailExists(userRegistrationDto.email())) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Email already exists"));
             }
 
-            // Check if username exists
-            if (userService.usernameExists(userRegistrationDto.getUsername())) {
+            if (userService.usernameExists(userRegistrationDto.username())) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Username already exists"));
             }
 
-            // Register user
             userService.registerUserWithDefaultRole(userRegistrationDto);
 
-            logger.info("User registered successfully: {}", userRegistrationDto.getUsername());
+            logger.info("User registered successfully: {}", userRegistrationDto.username());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(ApiResponse.success("User registered successfully", "User created"));
 
         } catch (Exception e) {
-            logger.error("Registration failed for user: {}", userRegistrationDto.getUsername(), e);
+            logger.error("Registration failed for user: {}", userRegistrationDto.username(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error("Registration failed"));
         }
@@ -75,24 +71,23 @@ public class AuthController {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
+                            loginRequest.username(),
+                            loginRequest.password()
                     )
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Here you could generate JWT token if needed
             LoginResponse loginResponse = new LoginResponse(
                     authentication.getName(),
                     "Login successful"
             );
 
-            logger.info("User logged in successfully: {}", loginRequest.getUsername());
+            logger.info("User logged in successfully: {}", loginRequest.username());
             return ResponseEntity.ok(ApiResponse.success("Login successful", loginResponse));
 
         } catch (Exception e) {
-            logger.error("Login failed for user: {}", loginRequest.getUsername(), e);
+            logger.error("Login failed for user: {}", loginRequest.username(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse.error("Invalid credentials"));
         }

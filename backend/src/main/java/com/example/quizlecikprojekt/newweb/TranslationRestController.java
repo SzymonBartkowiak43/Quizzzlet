@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.newweb;
 
-import com.example.quizlecikprojekt.deeplyTranzlator.WordsTranslator;
+import com.example.quizlecikprojekt.deeplytranzlator.WordsTranslator;
 import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
 import com.example.quizlecikprojekt.newweb.dto.tranzlation.TranslationRequest;
 import com.example.quizlecikprojekt.newweb.dto.tranzlation.TranslationResponse;
@@ -38,25 +38,24 @@ public class TranslationRestController {
 
             String userEmail = authentication.getName();
 
-            // Walidacja parametrów
-            if (request.getText() == null || request.getText().trim().isEmpty()) {
+            if (request.text() == null || request.text().trim().isEmpty()) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Text to translate cannot be empty"));
             }
 
-            if (request.getSourceLanguage() == null || request.getTargetLanguage() == null) {
+            if (request.sourceLanguage() == null || request.targetLanguage() == null) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Source and target languages are required"));
             }
 
-            if (request.getSourceLanguage().equals(request.getTargetLanguage())) {
+            if (request.sourceLanguage().equals(request.targetLanguage())) {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Source and target languages cannot be the same"));
             }
 
-            String text = request.getText().trim();
-            String sourceLanguage = request.getSourceLanguage().toLowerCase();
-            String targetLanguage = request.getTargetLanguage().toLowerCase();
+            String text = request.text().trim();
+            String sourceLanguage = request.sourceLanguage().toLowerCase();
+            String targetLanguage = request.targetLanguage().toLowerCase();
 
             logger.debug("Translation request from user: {} - '{}' from {} to {}",
                     userEmail, text, sourceLanguage, targetLanguage);
@@ -68,9 +67,7 @@ public class TranslationRestController {
             response.setSourceLanguage(sourceLanguage);
             response.setTargetLanguage(targetLanguage);
 
-            // Sprawdź czy tłumaczenie się powiodło
             if (translation.equals(text)) {
-                // Tłumaczenie nie powiodło się lub nie było potrzebne
                 response.setTranslatedText("");
                 response.setTranslationSuccessful(false);
                 response.setMessage("Translation not available or text unchanged");
@@ -89,7 +86,7 @@ public class TranslationRestController {
         } catch (Exception e) {
             logger.error("Error during translation for user: {} - text: '{}'",
                     authentication != null ? authentication.getName() : "unknown",
-                    request != null ? request.getText() : "null", e);
+                    request != null ? request.text() : "null", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error("Translation service temporarily unavailable"));
         }

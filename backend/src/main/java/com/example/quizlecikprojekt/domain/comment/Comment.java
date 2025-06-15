@@ -25,7 +25,7 @@ public class Comment {
     private User user;
 
     @Column(name = "date_and_time", nullable = false)
-    private LocalDateTime dateAndTime;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "video_id", nullable = false)

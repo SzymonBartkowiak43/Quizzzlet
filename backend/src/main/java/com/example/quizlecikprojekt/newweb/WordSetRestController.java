@@ -4,12 +4,12 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordService;
-import com.example.quizlecikprojekt.domain.wordSet.WordSet;
-import com.example.quizlecikprojekt.domain.wordSet.WordSetService;
+import com.example.quizlecikprojekt.domain.wordset.WordSet;
+import com.example.quizlecikprojekt.domain.wordset.WordSetService;
 import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
 import com.example.quizlecikprojekt.newweb.dto.WordSetCreateRequest;
-import com.example.quizlecikprojekt.newweb.dto.WordSetUpdateRequest;
 import com.example.quizlecikprojekt.newweb.dto.WordSetResponse;
+import com.example.quizlecikprojekt.newweb.dto.WordSetUpdateRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,12 +74,11 @@ public class WordSetRestController {
             User user = userService.getUserByEmail(authentication.getName());
             WordSet wordSet = wordSetService.newWordSet(user);
 
-            // Jeśli request zawiera dodatkowe dane (nazwa, opis), ustaw je
-            if (request.getName() != null && !request.getName().trim().isEmpty()) {
-                wordSet.setTitle(request.getName());
+            if (request.name() != null && !request.name().trim().isEmpty()) {
+                wordSet.setTitle(request.name());
             }
-            if (request.getDescription() != null) {
-                wordSet.setDescription(request.getDescription());
+            if (request.description() != null) {
+                wordSet.setDescription(request.description());
             }
 
             WordSet createdWordSet = wordSetService.createWordSet(wordSet);
@@ -106,18 +105,15 @@ public class WordSetRestController {
                         .body(ApiResponse.error("User not authenticated"));
             }
 
-            // Sprawdź czy wordset należy do użytkownika
             Optional<WordSet> wordSetOptional = wordSetService.getWordSetById(id);
             if (wordSetOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("Word set not found"));
             }
 
-            WordSet wordSet = wordSetOptional.get();
             String userEmail = authentication.getName();
 
-            // Weryfikacja właściciela - dodaj metodę do serwisu jeśli nie istnieje
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (wordSetService.isWordSetOwnedByUser(id, userEmail)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
@@ -153,7 +149,7 @@ public class WordSetRestController {
             WordSet wordSet = wordSetOptional.get();
             String userEmail = authentication.getName();
 
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (wordSetService.isWordSetOwnedByUser(id, userEmail)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
@@ -188,14 +184,14 @@ public class WordSetRestController {
             }
 
             String userEmail = authentication.getName();
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (wordSetService.isWordSetOwnedByUser(id, userEmail)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
 
             WordSet wordSetForm = new WordSet();
-            wordSetForm.setTitle(request.getName());
-            wordSetForm.setDescription(request.getDescription());
+            wordSetForm.setTitle(request.name());
+            wordSetForm.setDescription(request.description());
 
             WordSet updatedWordSet = wordSetService.updateWordSet(id, wordSetForm);
             WordSetResponse response = mapToWordSetResponse(updatedWordSet);
@@ -228,7 +224,7 @@ public class WordSetRestController {
             }
 
             String userEmail = authentication.getName();
-            if (!wordSetService.isWordSetOwnedByUser(id, userEmail)) {
+            if (wordSetService.isWordSetOwnedByUser(id, userEmail)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ApiResponse.error("Access denied"));
             }
@@ -245,29 +241,21 @@ public class WordSetRestController {
         }
     }
 
-    // Helper methods
     private WordSetResponse mapToWordSetResponse(WordSet wordSet) {
         return mapToWordSetResponse(wordSet, null);
     }
 
     private WordSetResponse mapToWordSetResponse(WordSet wordSet, List<Word> words) {
-        WordSetResponse response = new WordSetResponse();
-        response.setId(wordSet.getId());
-        response.setTitle(wordSet.getTitle());
-        response.setDescription(wordSet.getDescription());
-        response.setLanguage(wordSet.getLanguage());
-        response.setTranslationLanguage(wordSet.getTranslationLanguage());
-        response.setCreatedAt(wordSet.getCreatedAt());
-        response.setUpdatedAt(wordSet.getUpdatedAt());
-
-        if (words != null) {
-            response.setWords(words);
-            response.setWordCount(words.size());
-        } else {
-            int wordCount = wordSetService.getWordCountByWordSetId(wordSet.getId());
-            response.setWordCount(wordCount);
-        }
-
-        return response;
+        return WordSetResponse.builder()
+                .id(wordSet.getId())
+                .title(wordSet.getTitle())
+                .description(wordSet.getDescription())
+                .language(wordSet.getLanguage())
+                .translationLanguage(wordSet.getTranslationLanguage())
+                .createdAt(wordSet.getCreatedAt())
+                .updatedAt(wordSet.getUpdatedAt())
+                .words(words)
+                .wordCount(wordSetService.getWordCountByWordSetId(wordSet.getId()))
+                .build();
     }
 }

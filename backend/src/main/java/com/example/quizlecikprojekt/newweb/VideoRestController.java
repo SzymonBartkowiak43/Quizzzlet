@@ -8,7 +8,7 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.video.VideoService;
-import com.example.quizlecikprojekt.newweb.dto.*;
+import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
 import com.example.quizlecikprojekt.newweb.dto.video.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -66,16 +66,16 @@ public class VideoRestController {
             Optional<Integer> userRating = ratingService.getUserRatingForVideo(userEmail, id);
             double averageRating = ratingService.getAverageRatingForVideo(id);
 
-            VideoDetailsResponse response = new VideoDetailsResponse();
-            response.setId(video.getId());
-            response.setTitle(video.getTitle());
-            response.setUrl(video.getUrl());
-            response.setOwnerUsername(videoOwner.getUserName());
-            response.setOwnerId(video.getUserId());
-            response.setComments(comments.stream().map(this::mapToCommentResponse).toList());
-            response.setUserRating(userRating.orElse(0));
-            response.setAverageRating(averageRating);
-            response.setTotalComments(comments.size());
+            VideoDetailsResponse response = new VideoDetailsResponse(
+            video.getId(),
+            video.getTitle(),
+            video.getUrl(),
+            videoOwner.getUserName(),
+            video.getUserId(),
+            comments.stream().map(this::mapToCommentResponse).toList(),
+            userRating.orElse(0),
+            averageRating,
+            comments.size());
 
             logger.info("Video details retrieved for video: {} by user: {}", id, userEmail);
             return ResponseEntity.ok(ApiResponse.success("Video details retrieved", response));
@@ -166,11 +166,11 @@ public class VideoRestController {
             String userEmail = authentication.getName();
             User user = userService.getUserByEmail(userEmail);
 
-            Video createdVideo = videoService.addVideo(request.getUrl(), request.getTitle(), user.getId());
+            Video createdVideo = videoService.addVideo(request.url(), request.title(), user.getId());
 
             VideoSummaryResponse response = mapToVideoSummary(createdVideo, Map.of(createdVideo.getId(), 0.0));
 
-            logger.info("Video added by user: {} - title: '{}'", userEmail, request.getTitle());
+            logger.info("Video added by user: {} - title: '{}'", userEmail, request.title());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(ApiResponse.success("Video added successfully", response));
 
@@ -204,7 +204,7 @@ public class VideoRestController {
                         .body(ApiResponse.error("Video not found"));
             }
 
-            Comment comment = commentService.addComment(request.getContent(), user, video);
+            Comment comment = commentService.addComment(request.content(), user, video);
             CommentResponse response = mapToCommentResponse(comment);
 
             logger.info("Comment added by user: {} to video: {}", userEmail, id);
@@ -291,7 +291,6 @@ public class VideoRestController {
         }
     }
 
-    // === RATING ENDPOINTS ===
 
     @PostMapping("/{videoId}/rating")
     public ResponseEntity<ApiResponse<RatingResponse>> rateVideo(
@@ -312,15 +311,14 @@ public class VideoRestController {
                         .body(ApiResponse.error("Video not found"));
             }
 
-            ratingService.addOrUpdateRating(userEmail, videoId, request.getRating());
+            ratingService.addOrUpdateRating(userEmail, videoId, request.rating());
             double newAverageRating = ratingService.getAverageRatingForVideo(videoId);
 
-            RatingResponse response = new RatingResponse();
-            response.setVideoId(videoId);
-            response.setUserRating(request.getRating());
-            response.setAverageRating(newAverageRating);
+            RatingResponse response = new RatingResponse(
+            request.rating(),
+                    newAverageRating);
 
-            logger.info("Video {} rated {} by user: {}", videoId, request.getRating(), userEmail);
+            logger.info("Video {} rated {} by user: {}", videoId, request.rating(), userEmail);
             return ResponseEntity.ok(ApiResponse.success("Rating submitted successfully", response));
 
         } catch (Exception e) {
@@ -352,10 +350,7 @@ public class VideoRestController {
             Optional<Integer> userRating = ratingService.getUserRatingForVideo(userEmail, videoId);
             double averageRating = ratingService.getAverageRatingForVideo(videoId);
 
-            RatingResponse response = new RatingResponse();
-            response.setVideoId(videoId);
-            response.setUserRating(userRating.orElse(0));
-            response.setAverageRating(averageRating);
+            RatingResponse response = new RatingResponse(userRating.orElse(0), averageRating);
 
             return ResponseEntity.ok(ApiResponse.success("Rating retrieved successfully", response));
 
@@ -366,7 +361,6 @@ public class VideoRestController {
         }
     }
 
-    // === HELPER METHODS ===
 
     private VideoSummaryResponse mapToVideoSummary(Video video, Map<Long, Double> videoRatings) {
         VideoSummaryResponse response = new VideoSummaryResponse();
@@ -376,7 +370,6 @@ public class VideoRestController {
         response.setOwnerId(video.getUserId());
         response.setAverageRating(videoRatings.getOrDefault(video.getId(), 0.0));
 
-        // Dodaj informacje o właścicielu jeśli potrzebne
         try {
             User owner = userService.getUserById(video.getUserId());
             response.setOwnerUsername(owner.getUserName());
@@ -388,20 +381,14 @@ public class VideoRestController {
     }
 
     private CommentResponse mapToCommentResponse(CommentDto commentDto) {
-        CommentResponse response = new CommentResponse();
-        response.setId(commentDto.getId());
-        response.setContent(commentDto.getContent());
-        response.setAuthorUsername(commentDto.getUser().getUserName());
-        response.setCreatedAt(commentDto.getDateAndTime());
-        return response;
+        return new CommentResponse(
+        commentDto.id(),
+        commentDto.content(),
+        commentDto.user().getUserName(),
+        commentDto.dateAndTime());
     }
 
     private CommentResponse mapToCommentResponse(Comment comment) {
-        CommentResponse response = new CommentResponse();
-        response.setId(comment.getId());
-        response.setContent(comment.getContent());
-        response.setAuthorUsername(comment.getUser().getUserName());
-        response.setCreatedAt(comment.getDateAndTime());
-        return response;
+        return new CommentResponse(comment.getId(), comment.getContent(),comment.getUser().getUserName(),comment.getCreatedAt());
     }
 }

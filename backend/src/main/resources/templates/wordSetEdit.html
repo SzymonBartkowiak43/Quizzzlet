@@ -48,16 +48,19 @@
             <div class="word-pair">
                 <div>
                     <label th:for="${'word-' + iterStat.index}">Word:</label>
-                    <input class="input-large-word-pair" onblur="fetchTranslation(this)" th:id="${'word-' + iterStat.index}"
+                    <input class="input-large-word-pair" onblur="fetchTranslation(this)"
+                           th:id="${'word-' + iterStat.index}"
                            th:name="${'words[' + iterStat.index + '].word'}" th:value="${word.word}"
                            type="text"/>
                 </div>
                 <div>
                     <label th:for="${'translation-' + iterStat.index}">Translation:</label>
-                    <input class="input-large-word-pair" th:id="${'translation-' + iterStat.index}" th:name="${'words[' + iterStat.index + '].translation'}"
+                    <input class="input-large-word-pair" th:id="${'translation-' + iterStat.index}"
+                           th:name="${'words[' + iterStat.index + '].translation'}"
                            th:value="${word.translation}" type="text"/>
                 </div>
-                <button class="delete-word-button" th:attr="onclick='deleteWord(' + ${wordSet.id} + ',' + ${word.id} + ')'"
+                <button class="delete-word-button"
+                        th:attr="onclick='deleteWord(' + ${wordSet.id} + ',' + ${word.id} + ')'"
                         type="button">Delete
                 </button>
             </div>

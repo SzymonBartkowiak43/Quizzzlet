@@ -4,8 +4,6 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.video.VideoRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,26 +24,22 @@ public class RatingService {
     }
 
     public void addOrUpdateRating(String userEmail, long videoId, int rating) {
-        try {
-            Rating ratingToSave = ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
-                    .orElseGet(Rating::new);
+        Rating ratingToSave = ratingRepository.findByUserEmailAndVideoId(userEmail, videoId)
+                .orElseGet(Rating::new);
 
-            if (ratingToSave.getUser() == null || ratingToSave.getVideo() == null) {
-                User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
-                        new NoSuchElementException("User not found with email: " + userEmail));
-                Video video = videoRepository.findById(videoId).orElseThrow(() ->
-                        new NoSuchElementException("Video not found with id: " + videoId));
-                ratingToSave.setUser(user);
-                ratingToSave.setVideo(video);
-            }
-
-            ratingToSave.setRating(rating);
-            ratingToSave.setDateAndTime(LocalDateTime.now());
-
-            ratingRepository.save(ratingToSave);
-        } catch (NoSuchElementException e) {
-        } catch (Exception e) {
+        if (ratingToSave.getUser() == null || ratingToSave.getVideo() == null) {
+            User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
+                    new NoSuchElementException("User not found with email: " + userEmail));
+            Video video = videoRepository.findById(videoId).orElseThrow(() ->
+                    new NoSuchElementException("Video not found with id: " + videoId));
+            ratingToSave.setUser(user);
+            ratingToSave.setVideo(video);
         }
+
+        ratingToSave.setRating(rating);
+        ratingToSave.setDateAndTime(LocalDateTime.now());
+
+        ratingRepository.save(ratingToSave);
     }
 
     public Optional<Integer> getUserRatingForVideo(String userEmail, long videoId) {

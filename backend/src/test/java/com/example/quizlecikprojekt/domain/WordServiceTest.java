@@ -3,8 +3,8 @@ package com.example.quizlecikprojekt.domain;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
 import com.example.quizlecikprojekt.domain.word.WordService;
-import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeadDto;
-import com.example.quizlecikprojekt.domain.word.dto.WordToRepeadDto;
+import com.example.quizlecikprojekt.domain.word.dto.MapperWordToWordToRepeatDto;
+import com.example.quizlecikprojekt.domain.word.dto.WordToRepeatDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ public class WordServiceTest {
     private WordRepository wordRepository;
 
     @Mock
-    private MapperWordToWordToRepeadDto mapperWordToWordToRepeadDto;
+    private MapperWordToWordToRepeatDto mapperWordToWordToRepeadDto;
 
     @InjectMocks
     private WordService wordService;
@@ -40,7 +40,7 @@ public class WordServiceTest {
         when(wordRepository.findWordsToRepeat(userId)).thenReturn(new ArrayList<>());
 
         // When
-        List<WordToRepeadDto> result = wordService.getCorrectWordsAndCreateUncoredWords(userId);
+        List<WordToRepeatDto> result = wordService.getCorrectWordsAndCreateUncoredWords(userId);
 
         // Then
         assertEquals(0, result.size());
@@ -70,10 +70,10 @@ public class WordServiceTest {
         when(wordRepository.findWordsToRepeat(userId)).thenReturn(wordsToRepeat);
 
         // When
-        List<WordToRepeadDto> result = wordService.getCorrectWordsAndCreateUncoredWords(userId);
+        List<WordToRepeatDto> result = wordService.getCorrectWordsAndCreateUncoredWords(userId);
 
         // Then
-        for (WordToRepeadDto dto : result) {
+        for (WordToRepeatDto dto : result) {
             assertFalse(dto.isCorrect());
             assertTrue(wordsToRepeat.stream().anyMatch(word -> word.getWord().equals(dto.getWord())));
             assertTrue(wordsToRepeat.stream().anyMatch(word -> word.getTranslation().equals(dto.getTranslation())));

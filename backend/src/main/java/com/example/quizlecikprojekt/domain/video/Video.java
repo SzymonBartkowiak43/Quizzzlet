@@ -29,7 +29,7 @@ public class Video {
     private Long userId;
 
     @Column(name = "date_and_time", nullable = false)
-    private LocalDateTime dateAndTime;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
