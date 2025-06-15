@@ -37,6 +37,24 @@ public class WordSetService {
         this.transactionalService = transactionalService;
     }
 
+    private static WordSet prepareWordSetForUpdate(WordSet wordSetForm, Optional<WordSet> wordSetOptional) {
+        WordSet existingWordSet = wordSetOptional.get();
+
+        if (wordSetForm.getTitle() != null) {
+            existingWordSet.setTitle(wordSetForm.getTitle());
+        }
+        if (wordSetForm.getDescription() != null) {
+            existingWordSet.setDescription(wordSetForm.getDescription());
+        }
+        if (wordSetForm.getLanguage() != null) {
+            existingWordSet.setLanguage(wordSetForm.getLanguage());
+        }
+        if (wordSetForm.getTranslationLanguage() != null) {
+            existingWordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
+        }
+        return existingWordSet;
+    }
+
     public List<WordSet> getWordSetsByEmail(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
@@ -133,24 +151,6 @@ public class WordSetService {
             logger.error("Error updating WordSet with id: {}", id, e);
             throw new WordSetOperationException("Failed to update WordSet with id: " + id, e);
         }
-    }
-
-    private static WordSet prepareWordSetForUpdate(WordSet wordSetForm, Optional<WordSet> wordSetOptional) {
-        WordSet existingWordSet = wordSetOptional.get();
-
-        if (wordSetForm.getTitle() != null) {
-            existingWordSet.setTitle(wordSetForm.getTitle());
-        }
-        if (wordSetForm.getDescription() != null) {
-            existingWordSet.setDescription(wordSetForm.getDescription());
-        }
-        if (wordSetForm.getLanguage() != null) {
-            existingWordSet.setLanguage(wordSetForm.getLanguage());
-        }
-        if (wordSetForm.getTranslationLanguage() != null) {
-            existingWordSet.setTranslationLanguage(wordSetForm.getTranslationLanguage());
-        }
-        return existingWordSet;
     }
 
     private void updateWords(WordSet wordSet, List<Word> newWords) {

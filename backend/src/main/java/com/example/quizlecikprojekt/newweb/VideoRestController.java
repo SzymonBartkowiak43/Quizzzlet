@@ -67,15 +67,15 @@ public class VideoRestController {
             double averageRating = ratingService.getAverageRatingForVideo(id);
 
             VideoDetailsResponse response = new VideoDetailsResponse(
-            video.getId(),
-            video.getTitle(),
-            video.getUrl(),
-            videoOwner.getUserName(),
-            video.getUserId(),
-            comments.stream().map(this::mapToCommentResponse).toList(),
-            userRating.orElse(0),
-            averageRating,
-            comments.size());
+                    video.getId(),
+                    video.getTitle(),
+                    video.getUrl(),
+                    videoOwner.getUserName(),
+                    video.getUserId(),
+                    comments.stream().map(this::mapToCommentResponse).toList(),
+                    userRating.orElse(0),
+                    averageRating,
+                    comments.size());
 
             logger.info("Video details retrieved for video: {} by user: {}", id, userEmail);
             return ResponseEntity.ok(ApiResponse.success("Video details retrieved", response));
@@ -315,7 +315,7 @@ public class VideoRestController {
             double newAverageRating = ratingService.getAverageRatingForVideo(videoId);
 
             RatingResponse response = new RatingResponse(
-            request.rating(),
+                    request.rating(),
                     newAverageRating);
 
             logger.info("Video {} rated {} by user: {}", videoId, request.rating(), userEmail);
@@ -382,13 +382,13 @@ public class VideoRestController {
 
     private CommentResponse mapToCommentResponse(CommentDto commentDto) {
         return new CommentResponse(
-        commentDto.id(),
-        commentDto.content(),
-        commentDto.user().getUserName(),
-        commentDto.dateAndTime());
+                commentDto.id(),
+                commentDto.content(),
+                commentDto.user().getUserName(),
+                commentDto.dateAndTime());
     }
 
     private CommentResponse mapToCommentResponse(Comment comment) {
-        return new CommentResponse(comment.getId(), comment.getContent(),comment.getUser().getUserName(),comment.getCreatedAt());
+        return new CommentResponse(comment.getId(), comment.getContent(), comment.getUser().getUserName(), comment.getCreatedAt());
     }
 }

@@ -4,7 +4,8 @@ import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.word.WordService;
 import com.example.quizlecikprojekt.domain.word.dto.WordToRepeatDto;
 import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
-import com.example.quizlecikprojekt.newweb.dto.review.*;
+import com.example.quizlecikprojekt.newweb.dto.review.request.CheckAnswerRequest;
+import com.example.quizlecikprojekt.newweb.dto.review.response.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,8 +199,8 @@ public class ReviewRestController {
                     newCorrectCount++;
                 }
             } else if (wordToCheck.isCorrect() && !wasUserCorrect && !session.isSystemAddCorrectWord()) {
-                    newCorrectCount--;
-                }
+                newCorrectCount--;
+            }
 
 
             session.setCorrectWordOnView(Math.max(0, newCorrectCount));
@@ -299,7 +300,7 @@ public class ReviewRestController {
     }
 
     private WordToRepeatResponse mapToWordToRepeatResponse(WordToRepeatDto dto) {
-        return new WordToRepeatResponse(dto.word(),dto.translation(), dto.isCorrect());
+        return new WordToRepeatResponse(dto.word(), dto.translation(), dto.isCorrect());
     }
 
     // Session class

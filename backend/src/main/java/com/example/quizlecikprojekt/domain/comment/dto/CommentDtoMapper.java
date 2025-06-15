@@ -9,7 +9,7 @@ import java.util.List;
 public class CommentDtoMapper {
 
     public CommentDto toDto(Comment comment) {
-        return new CommentDto(comment.getId(), comment.getContent(),comment.getUser(),comment.getCreatedAt());
+        return new CommentDto(comment.getId(), comment.getContent(), comment.getUser(), comment.getCreatedAt());
     }
 
     public List<CommentDto> toDto(List<Comment> comments) {

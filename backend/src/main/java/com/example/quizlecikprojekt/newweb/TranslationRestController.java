@@ -2,8 +2,8 @@ package com.example.quizlecikprojekt.newweb;
 
 import com.example.quizlecikprojekt.deeplytranzlator.WordsTranslator;
 import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
-import com.example.quizlecikprojekt.newweb.dto.tranzlation.TranslationRequest;
-import com.example.quizlecikprojekt.newweb.dto.tranzlation.TranslationResponse;
+import com.example.quizlecikprojekt.newweb.dto.tranzlation.request.TranslationRequest;
+import com.example.quizlecikprojekt.newweb.dto.tranzlation.response.TranslationResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

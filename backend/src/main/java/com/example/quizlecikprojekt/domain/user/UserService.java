@@ -88,26 +88,26 @@ public class UserService {
 
     @Transactional
     public void updateUser(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.email())
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + userDto.email()));
+        User user = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + userDto.getEmail()));
 
 
-        if (userDto.password() != null && !userDto.password().trim().isEmpty() && !passwordEncoder.matches(userDto.password(), user.getPassword())) {
-                user.setPassword(passwordEncoder.encode(userDto.password()));
-                logger.debug("Password updated for user: {}", user.getEmail());
+        if (userDto.getPassword() != null && !userDto.getPassword().trim().isEmpty() && !passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            logger.debug("Password updated for user: {}", user.getEmail());
+        }
+
+
+        if (userDto.getUserName() != null &&
+                !userDto.getUserName().trim().isEmpty() &&
+                !userDto.getUserName().equals(user.getUserName())) {
+
+            if (usernameExists(userDto.getUserName())) {
+                throw new UserAlreadyExistsException("Username already exists: " + userDto.getUserName());
             }
 
-
-        if (userDto.userName() != null &&
-                !userDto.userName().trim().isEmpty() &&
-                !userDto.userName().equals(user.getUserName())) {
-
-            if (usernameExists(userDto.userName())) {
-                throw new UserAlreadyExistsException("Username already exists: " + userDto.userName());
-            }
-
-            user.setUserName(userDto.userName());
-            logger.debug("Username updated for user: {} to: {}", user.getEmail(), userDto.userName());
+            user.setUserName(userDto.getUserName());
+            logger.debug("Username updated for user: {} to: {}", user.getEmail(), userDto.getUserName());
         }
 
     }

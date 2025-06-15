@@ -4,6 +4,11 @@ import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordService;
 import com.example.quizlecikprojekt.domain.wordset.WordSetService;
 import com.example.quizlecikprojekt.newweb.dto.*;
+import com.example.quizlecikprojekt.newweb.dto.test.TestAnswerResult;
+import com.example.quizlecikprojekt.newweb.dto.test.TestResultResponse;
+import com.example.quizlecikprojekt.newweb.dto.test.TestStartResponse;
+import com.example.quizlecikprojekt.newweb.dto.test.TestSubmissionRequest;
+import com.example.quizlecikprojekt.newweb.dto.word.WordResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -312,19 +317,44 @@ public class LearnRestController {
         private int score;
         private List<Word> uncorrectedWords;
 
-        public Long getWordSetId() { return wordSetId; }
-        public void setWordSetId(Long wordSetId) { this.wordSetId = wordSetId; }
+        public Long getWordSetId() {
+            return wordSetId;
+        }
 
-        public List<Word> getWords() { return words; }
-        public void setWords(List<Word> words) { this.words = words; }
+        public void setWordSetId(Long wordSetId) {
+            this.wordSetId = wordSetId;
+        }
 
-        public int getCurrentIndex() { return currentIndex; }
-        public void setCurrentIndex(int currentIndex) { this.currentIndex = currentIndex; }
+        public List<Word> getWords() {
+            return words;
+        }
 
-        public int getScore() { return score; }
-        public void setScore(int score) { this.score = score; }
+        public void setWords(List<Word> words) {
+            this.words = words;
+        }
 
-        public List<Word> getUncorrectedWords() { return uncorrectedWords; }
-        public void setUncorrectedWords(List<Word> uncorrectedWords) { this.uncorrectedWords = uncorrectedWords; }
+        public int getCurrentIndex() {
+            return currentIndex;
+        }
+
+        public void setCurrentIndex(int currentIndex) {
+            this.currentIndex = currentIndex;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        public List<Word> getUncorrectedWords() {
+            return uncorrectedWords;
+        }
+
+        public void setUncorrectedWords(List<Word> uncorrectedWords) {
+            this.uncorrectedWords = uncorrectedWords;
+        }
     }
 }
