@@ -9,8 +9,8 @@ body {
 }
 
 .container1 {
-    margin-top: 150px;
-    margin-bottom: 20px; /* Add space between the two containers */
+    margin-top: 70px; /* Zmniejsz bo header już daje odstęp */
+    margin-bottom: 20px;
 }
 
 .container2 {
@@ -37,7 +37,6 @@ h2 {
     color: white;
     font-size: 24px;
 }
-
 
 .title {
     font-size: 24px;
@@ -66,6 +65,7 @@ h2 {
     box-sizing: border-box;
     position: relative;
     margin-right: 20px; /* Add space between frames */
+    cursor: pointer;
 }
 
 .centered-frame-blue::before {
@@ -85,9 +85,8 @@ h2 {
 }
 
 .blue-frame {
-    background-image: url('../img/blue-light.jpg');
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
 }
-
 
 .content-frame-blue {
     width: 300px;
@@ -133,7 +132,7 @@ h2 {
     box-sizing: border-box;
     position: relative;
     margin-right: 20px; /* Add space between frames */
-
+    cursor: pointer;
 }
 
 .centered-frame-red::before {
@@ -152,7 +151,6 @@ h2 {
     box-shadow: 0 100px 100px rgba(255, 0, 0, 0.7);
 }
 
-
 .content-frame-red {
     width: 300px;
     height: 300px;
@@ -164,11 +162,10 @@ h2 {
     color: white;
     position: relative;
     z-index: 2;
-
 }
 
 .red-frame {
-    background-image: url('../img/red-light.png');
+    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
     box-shadow: 0 0 70px rgba(255, 0, 0, 0.5);
 }
 
@@ -207,6 +204,7 @@ h2 {
     box-sizing: border-box;
     position: relative;
     margin-right: 20px; /* Add space between frames */
+    cursor: pointer;
 }
 
 .centered-frame-green::before {
@@ -225,8 +223,11 @@ h2 {
     box-shadow: 0 40px 70px rgba(0, 255, 0, 0.7);
 }
 
+.home-container {
+    margin-top: 80px; /* Kompensacja dla fixed header */
+}
 .green-frame {
-    background-image: url('../img/green-light.jpg');
+    background: linear-gradient(135deg, #0f4c3a 0%, #5cb85c 100%);
 }
 
 .content-frame-green {

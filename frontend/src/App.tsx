@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userEmail, setUserEmail] = useState('');
+
+    useEffect(() => {
+        // Sprawdź czy użytkownik jest zalogowany (np. sprawdź localStorage)
+        const token = localStorage.getItem('authToken');
+        const email = localStorage.getItem('userEmail');
+
+        if (token && email) {
+            setIsAuthenticated(true);
+            setUserEmail(email);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        setUserEmail('');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userEmail');
+    };
+
+    return (
+        <Router>
+            <Layout
+                isAuthenticated={isAuthenticated}
+                userEmail={userEmail}
+                onLogout={handleLogout}
+            >
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    {/* Tutaj dodasz więcej tras */}
+                </Routes>
+            </Layout>
+        </Router>
+    );
 }
 
 export default App;

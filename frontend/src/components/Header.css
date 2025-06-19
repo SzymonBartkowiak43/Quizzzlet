@@ -1,0 +1,98 @@
+.main-header {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3a3a3b;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.main-content {
+    padding: 100px 20px 20px;
+}
+
+.logo-container {
+    flex: 0 0 auto;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+}
+
+.main-nav {
+    flex: 1;
+    text-align: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.main-nav ul li {
+    margin: 0 15px;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+    color: #fd2828;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+.user-actions .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+}
+
+.user-actions .profile span {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.user-actions .profile a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.user-actions .profile a:hover {
+    color: #fd2828;
+}
+
+.user-actions .auth-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.user-actions .auth-links a:hover {
+    color: #fd2828;
+}
