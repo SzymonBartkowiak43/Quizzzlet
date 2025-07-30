@@ -8,8 +8,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
   flyway:
-    locations: classpath:db/migration,classpath:db/dev
+    enabled: false
+  sql:
+    init:
+      mode: always
 
 deepl:
   auth-key: 8ec376ab-7847-48d6-9941-23856ca6a578:fx
