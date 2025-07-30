@@ -13,8 +13,10 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,18 +27,18 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 @SpringBootTest(classes = QuizlecikProjektApplication.class)
 @AutoConfigureMockMvc
 @Testcontainers
-public abstract class BaseIntegrationTest {
+public class BaseIntegrationTest {
 
     public static final String WIRE_MOCK_HOST = "http://localhost";
 
     @Autowired
-    protected MockMvc mockMvc;
+    public MockMvc mockMvc;
 
     @Autowired
-    protected ObjectMapper objectMapper;
+    public ObjectMapper objectMapper;
 
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+   public JdbcTemplate jdbcTemplate;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -44,8 +46,9 @@ public abstract class BaseIntegrationTest {
             .build();
 
     @Container
-    public static final MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.0")
-            .withDatabaseName("projekt")
+    public static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>(
+            DockerImageName.parse("postgres:15"))
+            .withDatabaseName("integration-tests-db")
             .withUsername("testuser")
             .withPassword("testpass");
 
@@ -56,15 +59,15 @@ public abstract class BaseIntegrationTest {
 
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", mysqlContainer::getUsername);
-        registry.add("spring.datasource.password", mysqlContainer::getPassword);
-        registry.add("spring.datasource.driver-class-name", () -> "com.mysql.cj.jdbc.Driver");
-        registry.add("external.api.port", () -> wireMockServer.getPort());
-        registry.add("external.api.host", () -> WIRE_MOCK_HOST);
+        registry.add("spring.datasource.url", postgresContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresContainer::getUsername);
+        registry.add("spring.datasource.password", postgresContainer::getPassword);
+        registry.add("jobOffer.offer-fetchable.http.client.config.port", () -> wireMockServer.getPort());
+        registry.add("jobOffer.offer-fetchable.http.client.config.uri", () -> WIRE_MOCK_HOST);
     }
 
-    protected static String readJsonFromFile(String fileName) throws IOException {
+    public static String readJsonFromFile(String fileName) throws IOException {
         return new String(Files.readAllBytes(Paths.get("src/integration/resources/json/" + fileName)));
     }
+
 }
