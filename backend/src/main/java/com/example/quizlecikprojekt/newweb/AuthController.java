@@ -92,25 +92,4 @@ public class AuthController {
                     .body(ApiResponse.error("Invalid credentials"));
         }
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<String>> logout() {
-        SecurityContextHolder.clearContext();
-        return ResponseEntity.ok(ApiResponse.success("Logged out successfully", "Session cleared"));
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<ApiResponse<String>> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isLoggedIn = authentication != null &&
-                authentication.isAuthenticated() &&
-                !authentication.getPrincipal().equals("anonymousUser");
-
-        if (isLoggedIn) {
-            return ResponseEntity.ok(ApiResponse.success("User authenticated", authentication.getName()));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error("User not authenticated"));
-        }
-    }
 }

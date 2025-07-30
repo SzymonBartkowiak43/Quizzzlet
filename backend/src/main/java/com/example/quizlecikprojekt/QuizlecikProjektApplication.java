@@ -3,9 +3,10 @@ package com.example.quizlecikprojekt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {FlywayAutoConfiguration.class})
 @EnableScheduling
 public class QuizlecikProjektApplication {
 
