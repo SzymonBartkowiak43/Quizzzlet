@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt.domain.user;
 
 import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegistrationDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
 import com.example.quizlecikprojekt.domain.user.exception.UserAlreadyExistsException;
 import com.example.quizlecikprojekt.domain.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -62,7 +65,7 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
+    public UserResponseDto registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
         if (emailExists(userRegistrationDto.email())) {
             throw new UserAlreadyExistsException("Email already exists: " + userRegistrationDto.email());
         }
@@ -82,9 +85,15 @@ public class UserService {
         user.getRoles().add(defaultRole);
 
         User savedUser = userRepository.save(user);
-        logger.info("User registered successfully: {}", savedUser.getEmail());
 
+        Set<String> roleNames = savedUser.getRoles().stream()
+                .map(UserRole::getName)
+                .collect(Collectors.toSet());
+
+        return new UserResponseDto(savedUser.getId(), savedUser.getEmail(), savedUser.getUserName(), roleNames);
     }
+
+
 
     @Transactional
     public void updateUser(UserDto userDto) {

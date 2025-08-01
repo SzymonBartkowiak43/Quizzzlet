@@ -2,7 +2,10 @@ package com.example.quizlecikprojekt.newweb;
 
 import com.example.quizlecikprojekt.domain.user.PasswordValidator;
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegistrationDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
+import com.example.quizlecikprojekt.domain.user.exception.UserAlreadyExistsException;
 import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
 import com.example.quizlecikprojekt.newweb.dto.login.LoginRequest;
 import com.example.quizlecikprojekt.newweb.dto.login.LoginResponse;
@@ -35,7 +38,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody UserRegistrationDto userRegistrationDto) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> register(
+            @Valid @RequestBody UserRegistrationDto userRegistrationDto) {
+
         try {
             List<String> constraintViolations = PasswordValidator.getConstraintViolations(userRegistrationDto.password());
             if (!constraintViolations.isEmpty()) {
@@ -43,24 +48,15 @@ public class AuthController {
                         .body(ApiResponse.error("Password validation failed", constraintViolations));
             }
 
-            if (userService.emailExists(userRegistrationDto.email())) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Email already exists"));
-            }
+            UserResponseDto savedUser = userService.registerUserWithDefaultRole(userRegistrationDto);
 
-            if (userService.usernameExists(userRegistrationDto.username())) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Username already exists"));
-            }
-
-            userService.registerUserWithDefaultRole(userRegistrationDto);
-
-            logger.info("User registered successfully: {}", userRegistrationDto.username());
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.success("User registered successfully", "User created"));
+                    .body(ApiResponse.success("User registered successfully", savedUser));
 
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.error(e.getMessage()));
         } catch (Exception e) {
-            logger.error("Registration failed for user: {}", userRegistrationDto.username(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error("Registration failed"));
         }

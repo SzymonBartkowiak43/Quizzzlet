@@ -2,7 +2,6 @@ package com.example.quizlecikprojekt.newweb.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -11,11 +10,6 @@ public class ApiResponse<T> {
     private String message;
     private T data;
     private List<String> errors;
-    private LocalDateTime timestamp;
-
-    public ApiResponse() {
-        this.timestamp = LocalDateTime.now();
-    }
 
     public static <T> ApiResponse<T> success(String message, T data) {
         ApiResponse<T> response = new ApiResponse<>();
@@ -75,13 +69,5 @@ public class ApiResponse<T> {
 
     public void setErrors(List<String> errors) {
         this.errors = errors;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 }

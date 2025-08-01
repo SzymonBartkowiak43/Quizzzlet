@@ -1,35 +1,58 @@
 package com.example.quizlecikprojekt.login;
 
+import com.example.quizlecikprojekt.Asserter;
 import com.example.quizlecikprojekt.BaseIntegrationTest;
+import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegistrationDto;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 
-import static io.restassured.RestAssured.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 
+
+    @Autowired
+    private Asserter asserter;
+
     @Test
     void shouldRegisterUserSuccessfully() throws Exception {
+        // given
         UserRegistrationDto registrationDto = new UserRegistrationDto(
                 "testuser@example.com",
                 "StrongPass123!",
                 "testuser"
         );
 
-        mockMvc.perform(post("/api/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
+        User expectedUser = new User();
+        expectedUser.setEmail("testuser@example.com");
+        expectedUser.setUserName("testuser");
+
+        String expectedJson = """
+                        {
+                          "success": true,
+                          "message": "User registered successfully",
+                          "data": {
+                            "id": 2,
+                            "email": "testuser@example.com",
+                            "userName": "testuser",
+                            "roles": ["USER"]
+                          }
+                        }
+                """;
+
+        // when
+        MvcResult result = mockMvc.perform(post("/api/auth/register")
+                        .contentType("application/json")
                         .content(objectMapper.writeValueAsString(registrationDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.message").value("User registered successfully"))
-                .andExpect(jsonPath("$.data").value("User created"));
+                .andReturn();
 
-        // DB assertion
-        assertThatUserExistsInDb("testuser@example.com");
+        // then
+        asserter.assertApiResponse(result, expectedJson);
     }
 
 //    @Test
@@ -63,11 +86,4 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 //                .body("message", equalTo("Login successful"))
 //                .body("data.username", equalTo("loginuser"));
 //    }
-
-    private void assertThatUserExistsInDb(String email) {
-        Integer count = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM users WHERE email = ?", Integer.class, email
-        );
-        org.assertj.core.api.Assertions.assertThat(count).isEqualTo(1);
-    }
 }

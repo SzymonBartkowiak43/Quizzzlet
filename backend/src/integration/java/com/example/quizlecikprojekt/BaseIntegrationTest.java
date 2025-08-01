@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.apache.catalina.core.ApplicationContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class BaseIntegrationTest {
 
     @Autowired
    public JdbcTemplate jdbcTemplate;
+
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
