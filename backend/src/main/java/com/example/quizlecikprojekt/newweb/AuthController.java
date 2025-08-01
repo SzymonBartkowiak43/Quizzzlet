@@ -1,8 +1,6 @@
 package com.example.quizlecikprojekt.newweb;
 
-import com.example.quizlecikprojekt.domain.user.PasswordValidator;
 import com.example.quizlecikprojekt.domain.user.UserService;
-import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegistrationDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
 import com.example.quizlecikprojekt.domain.user.exception.UserAlreadyExistsException;
@@ -20,11 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -40,14 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserResponseDto>> register(
             @Valid @RequestBody UserRegistrationDto userRegistrationDto) {
-
         try {
-            List<String> constraintViolations = PasswordValidator.getConstraintViolations(userRegistrationDto.password());
-            if (!constraintViolations.isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Password validation failed", constraintViolations));
-            }
-
             UserResponseDto savedUser = userService.registerUserWithDefaultRole(userRegistrationDto);
 
             return ResponseEntity.status(HttpStatus.CREATED)

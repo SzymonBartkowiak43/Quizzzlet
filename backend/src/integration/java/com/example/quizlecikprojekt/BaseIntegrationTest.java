@@ -39,7 +39,10 @@ public class BaseIntegrationTest {
     public ObjectMapper objectMapper;
 
     @Autowired
-   public JdbcTemplate jdbcTemplate;
+    public JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public  Asserter asserter;
 
 
     @RegisterExtension
@@ -57,6 +60,11 @@ public class BaseIntegrationTest {
     @BeforeEach
     void resetWireMock() {
         wireMockServer.resetAll();
+    }
+
+    @BeforeEach
+    void resetDatabase() {
+        jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
     }
 
     @DynamicPropertySource

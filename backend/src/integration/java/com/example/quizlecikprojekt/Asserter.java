@@ -55,9 +55,6 @@ public class Asserter {
         JSONAssert.assertEquals(expectedJson, actualJson, comparator);
     }
 
-    /**
-     * Asserts DB state using repository resolved dynamically
-     */
     @SuppressWarnings("unchecked")
     public <T> void assertDbMatch(T expectedDbEntity, long expectedDbCount) throws Exception {
         if (expectedDbEntity != null) {
