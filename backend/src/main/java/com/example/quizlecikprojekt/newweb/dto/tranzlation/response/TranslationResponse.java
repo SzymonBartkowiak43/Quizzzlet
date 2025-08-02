@@ -6,10 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TranslationResponse {
-    private String originalText;
-    private String translatedText;
-    private String sourceLanguage;
-    private String targetLanguage;
-    private boolean translationSuccessful;
-    private String message;
+  private String originalText;
+  private String translatedText;
+  private String sourceLanguage;
+  private String targetLanguage;
+  private boolean translationSuccessful;
+  private String message;
 }

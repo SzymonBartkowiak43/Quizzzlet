@@ -1,43 +1,40 @@
 package com.example.quizlecikprojekt.domain.word;
 
-
 import com.example.quizlecikprojekt.domain.wordset.WordSet;
 import jakarta.persistence.*;
+import java.sql.Date;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Date;
 
 @Getter
 @Setter
 @Entity
 public class Word {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String word;
-    private String translation;
-    private Integer points;
-    private boolean star;
-    private Date lastPracticed;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "word_set_id", nullable = false)
-    private WordSet wordSet;
+  private String word;
+  private String translation;
+  private Integer points;
+  private boolean star;
+  private Date lastPracticed;
 
-    public void addPoint() {
-        lastPracticed = new Date(System.currentTimeMillis());
-        if (points < 2) {
-            points++;
-        }
+  @ManyToOne
+  @JoinColumn(name = "word_set_id", nullable = false)
+  private WordSet wordSet;
+
+  public void addPoint() {
+    lastPracticed = new Date(System.currentTimeMillis());
+    if (points < 2) {
+      points++;
     }
+  }
 
-    public void subtractPoint() {
-        lastPracticed = new Date(System.currentTimeMillis());
-        if (points > 0) {
-            points--;
-        }
+  public void subtractPoint() {
+    lastPracticed = new Date(System.currentTimeMillis());
+    if (points > 0) {
+      points--;
     }
-
-
+  }
 }

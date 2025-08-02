@@ -22,58 +22,53 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+  private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
+  private final UserService userService;
+  private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
+  public AuthController(UserService userService, AuthenticationManager authenticationManager) {
+    this.userService = userService;
+    this.authenticationManager = authenticationManager;
+  }
+
+  @PostMapping("/register")
+  public ResponseEntity<ApiResponse<UserResponseDto>> register(
+      @Valid @RequestBody UserRegistrationDto userRegistrationDto) {
+    try {
+      UserResponseDto savedUser = userService.registerUserWithDefaultRole(userRegistrationDto);
+
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .body(ApiResponse.success("User registered successfully", savedUser));
+
+    } catch (UserAlreadyExistsException e) {
+      return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(ApiResponse.error("Registration failed"));
     }
+  }
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponseDto>> register(
-            @Valid @RequestBody UserRegistrationDto userRegistrationDto) {
-        try {
-            UserResponseDto savedUser = userService.registerUserWithDefaultRole(userRegistrationDto);
+  @PostMapping("/login")
+  public ResponseEntity<ApiResponse<LoginResponse>> login(
+      @Valid @RequestBody LoginRequest loginRequest) {
+    try {
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  loginRequest.username(), loginRequest.password()));
 
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.success("User registered successfully", savedUser));
+      SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Registration failed"));
-        }
+      LoginResponse loginResponse = new LoginResponse(authentication.getName(), "Login successful");
+
+      logger.info("User logged in successfully: {}", loginRequest.username());
+      return ResponseEntity.ok(ApiResponse.success("Login successful", loginResponse));
+
+    } catch (Exception e) {
+      logger.error("Login failed for user: {}", loginRequest.username(), e);
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body(ApiResponse.error("Invalid credentials"));
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.username(),
-                            loginRequest.password()
-                    )
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            LoginResponse loginResponse = new LoginResponse(
-                    authentication.getName(),
-                    "Login successful"
-            );
-
-            logger.info("User logged in successfully: {}", loginRequest.username());
-            return ResponseEntity.ok(ApiResponse.success("Login successful", loginResponse));
-
-        } catch (Exception e) {
-            logger.error("Login failed for user: {}", loginRequest.username(), e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error("Invalid credentials"));
-        }
-    }
+  }
 }

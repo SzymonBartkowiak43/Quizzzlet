@@ -11,49 +11,49 @@ import org.springframework.stereotype.Service;
 @Service
 public class WordsTranslator {
 
-    private static final Logger logger = LoggerFactory.getLogger(WordsTranslator.class);
-    private static final int MAX_TEXT_LENGTH = 100;
+  private static final Logger logger = LoggerFactory.getLogger(WordsTranslator.class);
+  private static final int MAX_TEXT_LENGTH = 100;
 
-    @Value("${deepl.auth-key}")
-    private String authKey;
+  @Value("${deepl.auth-key}")
+  private String authKey;
 
-    private Translator translator;
+  private Translator translator;
 
-    @PostConstruct
-    public void initializeTranslator() {
-        try {
-            translator = new Translator(authKey);
-            logger.info("DeepL Translator initialized successfully");
-        } catch (Exception e) {
-            logger.error("Failed to initialize DeepL Translator", e);
-        }
+  @PostConstruct
+  public void initializeTranslator() {
+    try {
+      translator = new Translator(authKey);
+      logger.info("DeepL Translator initialized successfully");
+    } catch (Exception e) {
+      logger.error("Failed to initialize DeepL Translator", e);
     }
+  }
 
-    public String translate(String text, String sourceLanguage, String targetLanguage) {
-        try {
-            if (translator == null) {
-                logger.warn("Translator not initialized");
-                return text;
-            }
+  public String translate(String text, String sourceLanguage, String targetLanguage) {
+    try {
+      if (translator == null) {
+        logger.warn("Translator not initialized");
+        return text;
+      }
 
-            if (text == null || text.trim().isEmpty()) {
-                return text;
-            }
+      if (text == null || text.trim().isEmpty()) {
+        return text;
+      }
 
-            if (text.length() > MAX_TEXT_LENGTH) {
-                logger.warn("Text too long for translation: {} characters", text.length());
-                return text;
-            }
+      if (text.length() > MAX_TEXT_LENGTH) {
+        logger.warn("Text too long for translation: {} characters", text.length());
+        return text;
+      }
 
-            TextResult result = translator.translateText(text.trim(), sourceLanguage, targetLanguage);
-            String translatedText = result.getText();
+      TextResult result = translator.translateText(text.trim(), sourceLanguage, targetLanguage);
+      String translatedText = result.getText();
 
-            logger.debug("Translation: '{}' -> '{}'", text, translatedText);
-            return translatedText;
+      logger.debug("Translation: '{}' -> '{}'", text, translatedText);
+      return translatedText;
 
-        } catch (Exception e) {
-            logger.error("Translation failed for text: '{}'", text, e);
-            return text;
-        }
+    } catch (Exception e) {
+      logger.error("Translation failed for text: '{}'", text, e);
+      return text;
     }
+  }
 }
