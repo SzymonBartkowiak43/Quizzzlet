@@ -57,7 +57,7 @@ public class WordSetService {
   }
 
   public List<WordSet> getWordSetsByEmail(String email) {
-    Optional<User> userOptional = userRepository.findByEmail(email);
+    Optional<User> userOptional = userRepository.getUserByEmail(email);
     if (userOptional.isEmpty()) {
       logger.warn("User not found with email: {}", email);
       return List.of();

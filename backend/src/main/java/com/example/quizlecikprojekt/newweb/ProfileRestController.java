@@ -42,14 +42,8 @@ public class ProfileRestController {
       }
 
       String email = authentication.getName();
-      Optional<UserDto> userDtoOptional = userService.findCredentialsByEmail(email);
+      UserDto userDto = userService.findByEmail(email);
 
-      if (userDtoOptional.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(ApiResponse.error("User not found"));
-      }
-
-      UserDto userDto = userDtoOptional.get();
       UserProfileResponse response = mapToUserProfileResponse(userDto);
 
       logger.info("Profile retrieved for user: {}", email);
@@ -81,31 +75,27 @@ public class ProfileRestController {
             .body(ApiResponse.error("Current password is incorrect"));
       }
 
-      User currentUser = userService.getUserByEmail(email);
-      UserDto userDto = new UserDto();
-      userDto.setEmail(email);
+      UserDto userDto = userService.findByEmail(email);
 
       boolean updated = false;
 
       if (request.userName() != null
           && !request.userName().trim().isEmpty()
-          && !request.userName().equals(currentUser.getUserName())) {
+          && !request.userName().equals(userDto.name())) {
 
         if (userService.usernameExists(request.userName())) {
           return ResponseEntity.status(HttpStatus.BAD_REQUEST)
               .body(ApiResponse.error("Username already exists"));
         }
 
-        userDto.setUserName(request.userName());
         updated = true;
-        logger.debug("Username will be updated for user: {} to: {}", email, request.userName());
       }
 
       if (request.newPassword() != null
           && !request.newPassword().trim().isEmpty()
           && !request.newPassword().equals(request.currentPassword())) {
 
-        userDto.setPassword(request.newPassword());
+//        userDto.password(request.newPassword());
         updated = true;
         logger.debug("Password will be updated for user: {}", email);
       }
@@ -116,16 +106,13 @@ public class ProfileRestController {
       }
 
       // Wykonaj aktualizację
-      userService.updateUser(userDto);
+//      userService.updateUser(userDto);
 
       // Pobierz zaktualizowane dane
-      Optional<UserDto> updatedUserDtoOptional = userService.findCredentialsByEmail(email);
-      if (updatedUserDtoOptional.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ApiResponse.error("Failed to retrieve updated profile"));
-      }
+     UserDto updatedUserDtoOptional = userService.findByEmail(email);
 
-      UserProfileResponse response = mapToUserProfileResponse(updatedUserDtoOptional.get());
+
+      UserProfileResponse response = mapToUserProfileResponse(updatedUserDtoOptional);
 
       logger.info("Profile updated successfully for user: {}", email);
       return ResponseEntity.ok(ApiResponse.success("Profile updated successfully", response));
@@ -193,11 +180,11 @@ public class ProfileRestController {
             .body(ApiResponse.error("New password must be different from current password"));
       }
 
-      UserDto userDto = new UserDto();
-      userDto.setEmail(email);
-      userDto.setPassword(request.newPassword());
-
-      userService.updateUser(userDto);
+//      UserDto userDto = new UserDto();
+//      userDto.email(email);
+//      userDto.password(request.newPassword());
+//
+//      userService.updateUser(userDto);
 
       logger.info("Password changed successfully for user: {}", email);
       return ResponseEntity.ok(
@@ -229,9 +216,9 @@ public class ProfileRestController {
             .body(ApiResponse.error("Current password is incorrect"));
       }
 
-      User currentUser = userService.getUserByEmail(email);
+      UserDto currentUser = userService.findByEmail(email);
 
-      if (request.newUsername().equals(currentUser.getUserName())) {
+      if (request.newUsername().equals(currentUser.name())) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ApiResponse.error("New username must be different from current username"));
       }
@@ -241,19 +228,16 @@ public class ProfileRestController {
             .body(ApiResponse.error("Username already exists"));
       }
 
-      UserDto userDto = new UserDto();
-      userDto.setEmail(email);
-      userDto.setUserName(request.newUsername());
+//      UserDto userDto = new UserDto();
+//      userDto.setEmail(email);
+//      userDto.setUserName(request.newUsername());
+//
+//      userService.updateUser(userDto);
 
-      userService.updateUser(userDto);
+      UserDto updatedUserDtoOptional = userService.findByEmail(email);
 
-      Optional<UserDto> updatedUserDtoOptional = userService.findCredentialsByEmail(email);
-      if (updatedUserDtoOptional.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ApiResponse.error("Failed to retrieve updated profile"));
-      }
 
-      UserProfileResponse response = mapToUserProfileResponse(updatedUserDtoOptional.get());
+      UserProfileResponse response = mapToUserProfileResponse(updatedUserDtoOptional);
 
       logger.info(
           "Username changed successfully for user: {} to: {}", email, request.newUsername());
@@ -270,6 +254,6 @@ public class ProfileRestController {
   }
 
   private UserProfileResponse mapToUserProfileResponse(UserDto userDto) {
-    return new UserProfileResponse(userDto.getEmail(), userDto.getUserName());
+    return new UserProfileResponse(userDto.email(), userDto.name());
   }
 }

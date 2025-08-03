@@ -57,7 +57,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         """;
 
         // when
-        MvcResult loginResult = mockMvc.perform(post("/api/auth/login")
+        MvcResult loginResult = mockMvc.perform(post("/api/auth/token")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
@@ -84,7 +84,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         """;
 
         // when
-        MvcResult loginResult = mockMvc.perform(post("/api/auth/login")
+        MvcResult loginResult = mockMvc.perform(post("/api/auth/token")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isUnauthorized())

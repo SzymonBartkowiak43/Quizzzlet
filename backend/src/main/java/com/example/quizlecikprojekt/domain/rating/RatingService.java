@@ -32,7 +32,7 @@ public class RatingService {
     if (ratingToSave.getUser() == null || ratingToSave.getVideo() == null) {
       User user =
           userRepository
-              .findByEmail(userEmail)
+              .getUserByEmail(userEmail)
               .orElseThrow(
                   () -> new NoSuchElementException("User not found with email: " + userEmail));
       Video video =

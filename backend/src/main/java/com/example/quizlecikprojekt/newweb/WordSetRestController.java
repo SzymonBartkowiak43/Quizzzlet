@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt.newweb;
 
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordService;
 import com.example.quizlecikprojekt.domain.wordset.WordSet;
@@ -69,8 +70,8 @@ public class WordSetRestController {
             .body(ApiResponse.error("User not authenticated"));
       }
 
-      User user = userService.getUserByEmail(authentication.getName());
-      WordSet wordSet = wordSetService.newWordSet(user);
+      UserDto user = userService.findByEmail(authentication.getName());
+      WordSet wordSet = wordSetService.newWordSet(null);
 
       if (request.name() != null && !request.name().trim().isEmpty()) {
         wordSet.setTitle(request.name());

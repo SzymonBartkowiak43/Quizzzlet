@@ -6,6 +6,7 @@ import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
 import com.example.quizlecikprojekt.domain.rating.RatingService;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.video.VideoService;
 import com.example.quizlecikprojekt.newweb.dto.ApiResponse;
@@ -72,7 +73,7 @@ public class VideoRestController {
               video.getId(),
               video.getTitle(),
               video.getUrl(),
-              videoOwner.getUserName(),
+              videoOwner.getName(),
               video.getUserId(),
               comments.stream().map(this::mapToCommentResponse).toList(),
               userRating.orElse(0),
@@ -173,9 +174,9 @@ public class VideoRestController {
       }
 
       String userEmail = authentication.getName();
-      User user = userService.getUserByEmail(userEmail);
+      UserDto user = userService.findByEmail(userEmail);
 
-      Video createdVideo = videoService.addVideo(request.url(), request.title(), user.getId());
+      Video createdVideo = videoService.addVideo(request.url(), request.title(), user.userId());
 
       VideoSummaryResponse response =
           mapToVideoSummary(createdVideo, Map.of(createdVideo.getId(), 0.0));
@@ -208,7 +209,7 @@ public class VideoRestController {
       }
 
       String userEmail = authentication.getName();
-      User user = userService.getUserByEmail(userEmail);
+      UserDto user = userService.findByEmail(userEmail);
       Video video = videoService.findById(id);
 
       if (video == null) {
@@ -216,7 +217,7 @@ public class VideoRestController {
             .body(ApiResponse.error("Video not found"));
       }
 
-      Comment comment = commentService.addComment(request.content(), user, video);
+      Comment comment = commentService.addComment(request.content(), null, video);
       CommentResponse response = mapToCommentResponse(comment);
 
       logger.info("Comment added by user: {} to video: {}", userEmail, id);
@@ -251,9 +252,9 @@ public class VideoRestController {
             .body(ApiResponse.error("Comment not found"));
       }
 
-      User currentUser = userService.getUserByEmail(userEmail);
+      UserDto currentUser = userService.findByEmail(userEmail);
       boolean isAdmin =
-          currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN"));
+          currentUser.roles().stream().anyMatch(role -> role.name().equals("ADMIN"));
 
       if (!isAdmin && !comment.getUser().equals(currentUser)) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -383,7 +384,7 @@ public class VideoRestController {
 
     try {
       User owner = userService.getUserById(video.getUserId());
-      response.setOwnerUsername(owner.getUserName());
+      response.setOwnerUsername(owner.getName());
     } catch (Exception e) {
       response.setOwnerUsername("Unknown");
     }
@@ -395,7 +396,7 @@ public class VideoRestController {
     return new CommentResponse(
         commentDto.id(),
         commentDto.content(),
-        commentDto.user().getUserName(),
+        commentDto.user().getName(),
         commentDto.dateAndTime());
   }
 
@@ -403,7 +404,7 @@ public class VideoRestController {
     return new CommentResponse(
         comment.getId(),
         comment.getContent(),
-        comment.getUser().getUserName(),
+        comment.getUser().getName(),
         comment.getCreatedAt());
   }
 }
