@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
   User getUserById(Long id);
+
   Optional<User> getUserByEmail(String email);
+
   Optional<User> getUserByName(String name);
 }

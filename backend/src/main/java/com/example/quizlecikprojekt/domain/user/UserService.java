@@ -2,99 +2,85 @@ package com.example.quizlecikprojekt.domain.user;
 
 import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRoleDto;
 import com.example.quizlecikprojekt.domain.user.exception.UserNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.quizlecikprojekt.domain.user.validator.PasswordValidator;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
   private static final String DEFAULT_USER_ROLE = "USER";
-  private static final String ADMIN_ROLE = "ADMIN";
 
   private final UserRepository userRepository;
   private final UserRoleRepository userRoleRepository;
-  private final MaperUserToUserRegisterDto mapper;
   private final PasswordEncoder passwordEncoder;
 
-  public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, MaperUserToUserRegisterDto mapper, PasswordEncoder passwordEncoder) {
+  public UserService(
+      UserRepository userRepository,
+      UserRoleRepository userRoleRepository,
+      PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.userRoleRepository = userRoleRepository;
-    this.mapper = mapper;
     this.passwordEncoder = passwordEncoder;
   }
 
-  public User createNewUser(UserRegisterDto userDto) {
-    // 1) validate RAW password BEFORE encoding
+  public UserResponseDto createNewUser(UserRegisterDto userDto) {
     PasswordValidator.validate(userDto.password());
 
-    // 2) encode exactly once
     String encoded = passwordEncoder.encode(userDto.password());
 
-    // 3) build & save
-    return createUser(new UserRegisterDto(
-            userDto.email().trim(),
-            userDto.name().trim(),
-            encoded
-    ));
-  }
+    User newUser =
+        createUser(new UserRegisterDto(userDto.email().trim(), userDto.name().trim(), encoded));
 
-  public Optional<UserRegisterDto> getUser(Long id) {
-    Optional<User> optionalUser = userRepository.findById(id);
+    Set<String> roleNames =
+        newUser.getRoles().stream()
+            .map(UserRole::getName)
+            .collect(java.util.stream.Collectors.toSet());
 
-    return optionalUser.map(mapper::map);
+    return new UserResponseDto(newUser.getId(), newUser.getEmail(), newUser.getName(), roleNames);
   }
 
   public User getUserById(Long id) {
-    return userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
-  }
-
-
-  public Optional<User> getUserWithId(Long id) {
-    return userRepository.findById(id);
-  }
-  public String getNameById(Long id) {
-    User userById = userRepository.getUserById(id);
-    return userById.getName();
+    return userRepository
+        .findById(id)
+        .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
   }
 
   public Long getUserIdByUsername(String username) {
-    return userRepository.getUserByName(username)
-            .map(User::getId)
-            .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+    return userRepository
+        .getUserByName(username)
+        .map(User::getId)
+        .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
   }
 
   public UserDto findByEmail(String email) {
-    User user = userRepository.getUserByEmail(email)
+    User user =
+        userRepository
+            .getUserByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("Not found"));
 
-
-    Set<UserRoleDto> userRoleDtos = user.getRoles().stream()
+    Set<UserRoleDto> userRoleDtos =
+        user.getRoles().stream()
             .map(role -> new UserRoleDto(role.getName()))
             .collect(Collectors.toSet());
 
-
     return UserDto.builder()
-            .userId(user.getId())
-            .name(user.getName())
-            .email(user.getEmail())
-            .password(user.getPassword())
-            .roles(userRoleDtos)
-            .build();
+        .userId(user.getId())
+        .name(user.getName())
+        .email(user.getEmail())
+        .password(user.getPassword())
+        .roles(userRoleDtos)
+        .build();
   }
 
-
-  @Transactional
-  public User createUser(UserRegisterDto userDto) {
-    User user = User.builder()
+  private User createUser(UserRegisterDto userDto) {
+    User user =
+        User.builder()
             .name(userDto.name())
             .email(userDto.email())
             .password(userDto.password())
@@ -108,38 +94,14 @@ public class UserService {
     return userRepository.save(user);
   }
 
-
   private UserRole getDefaultRole() {
-    return userRoleRepository.findByName(DEFAULT_USER_ROLE)
-            .orElseThrow(() -> new IllegalStateException(
-                    "Default role '" + DEFAULT_USER_ROLE + "' is missing. Seed it before running the app/tests."
-            ));
+    return userRoleRepository
+        .findByName(DEFAULT_USER_ROLE)
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    "Default role '"
+                        + DEFAULT_USER_ROLE
+                        + "' is missing. Seed it before running the app/tests."));
   }
-
-  public User updateUser(UserRegisterDto userDto) {
-    User user = userRepository.getUserByEmail(userDto.email())
-            .orElseThrow(() -> new RuntimeException("user not found!!"));
-
-    user.setName(userDto.name());
-    user.setEmail(userDto.email());
-    user.setPassword(userDto.password());
-
-    userRepository.save(user);
-    return user;
-  }
-
-
-  public boolean verifyCurrentPassword(String email, String currentPassword) {
-    User user = userRepository. getUserByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
-
-    boolean isValid = passwordEncoder.matches(currentPassword, user.getPassword());
-
-    return isValid;
-  }
-
-  public boolean usernameExists(String username) {
-    return userRepository.getUserByName(username).isPresent();
-  }
-
 }

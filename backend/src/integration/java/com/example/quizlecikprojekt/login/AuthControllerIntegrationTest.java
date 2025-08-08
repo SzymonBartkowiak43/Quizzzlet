@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.login;
 
 import com.example.quizlecikprojekt.BaseIntegrationTest;
-import com.example.quizlecikprojekt.domain.user.dto.UserRegistrationDto;
+import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.login.models.UserJsonModel;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,8 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldRegisterUserSuccessfully() throws Exception {
         // given
-        UserRegistrationDto registrationDto = createRegistrationDto(
-                "testuser@example.com", "StrongPass123!", "testuser"
+        UserRegisterDto registrationDto = new UserRegisterDto(
+                "testuser@example.com", "testuser","StrongPass123!"
         );
 
         String expectedJson = UserJsonModel.maximal(
@@ -84,14 +84,14 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldRejectDuplicateEmail() throws Exception {
         // given
-        var dto = createRegistrationDto("dupe@example.com", "StrongPass123!", "dupeUser");
+        var dto = new UserRegisterDto("dupe@example.com",  "dupeUser","StrongPass123!");
         mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
 
         // when
-        var dupe = createRegistrationDto("dupe@example.com", "AnotherStrong123!", "dupeUser2");
+        var dupe = new UserRegisterDto("dupe@example.com", "dupeUser2","AnotherStrong123!");
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dupe)))
@@ -110,18 +110,18 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldRejectDuplicateUsername() throws Exception {
         // given
-        var dto = createRegistrationDto("userA@example.com", "StrongPass123!", "sameName");
+        var dto = new UserRegisterDto("userA@example.com",  "sameName", "StrongPass123!");
         mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
 
         // when
-        var dupe = createRegistrationDto("userB@example.com", "OtherStrong123!", "sameName");
+        var dupe = new UserRegisterDto("userB@example.com",  "sameName", "OtherStrong123!");
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dupe)))
-                .andExpect(status().isConflict()) // or BAD_REQUEST
+                .andExpect(status().isConflict())
                 .andReturn();
 
         String expectedJson = """
@@ -135,7 +135,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldRejectInvalidEmailFormat() throws Exception {
-        var dto = createRegistrationDto("not-an-email", "StrongPass123!", "invalidEmailUser");
+        var dto = new UserRegisterDto("not-an-email", "invalidEmailUser", "StrongPass123!");
 
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
@@ -155,7 +155,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldRejectWeakPassword() throws Exception {
-        var dto = createRegistrationDto("weakpass@example.com", "123", "weak");
+        var dto = new UserRegisterDto("weakpass@example.com",  "weak", "123");
 
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
@@ -179,7 +179,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldTrimEmailAndUsername() throws Exception {
-        var dto = createRegistrationDto("  spaced@example.com  ", "StrongPass123!", "  spacedName  ");
+        var dto = new UserRegisterDto("  spaced@example.com  ", "  spacedName  ", "StrongPass123!" );
 
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
@@ -194,14 +194,11 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         asserter.assertApiResponse(result, expectedJson);
     }
 
-    private UserRegistrationDto createRegistrationDto(String email, String password, String username) {
-        return new UserRegistrationDto(email, password, username);
-    }
 
     private void registerUser() throws Exception {
-        UserRegistrationDto registrationDto = createRegistrationDto(
-                "loginuser@example.com", "Password123!", "loginuser"
-        );
+        UserRegisterDto registrationDto = new UserRegisterDto(
+                "loginuser@example.com", "loginuser", "Password123!"
+                );
 
          mockMvc.perform(post("/api/auth/register")
                         .contentType("application/json")

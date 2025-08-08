@@ -1,4 +1,3 @@
 package com.example.quizlecikprojekt.domain.user.dto;
 
-public record UserRoleDto(String name) {
-}
+public record UserRoleDto(String name) {}

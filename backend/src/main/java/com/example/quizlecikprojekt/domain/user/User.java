@@ -1,12 +1,10 @@
 package com.example.quizlecikprojekt.domain.user;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.Email;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -79,5 +77,4 @@ public class User implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-
 }

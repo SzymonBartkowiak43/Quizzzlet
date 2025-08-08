@@ -253,8 +253,7 @@ public class VideoRestController {
       }
 
       UserDto currentUser = userService.findByEmail(userEmail);
-      boolean isAdmin =
-          currentUser.roles().stream().anyMatch(role -> role.name().equals("ADMIN"));
+      boolean isAdmin = currentUser.roles().stream().anyMatch(role -> role.name().equals("ADMIN"));
 
       if (!isAdmin && !comment.getUser().equals(currentUser)) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -402,9 +401,6 @@ public class VideoRestController {
 
   private CommentResponse mapToCommentResponse(Comment comment) {
     return new CommentResponse(
-        comment.getId(),
-        comment.getContent(),
-        comment.getUser().getName(),
-        comment.getCreatedAt());
+        comment.getId(), comment.getContent(), comment.getUser().getName(), comment.getCreatedAt());
   }
 }

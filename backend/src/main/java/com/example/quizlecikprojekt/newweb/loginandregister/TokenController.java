@@ -1,6 +1,5 @@
 package com.example.quizlecikprojekt.newweb.loginandregister;
 
-
 import com.example.quizlecikprojekt.config.security.JwtAuthenticatorFacade;
 import com.example.quizlecikprojekt.newweb.loginandregister.dto.JwtResponseDto;
 import com.example.quizlecikprojekt.newweb.loginandregister.dto.TokenRequestDto;
@@ -13,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class TokenController {
 
-    private final JwtAuthenticatorFacade jwtAuthenticatorFacade;
+  private final JwtAuthenticatorFacade jwtAuthenticatorFacade;
 
-    @PostMapping("/token")
-    public ResponseEntity<JwtResponseDto> authericateAndGenerateToken(@RequestBody TokenRequestDto tokenRequest) {
-        final JwtResponseDto jwtResponse = jwtAuthenticatorFacade.authenticateAndGenerateToken(tokenRequest);
-        return ResponseEntity.ok(jwtResponse);
-    }
+  @PostMapping("/token")
+  public ResponseEntity<JwtResponseDto> authericateAndGenerateToken(
+      @RequestBody TokenRequestDto tokenRequest) {
+    final JwtResponseDto jwtResponse =
+        jwtAuthenticatorFacade.authenticateAndGenerateToken(tokenRequest);
+    return ResponseEntity.ok(jwtResponse);
+  }
 }
