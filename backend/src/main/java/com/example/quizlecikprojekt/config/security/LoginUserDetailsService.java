@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.User;
 
 @AllArgsConstructor
 public class LoginUserDetailsService implements UserDetailsService {
@@ -15,16 +16,16 @@ public class LoginUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws BadCredentialsException {
-    UserDto userDto = userService.findByEmail(email);
+    UserDto userDto = userService.getUserByEmail(email);
     return getUser(userDto);
   }
 
-  private org.springframework.security.core.userdetails.User getUser(UserDto user) {
-    return new org.springframework.security.core.userdetails.User(
+  private User getUser(UserDto user) {
+    return new User(
         user.email(),
         user.password(),
         user.roles().stream()
-            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+            .map(role -> new SimpleGrantedAuthority(role.name()))
             .toList());
   }
 }

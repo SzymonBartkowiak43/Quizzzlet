@@ -11,7 +11,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
@@ -140,7 +139,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isBadRequest()) // if you return 400 for validation errors
+                .andExpect(status().isBadRequest())
                 .andReturn();
 
         String expectedJson = """
@@ -195,7 +194,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
     }
 
 
-    private void registerUser() throws Exception {
+    protected void registerUser() throws Exception {
         UserRegisterDto registrationDto = new UserRegisterDto(
                 "loginuser@example.com", "loginuser", "Password123!"
                 );

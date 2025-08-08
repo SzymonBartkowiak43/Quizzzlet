@@ -69,7 +69,7 @@ public class WordSetRestController {
             .body(ApiResponse.error("User not authenticated"));
       }
 
-      UserDto user = userService.findByEmail(authentication.getName());
+      UserDto user = userService.getUserByEmail(authentication.getName());
       WordSet wordSet = wordSetService.newWordSet(null);
 
       if (request.name() != null && !request.name().trim().isEmpty()) {

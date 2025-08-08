@@ -19,8 +19,10 @@ public class ConditionalJwtAuthTokenFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
+          HttpServletRequest request,
+          HttpServletResponse response,
+          FilterChain filterChain
+  ) throws ServletException, IOException {
     if (request.getRequestURI().startsWith(excludedEndpoint)) {
       filterChain.doFilter(request, response);
       return;

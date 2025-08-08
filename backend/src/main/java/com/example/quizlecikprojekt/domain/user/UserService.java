@@ -58,7 +58,7 @@ public class UserService {
         .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
   }
 
-  public UserDto findByEmail(String email) {
+  public UserDto getUserByEmail(String email) {
     User user =
         userRepository
             .getUserByEmail(email)

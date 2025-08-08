@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt;
 
 import com.example.quizlecikprojekt.domain.user.UserRole;
 import com.example.quizlecikprojekt.domain.user.UserRoleRepository;
+import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.apache.catalina.core.ApplicationContext;
@@ -27,6 +28,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = QuizlecikProjektApplication.class)
 @AutoConfigureMockMvc
@@ -90,6 +93,18 @@ public class BaseIntegrationTest {
 
     public static String readJsonFromFile(String fileName) throws IOException {
         return new String(Files.readAllBytes(Paths.get("src/integration/resources/json/" + fileName)));
+    }
+
+    protected void registerUser() throws Exception {
+        UserRegisterDto registrationDto = new UserRegisterDto(
+                "loginuser@example.com", "loginuser", "Password123!"
+        );
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(registrationDto)))
+                .andExpect(status().isCreated())
+                .andReturn();
     }
 
 }

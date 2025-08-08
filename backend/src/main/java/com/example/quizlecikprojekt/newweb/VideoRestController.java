@@ -174,7 +174,7 @@ public class VideoRestController {
       }
 
       String userEmail = authentication.getName();
-      UserDto user = userService.findByEmail(userEmail);
+      UserDto user = userService.getUserByEmail(userEmail);
 
       Video createdVideo = videoService.addVideo(request.url(), request.title(), user.userId());
 
@@ -209,7 +209,7 @@ public class VideoRestController {
       }
 
       String userEmail = authentication.getName();
-      UserDto user = userService.findByEmail(userEmail);
+      UserDto user = userService.getUserByEmail(userEmail);
       Video video = videoService.findById(id);
 
       if (video == null) {
@@ -252,7 +252,7 @@ public class VideoRestController {
             .body(ApiResponse.error("Comment not found"));
       }
 
-      UserDto currentUser = userService.findByEmail(userEmail);
+      UserDto currentUser = userService.getUserByEmail(userEmail);
       boolean isAdmin = currentUser.roles().stream().anyMatch(role -> role.name().equals("ADMIN"));
 
       if (!isAdmin && !comment.getUser().equals(currentUser)) {
