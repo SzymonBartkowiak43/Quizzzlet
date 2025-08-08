@@ -1,5 +1,7 @@
 package com.example.quizlecikprojekt;
 
+import com.example.quizlecikprojekt.domain.user.UserRole;
+import com.example.quizlecikprojekt.domain.user.UserRoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.apache.catalina.core.ApplicationContext;
@@ -12,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -44,6 +47,9 @@ public class BaseIntegrationTest {
     @Autowired
     public  Asserter asserter;
 
+    @Autowired
+    UserRoleRepository roleRepo;
+
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -65,6 +71,12 @@ public class BaseIntegrationTest {
     @BeforeEach
     void resetDatabase() {
         jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
+        roleRepo.findByName("USER")
+                .orElseGet(() -> {
+                    UserRole r = new UserRole();
+                    r.setName("USER");
+                    return roleRepo.save(r);
+                });
     }
 
     @DynamicPropertySource

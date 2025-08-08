@@ -4,28 +4,26 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class UserJsonModel {
+
     public static JsonObject maximal(
             Long id,
             String email,
-            String userName,
+            String name,
             String... roles
     ) {
         JsonArray rolesArray = new JsonArray();
-        for (String role : roles) {
-            rolesArray.add(role);
+        if (roles != null) {
+            for (String role : roles) {
+                rolesArray.add(role);
+            }
         }
 
-        JsonObject data = new JsonObject();
-        data.addProperty("id", id);
-        data.addProperty("email", email);
-        data.addProperty("userName", userName);
-        data.add("roles", rolesArray);
-
-        JsonObject response = new JsonObject();
-        response.addProperty("success", true);
-        response.addProperty("message", "User registered successfully");
-        response.add("data", data);
-
-        return response;
+        JsonObject user = new JsonObject();
+        if (id != null) user.addProperty("id", id);
+        user.addProperty("email", email);
+        user.addProperty("userName", name);
+        user.add("roles", rolesArray);
+        return user;
     }
+
 }

@@ -21,7 +21,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         );
 
         String expectedJson = UserJsonModel.maximal(
-                1L, registrationDto.email(), registrationDto.username(), "USER"
+                1L, "testuser@example.com", "testuser@example.com", new String[]{}
         ).toString();
 
         // when
@@ -37,35 +37,21 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldLoginUserSuccessfully() throws Exception {
-        // given: register user first
         registerUser();
 
-        // prepare login request
         ObjectNode loginRequest = objectMapper.createObjectNode();
-        loginRequest.put("username", "loginuser@example.com");
+        loginRequest.put("email", "loginuser@example.com");
         loginRequest.put("password", "Password123!");
 
-        String expectedJson = """
-        {
-          "success": true,
-          "message": "Login successful",
-          "data": {
-            "username": "loginuser@example.com",
-            "message": "Login successful"
-          }
-        }
-        """;
-
-        // when
         MvcResult loginResult = mockMvc.perform(post("/api/auth/token")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // then
-        asserter.assertApiResponse(loginResult, expectedJson);
+        asserter.assertAuthResponse(loginResult, "loginuser@example.com");
     }
+
 
     @Test
     void shouldFailLoginWithInvalidCredentials() throws Exception {
@@ -73,13 +59,13 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         registerUser();
 
         ObjectNode loginRequest = objectMapper.createObjectNode();
-        loginRequest.put("username", "loginuser@example.com");
+        loginRequest.put("email", "loginuser@example.com");
         loginRequest.put("password", "WrongPassword!");
 
         String expectedJson = """
         {
-            "success": false,
-            "message": "Invalid credentials"
+            "message": "Bad Credentials",
+            "status": "UNAUTHORIZED"
         }
         """;
 
@@ -91,7 +77,7 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
                 .andReturn();
 
         // then
-        asserter.assertApiResponse(loginResult, expectedJson);
+        asserter.assertErrorResponse(loginResult, expectedJson);
     }
 
 

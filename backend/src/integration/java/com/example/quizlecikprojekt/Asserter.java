@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt;
 
+import org.json.JSONObject;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -75,6 +76,29 @@ public class Asserter {
                     .isEqualTo(expectedDbEntity);
         }
     }
+    public void assertAuthResponse(MvcResult apiResponse, String expectedEmail) throws Exception {
+        String actualJson = apiResponse.getResponse().getContentAsString();
+
+        assertThat(actualJson)
+                .as("Response body should not be blank")
+                .isNotBlank();
+
+        JSONObject actual = new JSONObject(actualJson);
+
+        assertThat(actual.optString("email"))
+                .as("Email in response should match expected")
+                .isEqualTo(expectedEmail);
+
+        assertThat(actual.has("token"))
+                .as("Token should be present in response")
+                .isTrue();
+        assertThat(actual.optString("token"))
+                .as("Token should not be blank")
+                .isNotBlank();
+    }
+
+
+
 
     private String getRepositoryBeanName(Class<?> entityClass) {
         String simpleName = entityClass.getSimpleName();

@@ -35,9 +35,10 @@ public class User implements UserDetails {
       name = "user_roles",
       joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-  private Set<UserRole> roles;
+  private Set<UserRole> roles = new HashSet<>();
 
   User addUserRole(UserRole userRole) {
+    if (roles == null) roles = new HashSet<>();
     roles.add(userRole);
     return this;
   }
