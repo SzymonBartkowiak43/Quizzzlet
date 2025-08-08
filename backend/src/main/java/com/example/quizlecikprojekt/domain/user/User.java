@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ public class User implements UserDetails {
   private Long id;
 
   @Column(nullable = false, unique = true)
+  @Email(message = "must be a well-formed email address")
   private String email;
 
   @Column(nullable = false, unique = true)

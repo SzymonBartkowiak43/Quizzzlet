@@ -1,34 +1,43 @@
 package com.example.quizlecikprojekt.domain.user;
 
+import com.example.quizlecikprojekt.domain.user.exception.PasswordValidationException;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+@Component
 public class PasswordValidator {
+
   private static final int MIN_LENGTH = 10;
   private static final String LOWERCASE_CONSTRAINT =
-      "Password should contain at least one lowercase letter.";
+          "Password should contain at least one lowercase letter.";
   private static final String UPPERCASE_CONSTRAINT =
-      "Password should contain at least one uppercase letter.";
-  private static final String DIGIT_CONSTRAINT = "Password should contain at least one digit.";
+          "Password should contain at least one uppercase letter.";
+  private static final String DIGIT_CONSTRAINT =
+          "Password should contain at least one digit.";
   private static final String LENGTH_CONSTRAINT =
-      "Password should have a minimum length of " + MIN_LENGTH;
+          "Password should have a minimum length of " + MIN_LENGTH;
 
-  public static List<String> getConstraintViolations(String password) {
-    List<String> unsatisfiedConstraints = new ArrayList<>();
+  public static void validate(String password) {
+    List<String> violations = new ArrayList<>();
     if (!containsLowerCaseLetter(password)) {
-      unsatisfiedConstraints.add(LOWERCASE_CONSTRAINT);
+      violations.add(LOWERCASE_CONSTRAINT);
     }
     if (!containsUpperCaseLetter(password)) {
-      unsatisfiedConstraints.add(UPPERCASE_CONSTRAINT);
+      violations.add(UPPERCASE_CONSTRAINT);
     }
     if (!containsDigit(password)) {
-      unsatisfiedConstraints.add(DIGIT_CONSTRAINT);
+      violations.add(DIGIT_CONSTRAINT);
     }
     if (!hasMinimumLength(password)) {
-      unsatisfiedConstraints.add(LENGTH_CONSTRAINT);
+      violations.add(LENGTH_CONSTRAINT);
     }
-    return unsatisfiedConstraints;
+
+    if (!violations.isEmpty()) {
+      throw new PasswordValidationException("400", violations);
+    }
   }
 
   private static boolean containsLowerCaseLetter(String password) {
@@ -44,13 +53,12 @@ public class PasswordValidator {
   }
 
   private static boolean hasMinimumLength(String password) {
-    return password.length() >= MIN_LENGTH;
+    return password != null && password.length() >= MIN_LENGTH;
   }
 
-  private static boolean checkConditionForAllLetters(
-      String password, Predicate<Character> predicate) {
-    char[] chars = password.toCharArray();
-    for (char ch : chars) {
+  private static boolean checkConditionForAllLetters(String password, Predicate<Character> predicate) {
+    if (password == null) return false;
+    for (char ch : password.toCharArray()) {
       if (predicate.test(ch)) return true;
     }
     return false;

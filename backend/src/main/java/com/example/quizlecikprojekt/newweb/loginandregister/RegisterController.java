@@ -1,6 +1,9 @@
 package com.example.quizlecikprojekt.newweb.loginandregister;
 
 import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.domain.user.UserRole;
+import com.example.quizlecikprojekt.domain.user.UserRepository;
+import com.example.quizlecikprojekt.domain.user.UserRoleRepository;
 import com.example.quizlecikprojekt.domain.user.UserService;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
@@ -15,24 +18,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth")
 public class RegisterController {
 
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
     private final UserService userFacade;
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@RequestBody UserRegisterDto registerUserDto) {
-        String encodedPassword = bCryptPasswordEncoder.encode(registerUserDto.password());
+    public ResponseEntity<?> register(@RequestBody UserRegisterDto dto) {
 
         User newUser = userFacade.createNewUser(
-                new UserRegisterDto(registerUserDto.email(), registerUserDto.name(), encodedPassword));
+                new UserRegisterDto(dto.email(), dto.name(), dto.password())
+        );
 
-        UserResponseDto registerResult = new UserResponseDto(newUser.getId(), newUser.getEmail(), newUser.getEmail(), new HashSet<>());
+        Set<String> roleNames = newUser.getRoles().stream()
+                .map(UserRole::getName).collect(java.util.stream.Collectors.toSet());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(registerResult);
+        UserResponseDto body = new UserResponseDto(
+                newUser.getId(),
+                newUser.getEmail(),
+                newUser.getName(),
+                roleNames
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
+
 }

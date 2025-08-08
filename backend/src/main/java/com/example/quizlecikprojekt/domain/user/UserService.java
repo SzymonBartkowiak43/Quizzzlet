@@ -4,10 +4,11 @@ import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRoleDto;
 import com.example.quizlecikprojekt.domain.user.exception.UserNotFoundException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,8 +32,18 @@ public class UserService {
   }
 
   public User createNewUser(UserRegisterDto userDto) {
-    User user = createUser(userDto);
-    return user;
+    // 1) validate RAW password BEFORE encoding
+    PasswordValidator.validate(userDto.password());
+
+    // 2) encode exactly once
+    String encoded = passwordEncoder.encode(userDto.password());
+
+    // 3) build & save
+    return createUser(new UserRegisterDto(
+            userDto.email().trim(),
+            userDto.name().trim(),
+            encoded
+    ));
   }
 
   public Optional<UserRegisterDto> getUser(Long id) {
@@ -81,23 +92,28 @@ public class UserService {
   }
 
 
-  private User createUser(UserRegisterDto userDto) {
-    User user = new User.UserBuilder()
+  @Transactional
+  public User createUser(UserRegisterDto userDto) {
+    User user = User.builder()
             .name(userDto.name())
             .email(userDto.email())
             .password(userDto.password())
-                    .build();
+            .build();
 
+    if (user.getRoles() == null) {
+      user.setRoles(new java.util.HashSet<>());
+    }
     user.addUserRole(getDefaultRole());
 
-    userRepository.save(user);
-    return user;
+    return userRepository.save(user);
   }
 
+
   private UserRole getDefaultRole() {
-    return userRoleRepository
-            .findByName(DEFAULT_USER_ROLE)
-            .orElseThrow(() -> new BadCredentialsException("User Role not Exists!"));
+    return userRoleRepository.findByName(DEFAULT_USER_ROLE)
+            .orElseThrow(() -> new IllegalStateException(
+                    "Default role '" + DEFAULT_USER_ROLE + "' is missing. Seed it before running the app/tests."
+            ));
   }
 
   public User updateUser(UserRegisterDto userDto) {
