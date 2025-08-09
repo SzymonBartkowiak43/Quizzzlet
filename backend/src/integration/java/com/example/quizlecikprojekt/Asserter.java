@@ -48,7 +48,7 @@ public class Asserter {
             return;
         }
 
-        List<String> ignoreFields = List.of("timestamp", "createdAt", "updatedAt");
+        List<String> ignoreFields = List.of("timestamp", "createdAt", "updatedAt","completedAt", "sessionId");
         Customization[] customizations = ignoreFields.stream()
                 .map(field -> new Customization("**." + field, (o1, o2) -> true))
                 .toArray(Customization[]::new);

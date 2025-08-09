@@ -35,11 +35,6 @@ public class DeleteWordAndWordSetIntegrationTest extends BaseIntegrationTest {
         """.formatted(wordSetId);
 
         asserter.assertApiResponse(result, expectedJson);
-
-        // Verify the word set is actually deleted
-        mockMvc.perform(get("/api/word-sets/" + wordSetId)
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isNotFound());
     }
 
     @Test

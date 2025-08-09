@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +47,19 @@ public class WordService {
       }
     }
     return uncorrectedWords;
+  }
+
+  // Add this method to your WordService
+  public Word updateWordPoints(Long wordId, int newPoints) {
+    Optional<Word> wordOptional = wordRepository.findById(wordId);
+    if (wordOptional.isEmpty()) {
+      throw new EntityNotFoundException("Word not found with id: " + wordId);
+    }
+
+    Word word = wordOptional.get();
+    word.setPoints(newPoints);
+
+    return wordRepository.save(word);
   }
 
   public List<WordToRepeatDto> getWordsToRepeat(Long userId) {

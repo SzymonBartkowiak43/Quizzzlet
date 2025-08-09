@@ -4,10 +4,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-public class VideosListResponse {
-  private List<VideoSummaryResponse> videos;
-  private List<VideoSummaryResponse> topRatedVideos;
-  private int totalVideos;
-}
+public record VideosListResponse(
+        List<VideoSummaryResponse> videos,
+        List<VideoSummaryResponse> topRatedVideos,
+        Integer totalVideos
+) {}
+

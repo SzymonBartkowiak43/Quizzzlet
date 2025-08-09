@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -109,6 +110,17 @@ public class GlobalExceptionHandler {
     Map<String, Object> errorResponse =
         Map.of("message", "Requested resource not found", "status", HttpStatus.NOT_FOUND.name());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
+    System.err.println("Access denied: " + ex.getMessage()); // Debug log
+
+    Map<String, Object> errorResponse = Map.of(
+            "message", "You don't have permission to access this resource",
+            "status", HttpStatus.FORBIDDEN.name()
+    );
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
   }
 
   private String formatConstraintViolation(ConstraintViolation<?> cv) {
