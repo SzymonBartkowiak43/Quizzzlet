@@ -16,8 +16,8 @@ public class WordService {
     this.wordRepository = wordRepository;
   }
 
-  public void saveWord(Word word) {
-    wordRepository.save(word);
+  public Word saveWord(Word word) {
+    return wordRepository.save(word);
   }
 
   @Transactional

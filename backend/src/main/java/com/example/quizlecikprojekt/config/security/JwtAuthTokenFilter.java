@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
 @Log4j2
 @Component
 @AllArgsConstructor
@@ -27,8 +26,8 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-          HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-          throws ServletException, IOException {
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
 
     String authorization = request.getHeader("Authorization");
     if (authorization == null) {
@@ -37,7 +36,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     }
     try {
       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-              getUsernamePasswordAuthenticationToken(authorization);
+          getUsernamePasswordAuthenticationToken(authorization);
       SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     } catch (Exception e) {
       log.error("Error processing JWT token: {}", e.getMessage());

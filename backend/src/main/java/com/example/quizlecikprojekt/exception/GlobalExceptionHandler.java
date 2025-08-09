@@ -1,19 +1,21 @@
 package com.example.quizlecikprojekt.exception;
 
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import com.example.quizlecikprojekt.domain.user.exception.PasswordValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
+import java.util.NoSuchElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -31,9 +33,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex) {
     List<String> violations =
-        ex.getConstraintViolations().stream()
-            .map(this::formatConstraintViolation)
-            .collect(Collectors.toList());
+        ex.getConstraintViolations().stream().map(this::formatConstraintViolation).toList();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(
@@ -45,10 +45,9 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<Map<String, Object>> handleDataIntegrity(
-          DataIntegrityViolationException ex) {
+      DataIntegrityViolationException ex) {
     String message = "Unique constraint violated";
-    String mostSpecific =
-            getMostSpecificCause(ex).getMessage();
+    String mostSpecific = getMostSpecificCause(ex).getMessage();
 
     if (mostSpecific != null && mostSpecific.contains("(email)")) {
       message = "Email already exists";
@@ -57,7 +56,49 @@ public class GlobalExceptionHandler {
     }
 
     return ResponseEntity.status(HttpStatus.CONFLICT)
-            .body(Map.of("message", message, "status", "CONFLICT"));
+        .body(Map.of("message", message, "status", "CONFLICT"));
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .contentType(APPLICATION_JSON)
+        .body(
+            Map.of(
+                "message",
+                "Request contains invalid fields",
+                "status",
+                HttpStatus.BAD_REQUEST.name()));
+  }
+
+  @ExceptionHandler(NoSuchElementException.class)
+  public ResponseEntity<Map<String, Object>> handleNoSuchElementException(
+      NoSuchElementException ex) {
+    Map<String, Object> errorResponse =
+        Map.of("message", "Requested resource not found", "status", HttpStatus.NOT_FOUND.name());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+  }
+
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
+    Map<String, Object> errorResponse =
+        Map.of(
+            "message", "Bad Credentials",
+            "status", "UNAUTHORIZED");
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+    ex.printStackTrace();
+
+    Map<String, Object> errorResponse =
+        Map.of(
+            "message",
+            "An unexpected error occurred",
+            "status",
+            HttpStatus.INTERNAL_SERVER_ERROR.name());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
   }
 
   private String formatConstraintViolation(ConstraintViolation<?> cv) {

@@ -4,6 +4,7 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.domain.word.Word;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
+import com.example.quizlecikprojekt.domain.word.dto.WordAddRequest;
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundException;
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetOperationException;
 import java.sql.Date;
@@ -14,7 +15,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WordSetService {
@@ -37,9 +40,7 @@ public class WordSetService {
     this.transactionalService = transactionalService;
   }
 
-  private static WordSet prepareWordSetForUpdate(
-      WordSet wordSetForm, Optional<WordSet> wordSetOptional) {
-    WordSet existingWordSet = wordSetOptional.get();
+  private static WordSet prepareWordSetForUpdate(WordSet wordSetForm, WordSet existingWordSet) {
 
     if (wordSetForm.getTitle() != null) {
       existingWordSet.setTitle(wordSetForm.getTitle());
@@ -78,17 +79,13 @@ public class WordSetService {
     return wordRepository.findByWordSet(Optional.of(wordSet));
   }
 
-  public Optional<WordSet> getWordSetById(Long wordSetId) {
-    return wordSetRepository.findById(wordSetId);
+  public WordSet getWordSetById(Long wordSetId) {
+    return wordSetRepository.findById(wordSetId).get();
   }
 
   public boolean isWordSetOwnedByUser(Long wordSetId, String userEmail) {
-    Optional<WordSet> wordSetOptional = getWordSetById(wordSetId);
-    if (wordSetOptional.isEmpty()) {
-      return false;
-    }
+    WordSet wordSet = getWordSetById(wordSetId);
 
-    WordSet wordSet = wordSetOptional.get();
     return wordSet.getUser().getEmail().equals(userEmail);
   }
 
@@ -108,12 +105,8 @@ public class WordSetService {
 
   public void deleteWordSet(Long id) {
     try {
-      Optional<WordSet> wordSetOptional = getWordSetById(id);
-      if (wordSetOptional.isEmpty()) {
-        throw new WordSetNotFoundException("WordSet not found with id: " + id);
-      }
+      WordSet wordSet = getWordSetById(id);
 
-      WordSet wordSet = wordSetOptional.get();
       logger.info(
           "Attempting to delete WordSet with id: {} for user: {}",
           id,
@@ -132,10 +125,7 @@ public class WordSetService {
 
   public WordSet updateWordSet(Long id, WordSet wordSetForm) {
     try {
-      Optional<WordSet> wordSetOptional = getWordSetById(id);
-      if (wordSetOptional.isEmpty()) {
-        throw new WordSetNotFoundException("WordSet not found with id: " + id);
-      }
+      WordSet wordSetOptional = getWordSetById(id);
 
       WordSet existingWordSet = prepareWordSetForUpdate(wordSetForm, wordSetOptional);
 
@@ -194,5 +184,41 @@ public class WordSetService {
 
     logger.debug("Created new WordSet template for user: {}", user.getEmail());
     return wordSet;
+  }
+
+  public List<WordSet> getWordSetsByUser(User user) {
+    List<WordSet> wordSets = wordSetRepository.findByUserWithWordsOrderByCreatedAtDesc(user);
+
+    for (WordSet wordSet : wordSets) {
+      wordSet.getWords().size();
+    }
+
+    return wordSets;
+  }
+
+  @Transactional
+  public List<Word> addWordsToWordSet(
+      Long wordSetId, List<WordAddRequest.WordItem> wordItems, User user) {
+    WordSet wordSet = getWordSetById(wordSetId);
+
+    if (!wordSet.getUser().equals(user)) {
+      throw new AccessDeniedException("You don't have permission to modify this word set");
+    }
+
+    List<Word> wordsToSave =
+        wordItems.stream()
+            .map(
+                wordItem -> {
+                  Word word = new Word();
+                  word.setWord(wordItem.word().trim());
+                  word.setTranslation(wordItem.translation().trim());
+                  word.setPoints(0);
+                  word.setStar(false);
+                  word.setWordSet(wordSet);
+                  return word;
+                })
+            .toList();
+
+    return wordRepository.saveAll(wordsToSave);
   }
 }

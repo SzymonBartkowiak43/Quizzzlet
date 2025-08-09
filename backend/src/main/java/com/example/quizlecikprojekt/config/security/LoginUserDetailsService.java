@@ -1,13 +1,12 @@
 package com.example.quizlecikprojekt.config.security;
 
 import com.example.quizlecikprojekt.domain.user.UserService;
-import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.User;
 
 @AllArgsConstructor
 public class LoginUserDetailsService implements UserDetailsService {
@@ -16,16 +15,13 @@ public class LoginUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws BadCredentialsException {
-    UserDto userDto = userService.getUserByEmail(email);
-    return getUser(userDto);
+    return getUser(userService.getUserByEmail(email));
   }
 
-  private User getUser(UserDto user) {
+  private User getUser(com.example.quizlecikprojekt.domain.user.User user) {
     return new User(
-        user.email(),
-        user.password(),
-        user.roles().stream()
-            .map(role -> new SimpleGrantedAuthority(role.name()))
-            .toList());
+        user.getEmail(),
+        user.getPassword(),
+        user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList());
   }
 }

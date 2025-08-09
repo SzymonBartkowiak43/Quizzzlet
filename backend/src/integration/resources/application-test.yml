@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    hikari:
+      maxLifetime: 30000
+      keepaliveTime: 15000
+      idleTimeout: 10000
+      minimumIdle: 0

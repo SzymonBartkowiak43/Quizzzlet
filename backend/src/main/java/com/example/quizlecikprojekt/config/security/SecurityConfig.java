@@ -1,6 +1,9 @@
 package com.example.quizlecikprojekt.config.security;
 
 import com.example.quizlecikprojekt.domain.user.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -87,6 +91,20 @@ public class SecurityConfig {
             new ConditionalJwtAuthTokenFilter(jwtAuthTokenFilter, "/reservation"),
             UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(ex -> ex.authenticationEntryPoint(jsonEntryPoint(new ObjectMapper())))
         .build();
+  }
+
+  @Bean
+  AuthenticationEntryPoint jsonEntryPoint(ObjectMapper mapper) {
+    return (req, res, ex) -> {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      res.setContentType("application/json");
+      mapper.writeValue(
+          res.getWriter(),
+          Map.of(
+              "message", "Unauthorized",
+              "status", "UNAUTHORIZED"));
+    };
   }
 }

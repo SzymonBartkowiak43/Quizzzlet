@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.newweb.dto.wordset;
 
-import com.example.quizlecikprojekt.domain.word.Word;
+import com.example.quizlecikprojekt.newweb.dto.word.WordResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -14,5 +14,4 @@ public record WordSetResponse(
     String translationLanguage,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
-    int wordCount,
-    List<Word> words) {}
+    List<WordResponse> words) {}

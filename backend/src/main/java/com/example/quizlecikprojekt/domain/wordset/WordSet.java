@@ -4,9 +4,12 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.word.Word;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
@@ -21,9 +24,11 @@ public class WordSet {
   private String language;
   private String translationLanguage;
 
+  @CreationTimestamp
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+  @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
@@ -35,6 +40,6 @@ public class WordSet {
       mappedBy = "wordSet",
       cascade = CascadeType.ALL,
       orphanRemoval = true,
-      fetch = FetchType.LAZY)
-  private List<Word> words;
+      fetch = FetchType.EAGER)
+  private List<Word> words = new ArrayList<>();
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,14 +41,14 @@ public class Asserter {
     }
 
     public void assertApiResponse(MvcResult apiResponse, String expectedJson) throws Exception {
-        String actualJson = apiResponse.getResponse().getContentAsString();
+        String actualJson = apiResponse.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
         if (actualJson.isBlank()) {
             assertThat(expectedJson).isEqualTo("{}");
             return;
         }
 
-        List<String> ignoreFields = List.of("timestamp");
+        List<String> ignoreFields = List.of("timestamp", "createdAt", "updatedAt");
         Customization[] customizations = ignoreFields.stream()
                 .map(field -> new Customization("**." + field, (o1, o2) -> true))
                 .toArray(Customization[]::new);

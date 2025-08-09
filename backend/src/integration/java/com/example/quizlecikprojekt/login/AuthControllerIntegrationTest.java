@@ -63,11 +63,11 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         loginRequest.put("password", "WrongPassword!");
 
         String expectedJson = """
-        {
-            "message": "Bad Credentials",
-            "status": "UNAUTHORIZED"
-        }
-        """;
+    {
+        "message": "Bad Credentials",
+        "status": "UNAUTHORIZED"
+    }
+    """;
 
         // when
         MvcResult loginResult = mockMvc.perform(post("/api/auth/token")

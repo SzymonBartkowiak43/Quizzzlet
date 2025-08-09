@@ -1,13 +1,10 @@
 package com.example.quizlecikprojekt.domain.user;
 
-import com.example.quizlecikprojekt.domain.user.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
-import com.example.quizlecikprojekt.domain.user.dto.UserRoleDto;
 import com.example.quizlecikprojekt.domain.user.exception.UserNotFoundException;
 import com.example.quizlecikprojekt.domain.user.validator.PasswordValidator;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,24 +55,10 @@ public class UserService {
         .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
   }
 
-  public UserDto getUserByEmail(String email) {
-    User user =
-        userRepository
-            .getUserByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("Not found"));
-
-    Set<UserRoleDto> userRoleDtos =
-        user.getRoles().stream()
-            .map(role -> new UserRoleDto(role.getName()))
-            .collect(Collectors.toSet());
-
-    return UserDto.builder()
-        .userId(user.getId())
-        .name(user.getName())
-        .email(user.getEmail())
-        .password(user.getPassword())
-        .roles(userRoleDtos)
-        .build();
+  public User getUserByEmail(String email) {
+    return userRepository
+        .getUserByEmail(email)
+        .orElseThrow(() -> new UserNotFoundException("Not found"));
   }
 
   private User createUser(UserRegisterDto userDto) {
