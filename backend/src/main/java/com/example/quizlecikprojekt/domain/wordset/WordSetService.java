@@ -7,6 +7,7 @@ import com.example.quizlecikprojekt.domain.word.WordRepository;
 import com.example.quizlecikprojekt.domain.word.dto.WordAddRequest;
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundException;
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetOperationException;
+import jakarta.persistence.EntityNotFoundException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -194,6 +195,57 @@ public class WordSetService {
     }
 
     return wordSets;
+  }
+
+  public Word updateWord(Long wordId, String newWord, String newTranslation) {
+    Optional<Word> wordOptional = wordRepository.findById(wordId);
+    if (wordOptional.isEmpty()) {
+      throw new EntityNotFoundException("Word not found with id: " + wordId);
+    }
+
+    Word word = wordOptional.get();
+    word.setWord(newWord.trim());
+    word.setTranslation(newTranslation.trim());
+
+    return wordRepository.save(word);
+  }
+
+  public void deleteWord(Long wordId) {
+    try {
+      if (!wordRepository.existsById(wordId)) {
+        throw new EntityNotFoundException("Word not found with id: " + wordId);
+      }
+
+      wordRepository.deleteById(wordId);
+      logger.info("Word deleted successfully with id: {}", wordId);
+
+    } catch (EntityNotFoundException e) {
+      logger.error("Word not found for deletion with id: {}", wordId);
+      throw e;
+    } catch (Exception e) {
+      logger.error("Error deleting word with id: {}", wordId, e);
+      throw new RuntimeException("Failed to delete word with id: " + wordId, e);
+    }
+  }
+
+  public int deleteWords(List<Long> wordIds) {
+    try {
+      int deletedCount = 0;
+
+      for (Long wordId : wordIds) {
+        if (wordRepository.existsById(wordId)) {
+          wordRepository.deleteById(wordId);
+          deletedCount++;
+        }
+      }
+
+      logger.info("Deleted {} words out of {} requested", deletedCount, wordIds.size());
+      return deletedCount;
+
+    } catch (Exception e) {
+      logger.error("Error deleting multiple words: {}", wordIds, e);
+      throw new RuntimeException("Failed to delete words", e);
+    }
   }
 
   @Transactional

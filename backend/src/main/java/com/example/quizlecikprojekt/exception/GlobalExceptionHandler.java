@@ -4,6 +4,7 @@ import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.example.quizlecikprojekt.domain.user.exception.PasswordValidationException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -99,6 +100,15 @@ public class GlobalExceptionHandler {
             "status",
             HttpStatus.INTERNAL_SERVER_ERROR.name());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+  }
+
+  // NEW: Handle EntityNotFoundException (JPA)
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(
+      EntityNotFoundException ex) {
+    Map<String, Object> errorResponse =
+        Map.of("message", "Requested resource not found", "status", HttpStatus.NOT_FOUND.name());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 
   private String formatConstraintViolation(ConstraintViolation<?> cv) {
