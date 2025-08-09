@@ -123,6 +123,47 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+    System.err.println("IllegalArgumentException: " + ex.getMessage());
+
+    String message = ex.getMessage();
+
+    // Check if it's related to resource not found
+    if (message != null &&
+            (message.toLowerCase().contains("not found") ||
+                    message.toLowerCase().contains("does not exist") ||
+                    message.toLowerCase().contains("invalid id"))) {
+
+      Map<String, Object> errorResponse = Map.of(
+              "message", "Requested resource not found",
+              "status", HttpStatus.NOT_FOUND.name()
+      );
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    // Check if it's access-related
+    if (message != null &&
+            (message.toLowerCase().contains("permission") ||
+                    message.toLowerCase().contains("access") ||
+                    message.toLowerCase().contains("denied"))) {
+
+      Map<String, Object> errorResponse = Map.of(
+              "message", "You don't have permission to access this resource",
+              "status", HttpStatus.FORBIDDEN.name()
+      );
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    // This is the key part - return the actual message for validation errors
+    Map<String, Object> errorResponse = Map.of(
+            "message", message != null ? message : "Invalid request parameter",
+            "status", HttpStatus.BAD_REQUEST.name()
+    );
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
+
   private String formatConstraintViolation(ConstraintViolation<?> cv) {
     return cv.getPropertyPath() + ": " + cv.getMessage();
   }
