@@ -11,9 +11,4 @@ import org.springframework.stereotype.Repository;
 public interface WordRepository extends JpaRepository<Word, Long> {
   List<Word> findByWordSet(Optional<WordSet> wordSet);
 
-  @Query(
-      "SELECT w FROM Word w "
-          + "INNER JOIN w.wordSet ws "
-          + "WHERE w.points <= 1 AND w.lastPracticed IS NOT NULL AND ws.user.id = :userId ")
-  List<Word> findWordsToRepeat(Long userId);
 }

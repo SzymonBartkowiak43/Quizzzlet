@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.domain.comment;
 
 import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
-import com.example.quizlecikprojekt.domain.comment.dto.CommentDtoMapper;
+import com.example.quizlecikprojekt.domain.comment.maper.CommentDtoMapper;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.video.Video;
 import java.time.LocalDateTime;

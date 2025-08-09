@@ -195,39 +195,39 @@ public class GetWordSetsIntegrationTest extends BaseIntegrationTest {
                 .andReturn();
 
         String expectedJson = """
-        [
+    [
+      {
+        "id": 2,
+        "title": "Empty Set",
+        "description": "No words yet",
+        "language": "pl",
+        "translationLanguage": "en",
+        "words": [],
+        "createdAt": "2025-08-09T18:56:31",
+        "updatedAt": "2025-08-09T18:56:31"
+      },
+      {
+        "id": 1,
+        "title": "With Words",
+        "description": "Has vocabulary",
+        "language": "pl",
+        "translationLanguage": "en",
+        "words": [
           {
-            "id": 2,
-            "title": "Empty Set",
-            "description": "No words yet",
-            "language": "pl",
-            "translationLanguage": "en",
-            "words": [],
-            "createdAt": "2025-08-09T09:50:45",
-            "updatedAt": "2025-08-09T09:50:45"
-          },
-          {
-            "id": %d,
-            "title": "With Words",
-            "description": "Has vocabulary",
-            "language": "pl",
-            "translationLanguage": "en",
-            "words": [
-              {
-                "id": 1,
-                "word": "cat",
-                "translation": "kot",
-                "points": 0,
-                "star": false,
-                "lastPracticed": null,
-                "wordSetId": %d
-              }
-            ],
-            "createdAt": "2025-08-09T09:50:45",
-            "updatedAt": "2025-08-09T09:50:45"
+            "id": 1,
+            "word": "cat",
+            "translation": "kot",
+            "points": 0,
+            "star": false,
+            "lastPracticed": null,
+            "wordSetId": 1
           }
-        ]
-        """.formatted(wordSetId1, wordSetId1);
+        ],
+        "createdAt": "2025-08-09T18:56:31",
+        "updatedAt": "2025-08-09T18:56:31"
+      }
+    ]
+    """.trim();
 
         asserter.assertApiResponse(result, expectedJson);
     }

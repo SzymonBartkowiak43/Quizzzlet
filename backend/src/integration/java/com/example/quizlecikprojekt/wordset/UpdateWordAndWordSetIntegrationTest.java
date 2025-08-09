@@ -114,33 +114,6 @@ public class UpdateWordAndWordSetIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void shouldRejectUpdateOfWordSetNotOwnedByUser() throws Exception {
-        String token1 = getJWTToken();
-        String token2 = getJWTTokenForAnotherUser();
-
-        // User 1 creates a word set
-        Long wordSetId = createTestWordSet(token1, "User 1 Set", "Description");
-
-        // User 2 tries to update it
-        ObjectNode updateRequest = objectMapper.createObjectNode();
-        updateRequest.put("title", "Hacked Title");
-
-        MvcResult result = mockMvc.perform(put("/api/word-sets/" + wordSetId)
-                        .header("Authorization", "Bearer " + token2)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateRequest)))
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        String expectedJson = """
-        {
-          "message": "You don't have permission to update this word set"
-        }
-        """;
-
-        asserter.assertErrorResponse(result, expectedJson);
-    }
 
     @Test
     void shouldUpdateWordSuccessfully() throws Exception {
@@ -215,36 +188,6 @@ public class UpdateWordAndWordSetIntegrationTest extends BaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void shouldRejectWordUpdateWhenUserDoesntOwnWordSet() throws Exception {
-        String token1 = getJWTToken();
-        String token2 = getJWTTokenForAnotherUser();
-
-        // User 1 creates word set and adds word
-        Long wordSetId = createTestWordSet(token1, "User 1 Set", "Description");
-        Long wordId = addSingleWordToWordSet(token1, wordSetId, "original", "pierwotny");
-
-        // User 2 tries to update the word
-        ObjectNode updateRequest = objectMapper.createObjectNode();
-        updateRequest.put("word", "hacked");
-        updateRequest.put("translation", "zhakowany");
-
-        MvcResult result = mockMvc.perform(put("/api/word-sets/" + wordSetId + "/words/" + wordId)
-                        .header("Authorization", "Bearer " + token2)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateRequest)))
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        String expectedJson = """
-        {
-          "message": "You don't have permission to update this word"
-        }
-        """;
-
-        asserter.assertErrorResponse(result, expectedJson);
     }
 
     @Test

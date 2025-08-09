@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -27,12 +29,28 @@ public class Video {
   @Column(name = "user_id", nullable = false)
   private Long userId;
 
-  @Column(name = "date_and_time", nullable = false)
-  private LocalDateTime createdAt;
-
   @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Comment> comments = new HashSet<>();
 
   @OneToMany(mappedBy = "video")
   private Set<Rating> ratings = new HashSet<>();
+
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private LocalDateTime createdAt;
+
+  @UpdateTimestamp
+  @Column(name = "updated_at", nullable = false)
+  private LocalDateTime updatedAt;
+
+  @PrePersist
+  private void onCreate() {
+    createdAt = LocalDateTime.now();
+    updatedAt = createdAt;
+  }
+
+  @PreUpdate
+  private void onUpdate() {
+    updatedAt = LocalDateTime.now();
+  }
 }

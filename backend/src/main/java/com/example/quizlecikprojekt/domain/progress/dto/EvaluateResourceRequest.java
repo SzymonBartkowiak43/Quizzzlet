@@ -6,29 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record EvaluateResourceRequest(
-        Long wordSetId, // Either wordSetId or videoId must be provided
-        Long videoId,
-
-        @NotNull(message = "Rating is required")
+    Long wordSetId, // Either wordSetId or videoId must be provided
+    Long videoId,
+    @NotNull(message = "Rating is required")
         @Min(value = 1, message = "Rating must be between 1 and 5")
         @Max(value = 5, message = "Rating must be between 1 and 5")
         Integer rating,
-
-        @NotNull(message = "Usefulness rating is required")
+    @NotNull(message = "Usefulness rating is required")
         @Min(value = 1, message = "Usefulness rating must be between 1 and 5")
         @Max(value = 5, message = "Usefulness rating must be between 1 and 5")
         Integer usefulnessRating,
-
-        String difficultyLevel, // "BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"
-
-        @Size(max = 1000, message = "Comment cannot exceed 1000 characters")
-        String comment,
-
-        Boolean wouldRecommend,
-
-        @Min(value = 1, message = "Completion time must be positive")
-        Integer completionTimeMinutes,
-
-        @Size(max = 200, message = "Tags cannot exceed 200 characters")
-        String tags
-) {}
+    String difficultyLevel, // "BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"
+    @Size(max = 1000, message = "Comment cannot exceed 1000 characters") String comment,
+    Boolean wouldRecommend,
+    @Min(value = 1, message = "Completion time must be positive") Integer completionTimeMinutes,
+    @Size(max = 200, message = "Tags cannot exceed 200 characters") String tags) {}

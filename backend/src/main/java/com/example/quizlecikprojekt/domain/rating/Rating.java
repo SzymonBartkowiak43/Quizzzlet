@@ -28,4 +28,6 @@ public class Rating {
 
   @Column(name = "date_and_time", nullable = false)
   private LocalDateTime dateAndTime;
+
+
 }

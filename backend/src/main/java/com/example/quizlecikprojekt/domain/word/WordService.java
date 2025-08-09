@@ -1,56 +1,30 @@
 package com.example.quizlecikprojekt.domain.word;
 
-import com.example.quizlecikprojekt.domain.word.dto.WordToRepeatDto;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.example.quizlecikprojekt.domain.wordset.WordSet;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WordService {
   private final WordRepository wordRepository;
 
+  private static final Logger logger = LoggerFactory.getLogger(WordService.class);
+
   public WordService(WordRepository wordRepository) {
     this.wordRepository = wordRepository;
   }
 
-  public Word saveWord(Word word) {
-    return wordRepository.save(word);
-  }
-
-  @Transactional
-  public void deleteWordById(Long wordId) {
-    wordRepository.deleteById(wordId);
-  }
-
-  public List<WordToRepeatDto> getCorrectWordsAndCreateUncoredWords(Long userId) {
-    List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
-    List<WordToRepeatDto> uncorrectedWords = new ArrayList<>();
-    for (int i = 0; i < wordsToRepeat.size(); i++) {
-      try {
-        int randomWord = (int) (Math.random() * wordsToRepeat.size());
-        int randomTranslation = (int) (Math.random() * wordsToRepeat.size());
-        if (randomWord != randomTranslation) {
-          uncorrectedWords.add(
-              new WordToRepeatDto(
-                  wordsToRepeat.get(randomWord).getWord(),
-                  wordsToRepeat.get(randomTranslation).getTranslation(),
-                  false));
-        }
-      } catch (Exception e) {
-
-      }
-    }
-    return uncorrectedWords;
-  }
-
-  // Add this method to your WordService
-  public Word updateWordPoints(Long wordId, int newPoints) {
+  public void updateWordPoints(Long wordId, int newPoints) {
     Optional<Word> wordOptional = wordRepository.findById(wordId);
     if (wordOptional.isEmpty()) {
       throw new EntityNotFoundException("Word not found with id: " + wordId);
@@ -59,31 +33,85 @@ public class WordService {
     Word word = wordOptional.get();
     word.setPoints(newPoints);
 
+    wordRepository.save(word);
+  }
+
+  public int deleteWords(List<Long> wordIds) {
+    try {
+      int deletedCount = 0;
+
+      for (Long wordId : wordIds) {
+        if (wordRepository.existsById(wordId)) {
+          wordRepository.deleteById(wordId);
+          deletedCount++;
+        }
+      }
+
+      logger.info("Deleted {} words out of {} requested", deletedCount, wordIds.size());
+      return deletedCount;
+
+    } catch (Exception e) {
+      logger.error("Error deleting multiple words: {}", wordIds, e);
+      throw new RuntimeException("Failed to delete words", e);
+    }
+  }
+
+  public void updateWords(WordSet wordSet, List<Word> newWords) {
+    List<Word> existingWords = wordSet.getWords();
+
+    Map<Long, Word> existingWordsMap =
+            existingWords.stream().collect(Collectors.toMap(Word::getId, word -> word));
+
+    for (Word formWord : newWords) {
+      if (formWord.getId() != null && existingWordsMap.containsKey(formWord.getId())) {
+        Word existingWord = existingWordsMap.get(formWord.getId());
+        if (!existingWord.getWord().equals(formWord.getWord())
+                || !existingWord.getTranslation().equals(formWord.getTranslation())) {
+          existingWord.setWord(formWord.getWord());
+          existingWord.setTranslation(formWord.getTranslation());
+        }
+      } else {
+        formWord.setWordSet(wordSet);
+        formWord.setPoints(0);
+        formWord.setLastPracticed(Date.valueOf(LocalDateTime.now().toLocalDate()));
+        wordSet.getWords().add(formWord);
+      }
+    }
+
+    List<Long> formWordIds = newWords.stream().map(Word::getId).toList();
+    wordSet
+            .getWords()
+            .removeIf(word -> word.getId() != null && !formWordIds.contains(word.getId()));
+  }
+
+  public Word updateWord(Long wordId, String newWord, String newTranslation) {
+    Optional<Word> wordOptional = wordRepository.findById(wordId);
+    if (wordOptional.isEmpty()) {
+      throw new EntityNotFoundException("Word not found with id: " + wordId);
+    }
+
+    Word word = wordOptional.get();
+    word.setWord(newWord.trim());
+    word.setTranslation(newTranslation.trim());
+
     return wordRepository.save(word);
   }
 
-  public List<WordToRepeatDto> getWordsToRepeat(Long userId) {
+  public void deleteWord(Long wordId) {
     try {
-      List<Word> wordsToRepeat = wordRepository.findWordsToRepeat(userId);
-
-      if (wordsToRepeat.isEmpty()) {
-        return List.of();
+      if (!wordRepository.existsById(wordId)) {
+        throw new EntityNotFoundException("Word not found with id: " + wordId);
       }
 
-      List<WordToRepeatDto> correctWords = new ArrayList<>();
+      wordRepository.deleteById(wordId);
+      logger.info("Word deleted successfully with id: {}", wordId);
 
-      for (Word word : wordsToRepeat) {
-        word.setLastPracticed(Date.valueOf(LocalDate.now()));
-
-        correctWords.add(new WordToRepeatDto(word.getWord(), word.getTranslation(), true));
-      }
-
-      wordRepository.saveAll(wordsToRepeat);
-
-      return correctWords;
-
+    } catch (EntityNotFoundException e) {
+      logger.error("Word not found for deletion with id: {}", wordId);
+      throw e;
     } catch (Exception e) {
-      return List.of();
+      logger.error("Error deleting word with id: {}", wordId, e);
+      throw new RuntimeException("Failed to delete word with id: " + wordId, e);
     }
   }
 }

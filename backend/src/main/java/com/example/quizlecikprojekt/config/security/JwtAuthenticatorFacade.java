@@ -2,8 +2,8 @@ package com.example.quizlecikprojekt.config.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.quizlecikprojekt.newweb.loginandregister.dto.JwtResponseDto;
-import com.example.quizlecikprojekt.newweb.loginandregister.dto.TokenRequestDto;
+import com.example.quizlecikprojekt.controllers.loginandregister.dto.JwtResponseDto;
+import com.example.quizlecikprojekt.controllers.loginandregister.dto.TokenRequestDto;
 import java.time.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

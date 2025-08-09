@@ -92,6 +92,7 @@ public class BaseIntegrationTest {
     void resetDatabase() {
         jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
         jdbcTemplate.execute("TRUNCATE TABLE video RESTART IDENTITY CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE word_sets RESTART IDENTITY CASCADE");
         roleRepo.findByName("USER")
                 .orElseGet(() -> {
                     UserRole r = new UserRole();
