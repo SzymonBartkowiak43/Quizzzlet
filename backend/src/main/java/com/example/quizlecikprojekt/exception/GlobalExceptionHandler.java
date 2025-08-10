@@ -126,11 +126,10 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(WordSetNotFoundException.class)
-  public ResponseEntity<Map<String, Object>> handleWordSetNotFoundException(WordSetNotFoundException ex) {
-    Map<String, Object> errorResponse = Map.of(
-            "message", "Requested resource not found",
-            "status", HttpStatus.NOT_FOUND.name()
-    );
+  public ResponseEntity<Map<String, Object>> handleWordSetNotFoundException(
+      WordSetNotFoundException ex) {
+    Map<String, Object> errorResponse =
+        Map.of("message", "Requested resource not found", "status", HttpStatus.NOT_FOUND.name());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 

@@ -2,7 +2,6 @@ package com.example.quizlecikprojekt.domain.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;

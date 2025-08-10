@@ -3,34 +3,33 @@ package com.example.quizlecikprojekt.domain.wordset;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetCreateRequest;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.word.Word;
+import com.example.quizlecikprojekt.domain.word.WordFacade;
 import com.example.quizlecikprojekt.domain.word.WordRepository;
-import com.example.quizlecikprojekt.domain.word.WordService;
 import com.example.quizlecikprojekt.domain.word.dto.WordItem;
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundException;
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetOperationException;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class WordSetService {
+class WordSetService {
 
   private final WordSetRepository wordSetRepository;
   private final WordRepository wordRepository;
-  private final WordService wordService;
+  private final WordFacade wordFacade;
   private final WordSetTransactionalService transactionalService;
 
   public WordSetService(
-          WordSetRepository wordSetRepository,
-          WordRepository wordRepository,
-          WordService wordService, WordSetTransactionalService transactionalService) {
+      WordSetRepository wordSetRepository,
+      WordRepository wordRepository,
+      WordFacade wordFacade,
+      WordSetTransactionalService transactionalService) {
     this.wordSetRepository = wordSetRepository;
     this.wordRepository = wordRepository;
-    this.wordService = wordService;
+    this.wordFacade = wordFacade;
     this.transactionalService = transactionalService;
   }
 
@@ -45,7 +44,8 @@ public class WordSetService {
   }
 
   public WordSet getWordSetById(Long wordSetId) {
-    return wordSetRepository.findById(wordSetId)
+    return wordSetRepository
+        .findById(wordSetId)
         .orElseThrow(() -> new WordSetNotFoundException("WordSet not found with id: " + wordSetId));
   }
 
@@ -73,10 +73,10 @@ public class WordSetService {
       WordSet existingWordSet = prepareWordSetForUpdate(wordSetForm, wordSetOptional);
 
       if (wordSetForm.getWords() != null && !wordSetForm.getWords().isEmpty()) {
-        wordService.updateWords(existingWordSet, wordSetForm.getWords());
+        wordFacade.updateWords(existingWordSet, wordSetForm.getWords());
       }
 
-        return transactionalService.updateWordSet(existingWordSet);
+      return transactionalService.updateWordSet(existingWordSet);
 
     } catch (WordSetNotFoundException e) {
       throw e;
@@ -85,10 +85,8 @@ public class WordSetService {
     }
   }
 
-
   @Transactional
-  public List<Word> addWordsToWordSet(
-          Long wordSetId, List<WordItem> wordItems, User user) {
+  public List<Word> addWordsToWordSet(Long wordSetId, List<WordItem> wordItems, User user) {
     WordSet wordSet = getWordSetById(wordSetId);
 
     if (!wordSet.getUser().equals(user)) {
@@ -96,31 +94,20 @@ public class WordSetService {
     }
 
     List<Word> wordsToSave =
-            wordItems.stream()
-                    .map(
-                            wordItem -> {
-                              Word word = new Word();
-                              word.setWord(wordItem.word().trim());
-                              word.setTranslation(wordItem.translation().trim());
-                              word.setPoints(0);
-                              word.setStar(false);
-                              word.setWordSet(wordSet);
-                              return word;
-                            })
-                    .toList();
+        wordItems.stream()
+            .map(
+                wordItem -> {
+                  Word word = new Word();
+                  word.setWord(wordItem.word().trim());
+                  word.setTranslation(wordItem.translation().trim());
+                  word.setPoints(0);
+                  word.setStar(false);
+                  word.setWordSet(wordSet);
+                  return word;
+                })
+            .toList();
 
     return wordRepository.saveAll(wordsToSave);
-  }
-
-  public WordSet newWordSet(User user, WordSetCreateRequest request) {
-    WordSet wordSet = new WordSet();
-    wordSet.setUser(user);
-    wordSet.setTitle("New Word Set");
-    wordSet.setDescription("Description");
-    wordSet.setLanguage("pl");
-    wordSet.setTranslationLanguage("en");
-
-    return wordSet;
   }
 
   public List<WordSet> getWordSetsByUser(User user) {
@@ -157,7 +144,6 @@ public class WordSetService {
     wordSet.setDescription(request.description() != null ? request.description() : "Description");
     wordSet.setLanguage("pl");
     wordSet.setTranslationLanguage("en");
-
 
     return transactionalService.createWordSet(wordSet);
   }

@@ -1,5 +1,7 @@
 package com.example.quizlecikprojekt.controllers;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import com.example.quizlecikprojekt.controllers.dto.word.WordDeleteRequest;
 import com.example.quizlecikprojekt.controllers.dto.word.WordResponse;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetCreateRequest;
@@ -10,14 +12,11 @@ import com.example.quizlecikprojekt.domain.word.dto.WordAddRequest;
 import com.example.quizlecikprojekt.domain.word.dto.WordAddResponse;
 import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @AllArgsConstructor
@@ -34,7 +33,6 @@ public class WordSetRestController {
     WordSetResponse response = wordSetFacade.createNewWordSet(authentication.getName(), request);
 
     return ResponseEntity.status(CREATED).body(response);
-
   }
 
   @PostMapping("/{wordSetId}/words")
@@ -43,10 +41,10 @@ public class WordSetRestController {
       @PathVariable Long wordSetId,
       @Valid @RequestBody WordAddRequest request) {
 
-    WordAddResponse response = wordSetFacade.addWordsToWordSet(authentication.getName(), wordSetId, request);
+    WordAddResponse response =
+        wordSetFacade.addWordsToWordSet(authentication.getName(), wordSetId, request);
 
     return ResponseEntity.status(CREATED).body(response);
-
   }
 
   @GetMapping
@@ -63,7 +61,8 @@ public class WordSetRestController {
       @PathVariable Long wordSetId,
       @Valid @RequestBody WordSetUpdateRequest request) {
 
-    WordSetResponse response = wordSetFacade.updateWordSet(authentication.getName(), wordSetId, request);
+    WordSetResponse response =
+        wordSetFacade.updateWordSet(authentication.getName(), wordSetId, request);
 
     return ResponseEntity.ok(response);
   }
@@ -75,8 +74,8 @@ public class WordSetRestController {
       @PathVariable Long wordId,
       @Valid @RequestBody WordUpdateRequest request) {
 
-
-    WordResponse response = wordSetFacade.updateWord(authentication.getName(), wordSetId, wordId, request);
+    WordResponse response =
+        wordSetFacade.updateWord(authentication.getName(), wordSetId, wordId, request);
 
     return ResponseEntity.ok(response);
   }
@@ -105,10 +104,8 @@ public class WordSetRestController {
       @PathVariable Long wordSetId,
       @RequestBody WordDeleteRequest request) {
 
-     wordSetFacade.deleteWords(authentication.getName(), wordSetId, request.wordIds());
+    wordSetFacade.deleteWords(authentication.getName(), wordSetId, request.wordIds());
 
     return ResponseEntity.ok().build();
   }
-
-
 }

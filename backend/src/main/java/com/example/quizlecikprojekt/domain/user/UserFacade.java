@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class UserFacade {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    public User getUserByEmail(String userEmail) {
-        User user = userService.getUserByEmail(userEmail);
-        if (user == null) {
-            throw new EntityNotFoundException("User with email " + userEmail + " not found");
-        }
-        return user;
+  public User getUserByEmail(String userEmail) {
+    User user = userService.getUserByEmail(userEmail);
+    if (user == null) {
+      throw new EntityNotFoundException("User with email " + userEmail + " not found");
     }
+    return user;
+  }
 }

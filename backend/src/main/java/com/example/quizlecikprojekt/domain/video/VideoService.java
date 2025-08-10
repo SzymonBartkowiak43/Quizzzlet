@@ -86,7 +86,6 @@ public class VideoService {
         .toList();
   }
 
-
   public List<Video> searchVideosByTitle(String query) {
     if (query == null || query.trim().isEmpty()) {
       return List.of();

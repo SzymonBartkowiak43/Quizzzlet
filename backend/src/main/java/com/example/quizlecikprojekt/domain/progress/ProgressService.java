@@ -2,32 +2,23 @@ package com.example.quizlecikprojekt.domain.progress;
 
 import com.example.quizlecikprojekt.domain.progress.dto.*;
 import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.wordset.WordSetService;
+import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ProgressService {
 
   private final ProgressRepository progressRepository;
-  private final WordSetService wordSetService;
-
-  public ProgressService(ProgressRepository progressRepository, WordSetService wordSetService) {
-    this.progressRepository = progressRepository;
-    this.wordSetService = wordSetService;
-  }
+  private final WordSetFacade wordSetService;
 
   public Progress recordStudySession(User user, RecordStudySessionRequest request) {
-    if (request.wordSetId() != null) {
-      if (wordSetService.isWordSetOwnedByUser(request.wordSetId(), user.getEmail())) {
-        throw new IllegalArgumentException("You don't have access to this word set");
-      }
-    }
 
     LocalDate today = LocalDate.now();
     Optional<Progress> existingProgress =

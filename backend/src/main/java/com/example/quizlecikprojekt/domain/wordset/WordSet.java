@@ -3,7 +3,6 @@ package com.example.quizlecikprojekt.domain.wordset;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.word.Word;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +11,11 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
 @Getter
 @Setter
 @Entity
 @Table(name = "word_sets")
-public class WordSet  {
+public class WordSet {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -32,10 +30,10 @@ public class WordSet  {
   private User user;
 
   @OneToMany(
-          mappedBy = "wordSet",
-          cascade = CascadeType.ALL,
-          orphanRemoval = true,
-          fetch = FetchType.LAZY)
+      mappedBy = "wordSet",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
   private List<Word> words = new ArrayList<>();
 
   @CreationTimestamp

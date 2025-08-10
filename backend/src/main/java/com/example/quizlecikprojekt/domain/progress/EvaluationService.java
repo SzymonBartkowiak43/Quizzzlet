@@ -7,29 +7,22 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.video.VideoService;
 import com.example.quizlecikprojekt.domain.wordset.WordSet;
-import com.example.quizlecikprojekt.domain.wordset.WordSetService;
+import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class EvaluationService {
 
   private final ResourceEvaluationRepository evaluationRepository;
-  private final WordSetService wordSetService;
+  private final WordSetFacade wordSetFacade;
   private final VideoService videoService;
-
-  public EvaluationService(
-      ResourceEvaluationRepository evaluationRepository,
-      WordSetService wordSetService,
-      VideoService videoService) {
-    this.evaluationRepository = evaluationRepository;
-    this.wordSetService = wordSetService;
-    this.videoService = videoService;
-  }
 
   public ResourceEvaluation evaluateResource(User user, EvaluateResourceRequest request) {
     if (request.wordSetId() == null && request.videoId() == null) {
@@ -44,7 +37,7 @@ public class EvaluationService {
 
     if (request.wordSetId() != null) {
       // Evaluate word set
-      WordSet wordSet = wordSetService.getWordSetById(request.wordSetId());
+      WordSet wordSet = wordSetFacade.getWordSetById(request.wordSetId());
       Optional<ResourceEvaluation> existing =
           evaluationRepository.findByUserIdAndWordSetId(user.getId(), request.wordSetId());
 
@@ -99,7 +92,7 @@ public class EvaluationService {
   }
 
   public ResourceEvaluationSummary getWordSetEvaluationSummary(Long wordSetId) {
-    WordSet wordSet = wordSetService.getWordSetById(wordSetId);
+    WordSet wordSet = wordSetFacade.getWordSetById(wordSetId);
     List<ResourceEvaluation> evaluations =
         evaluationRepository.findByWordSetIdOrderByCreatedAtDesc(wordSetId);
 
@@ -190,8 +183,6 @@ public class EvaluationService {
     return evaluationRepository.findByUserIdAndWordSetId(user.getId(), wordSetId);
   }
 
-
-
   private EvaluationResponse mapToEvaluationResponse(ResourceEvaluation evaluation) {
     String resourceType = evaluation.getWordSet() != null ? "wordset" : "video";
     Long resourceId =
@@ -241,5 +232,9 @@ public class EvaluationService {
         .max(java.util.Map.Entry.comparingByValue())
         .map(java.util.Map.Entry::getKey)
         .orElse(null);
+  }
+
+  public Optional<ResourceEvaluation> getUserEvaluationForVideo(User user, Long videoId) {
+    return evaluationRepository.findByUserIdAndVideoId(user.getId(), videoId);
   }
 }

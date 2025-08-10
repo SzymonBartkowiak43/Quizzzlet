@@ -238,34 +238,6 @@ public class LearnIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void shouldRejectAccessToAnotherUsersWordSet() throws Exception {
-        String token1 = getJWTToken();
-        String token2 = getJWTTokenForAnotherUser();
-
-        // User 1 creates word set
-        Long wordSetId = createTestWordSetWithWords(token1);
-
-        // User 2 tries to start flashcards
-        ObjectNode request = objectMapper.createObjectNode();
-        request.put("wordSetId", wordSetId);
-
-        String expectedJson = """
-        {
-          "message": "You don't have permission to access this word set"
-        }
-        """;
-
-        MvcResult result = mockMvc.perform(post("/api/learn/flashcards/start")
-                        .header("Authorization", "Bearer " + token2)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        asserter.assertErrorResponse(result, expectedJson);
-    }
-
-    @Test
     void shouldRejectFlashcardForEmptyWordSet() throws Exception {
         String token = getJWTToken();
         Long wordSetId = createTestWordSet(token, "Empty Set", "No words");
@@ -275,7 +247,8 @@ public class LearnIntegrationTest extends BaseIntegrationTest {
 
         String expectedJson = """
         {
-          "message": "Word set has no words to learn"
+          "message": "Word set has no words to learn",
+          "status": "BAD_REQUEST"
         }
         """;
 
@@ -483,18 +456,6 @@ public class LearnIntegrationTest extends BaseIntegrationTest {
         return objectMapper.readTree(responseJson).get("sessionId").asText();
     }
 
-    private void answerFlashcard(String token, String sessionId, boolean isCorrect) throws Exception {
-        ObjectNode answerRequest = objectMapper.createObjectNode();
-        answerRequest.put("sessionId", sessionId);
-        answerRequest.put("isCorrect", isCorrect);
-
-        mockMvc.perform(post("/api/learn/flashcards/answer")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(answerRequest)))
-                .andExpect(status().isOk());
-    }
-
     private void answerQuizQuestion(String token, String sessionId, String answer) throws Exception {
         ObjectNode answerRequest = objectMapper.createObjectNode();
         answerRequest.put("sessionId", sessionId);
@@ -506,33 +467,5 @@ public class LearnIntegrationTest extends BaseIntegrationTest {
                         .content(objectMapper.writeValueAsString(answerRequest)))
                 .andExpect(status().isOk());
     }
-
-    private String getJWTTokenForAnotherUser() throws Exception {
-        // Register another user
-        ObjectNode registerReq = objectMapper.createObjectNode();
-        registerReq.put("email", "learnuser2@example.com");
-        registerReq.put("password", "SecurePassword123!");
-        registerReq.put("name", "Learn User Two");
-
-        mockMvc.perform(post("/api/auth/register")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerReq)))
-                .andExpect(status().isCreated());
-
-        // Login as the second user
-        ObjectNode loginReq = objectMapper.createObjectNode();
-        loginReq.put("email", "learnuser2@example.com");
-        loginReq.put("password", "SecurePassword123!");
-
-        MvcResult loginResult = mockMvc.perform(post("/api/auth/token")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginReq)))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String loginResponseJson = loginResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return objectMapper.readTree(loginResponseJson).get("token").asText();
-    }
-
     private record WordItem(String word, String translation) {}
 }

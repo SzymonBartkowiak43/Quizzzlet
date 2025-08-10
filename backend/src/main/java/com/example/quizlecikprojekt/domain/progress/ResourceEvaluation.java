@@ -4,10 +4,9 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.video.Video;
 import com.example.quizlecikprojekt.domain.wordset.WordSet;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
       @UniqueConstraint(columnNames = {"user_id", "word_set_id"}),
       @UniqueConstraint(columnNames = {"user_id", "video_id"})
     })
-public class ResourceEvaluation{
+public class ResourceEvaluation {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,7 +73,6 @@ public class ResourceEvaluation{
   private void onUpdate() {
     updatedAt = LocalDateTime.now();
   }
-
 
   public enum DifficultyLevel {
     BEGINNER,

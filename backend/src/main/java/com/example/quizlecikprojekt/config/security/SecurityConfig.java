@@ -57,9 +57,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/token")
                     .authenticated()
-                        .anyRequest().authenticated()
-
-        )
+                    .anyRequest()
+                    .authenticated())
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .httpBasic(Customizer.withDefaults())
         .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
