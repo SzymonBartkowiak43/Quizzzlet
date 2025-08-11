@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @Entity
+@Table(name = "words")
 public class Word {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

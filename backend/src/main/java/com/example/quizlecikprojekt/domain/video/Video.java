@@ -14,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Getter
 @Setter
+@Table(name = "videos")
 public class Video {
 
   @Id
