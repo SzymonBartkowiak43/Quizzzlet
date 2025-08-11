@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-//  mvn spotless:apply code formater
 
 @EnableScheduling
 @SpringBootApplication(exclude = {FlywayAutoConfiguration.class})

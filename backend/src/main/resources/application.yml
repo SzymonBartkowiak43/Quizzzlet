@@ -2,13 +2,14 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:postgresql://postgres:5432/reservations
+    url: jdbc:postgresql://localhost:5432/reservations
     username: postgres
     password: postgres
   jpa:
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
+    show-sql: true
   flyway:
     enabled: false
   sql:
@@ -30,3 +31,9 @@ auth:
     expirationDays: 30
     secret: ${JWT_SECRET:ababababbbsadfweawgehrth}
     issuer: sb-reservation-system-backend
+
+logging:
+  level:
+    org.springframework.jdbc: DEBUG
+    org.hibernate.SQL: DEBUG
+    com.example.quizlecikprojekt: DEBUG
