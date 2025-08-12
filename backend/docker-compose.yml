@@ -22,18 +22,18 @@ services:
     ports:
       - "5050:80"
 
-  app:
-    build:
-      context: .
-    container_name: quizlecik-app
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/reservations
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-    ports:
-      - "8080:8080"
+#  app:
+#    build:
+#      context: .
+#    container_name: quizlecik-app
+#    depends_on:
+#      - postgres
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/reservations
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#    ports:
+#      - "8080:8080"
 
 volumes:
   postgres_data:
