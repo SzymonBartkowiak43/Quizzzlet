@@ -1,0 +1,52 @@
+.edit-word-modal {
+    width: 500px;
+}
+
+.edit-word-form {
+    padding: 1.5rem;
+}
+
+.edit-word-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.edit-word-form .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.edit-word-form input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.edit-word-form input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edit-word-modal {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+}

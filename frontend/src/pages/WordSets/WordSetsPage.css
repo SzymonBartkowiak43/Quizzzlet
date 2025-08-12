@@ -1,0 +1,141 @@
+.word-sets-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.word-sets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.word-sets-header h1 {
+    color: #333;
+    margin: 0;
+    font-size: 2rem;
+}
+
+.word-sets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.word-set-card {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.word-set-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.word-set-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.word-set-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.word-set-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.word-set-description {
+    color: #666;
+    margin: 0.5rem 0 1rem 0;
+    line-height: 1.4;
+}
+
+.word-set-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #666;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.word-count {
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    border: 2px dashed #e1e5e9;
+}
+
+.empty-state h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-size: 1.125rem;
+}
+
+.error-message {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .word-sets-page {
+        padding: 1rem;
+    }
+
+    .word-sets-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .word-sets-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .word-set-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .word-set-actions {
+        justify-content: flex-start;
+    }
+}

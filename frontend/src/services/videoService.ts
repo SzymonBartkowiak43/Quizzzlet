@@ -4,7 +4,7 @@ import { Video, VideoComment, VideoRating } from '../types/video';
 export const videoService = {
     async getAllVideos(): Promise<Video[]> {
         try {
-            const response = await axiosInstance.get('/videos');
+            const response = await axiosInstance.get('/api/videos');
             console.log('API Response:', response.data);
 
             if (response.data.videos) {
