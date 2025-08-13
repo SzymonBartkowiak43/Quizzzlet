@@ -9,8 +9,8 @@ interface EditWordModalProps {
 }
 
 const EditWordModal: React.FC<EditWordModalProps> = ({ word, onClose, onUpdate }) => {
-    const [englishWord, setEnglishWord] = useState(word.englishWord);
-    const [polishTranslation, setPolishTranslation] = useState(word.polishTranslation);
+    const [englishWord, setEnglishWord] = useState(word.word);
+    const [polishTranslation, setPolishTranslation] = useState(word.translation);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 

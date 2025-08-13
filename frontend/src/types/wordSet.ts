@@ -1,28 +1,35 @@
 export interface WordSet {
     id: number;
-    name: string;
+    title: string;          // ← Zmień z "name" na "title"
     description?: string;
     words: Word[];
     createdAt: string;
     updatedAt: string;
-    userId: number;
+    userId?: number;
+    language?: string;
+    translationLanguage?: string;
 }
 
 export interface Word {
     id: number;
-    englishWord: string;
-    polishTranslation: string;
+    word: string;               // ← Zmień z "englishWord"
+    translation: string;        // ← Zmień z "polishTranslation"
     wordSetId: number;
+    points?: number;
+    star?: boolean;
+    lastPracticed?: string | null;
     createdAt?: string;
 }
 
 export interface CreateWordSetRequest {
-    name: string;
+    title: string;          // ← Zmień z "name"
     description?: string;
+    language?: string;
+    translationLanguage?: string;
 }
 
 export interface UpdateWordSetRequest {
-    name: string;
+    title: string;          // ← Zmień z "name"
     description?: string;
 }
 

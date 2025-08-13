@@ -151,7 +151,7 @@ const WordSetDetailsPage: React.FC = () => {
                     ← Powrót
                 </button>
                 <div className="header-content">
-                    <h1>{wordSet.name}</h1>
+                    <h1>{wordSet.title}</h1>
                     {wordSet.description && (
                         <p className="word-set-description">{wordSet.description}</p>
                     )}
@@ -235,8 +235,8 @@ const WordSetDetailsPage: React.FC = () => {
                                     />
                                 </div>
                                 <div className="word-content">
-                                    <div className="english-word">{word.englishWord}</div>
-                                    <div className="polish-translation">{word.polishTranslation}</div>
+                                    <div className="english-word">{word.word}</div>
+                                    <div className="polish-translation">{word.translation}</div>
                                 </div>
                                 <div className="word-actions">
                                     <button

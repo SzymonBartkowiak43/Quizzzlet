@@ -10,7 +10,7 @@ const EditWordSetPage: React.FC = () => {
 
     const [wordSet, setWordSet] = useState<WordSet | null>(null);
     const [formData, setFormData] = useState<UpdateWordSetRequest>({
-        name: '',
+        title: '',
         description: ''
     });
     const [loading, setLoading] = useState(true);
@@ -36,7 +36,7 @@ const EditWordSetPage: React.FC = () => {
 
             setWordSet(currentSet);
             setFormData({
-                name: currentSet.name,
+                title: currentSet.title,
                 description: currentSet.description || ''
             });
             setError(null);
@@ -59,7 +59,7 @@ const EditWordSetPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.name.trim()) {
+        if (!formData.title.trim()) {
             setError('Nazwa zestawu jest wymagana');
             return;
         }
@@ -71,7 +71,7 @@ const EditWordSetPage: React.FC = () => {
             setError(null);
 
             await wordSetService.updateWordSet(wordSet.id, {
-                name: formData.name.trim(),
+                title: formData.title.trim(),
                 description: formData.description?.trim() || undefined
             });
 
@@ -88,7 +88,7 @@ const EditWordSetPage: React.FC = () => {
     const handleDelete = async () => {
         if (!wordSet) return;
 
-        const confirmMessage = `Czy na pewno chcesz usunąć zestaw "${wordSet.name}"?\n\nTa akcja jest nieodwracalna i usunie również wszystkie słówka z zestawu.`;
+        const confirmMessage = `Czy na pewno chcesz usunąć zestaw "${wordSet.title}"?\n\nTa akcja jest nieodwracalna i usunie również wszystkie słówka z zestawu.`;
 
         if (!window.confirm(confirmMessage)) return;
 
@@ -154,7 +154,7 @@ const EditWordSetPage: React.FC = () => {
                                 type="text"
                                 id="name"
                                 name="name"
-                                value={formData.name}
+                                value={formData.title}
                                 onChange={handleInputChange}
                                 placeholder="np. Słówka z angielskiego - poziom podstawowy"
                                 maxLength={100}
@@ -193,7 +193,7 @@ const EditWordSetPage: React.FC = () => {
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                disabled={saving || !formData.name.trim()}
+                                disabled={saving || !formData.title.trim()}
                             >
                                 {saving ? 'Zapisuję...' : 'Zapisz zmiany'}
                             </button>

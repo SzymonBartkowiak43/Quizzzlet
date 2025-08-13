@@ -7,7 +7,7 @@ import './CreateWordSetPage.css';
 const CreateWordSetPage: React.FC = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<CreateWordSetRequest>({
-        name: '',
+        title: '',
         description: ''
     });
     const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ const CreateWordSetPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.name.trim()) {
+        if (!formData.title.trim()) {
             setError('Nazwa zestawu jest wymagana');
             return;
         }
@@ -34,11 +34,10 @@ const CreateWordSetPage: React.FC = () => {
             setError(null);
 
             const newWordSet = await wordSetService.createWordSet({
-                name: formData.name.trim(),
+                title: formData.title.trim(),
                 description: formData.description?.trim() || undefined
             });
 
-            // Przekieruj do szczegółów nowego zestawu
             navigate(`/word-sets/${newWordSet.id}`);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Nie udało się utworzyć zestawu');
@@ -62,12 +61,12 @@ const CreateWordSetPage: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="create-word-set-form">
                 <div className="form-group">
-                    <label htmlFor="name">Nazwa zestawu *</label>
+                    <label htmlFor="title">Nazwa zestawu *</label> {/* ← POPRAWKA */}
                     <input
                         type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
+                        id="title"
+                        name="title"
+                        value={formData.title}
                         onChange={handleInputChange}
                         placeholder="np. Słówka z angielskiego - poziom podstawowy"
                         maxLength={100}
@@ -106,7 +105,7 @@ const CreateWordSetPage: React.FC = () => {
                     <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={loading || !formData.name.trim()}
+                        disabled={loading || !formData.title.trim()}
                     >
                         {loading ? 'Tworzę...' : 'Utwórz zestaw'}
                     </button>

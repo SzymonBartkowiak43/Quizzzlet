@@ -66,7 +66,7 @@ const WordSetsPage: React.FC = () => {
                 {wordSets.map(wordSet => (
                     <div key={wordSet.id} className="word-set-card">
                         <div className="word-set-header">
-                            <h3>{wordSet.name}</h3>
+                            <h3>{wordSet.title}</h3>
                             <div className="word-set-actions">
                                 <Link to={`/word-sets/${wordSet.id}`} className="btn btn-small">
                                     Otwórz
