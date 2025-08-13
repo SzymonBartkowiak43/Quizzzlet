@@ -38,18 +38,18 @@ const WordSetDetailsPage: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    }, [id]); // ← Zależność tylko od id
+    }, [id]);
 
     useEffect(() => {
         loadWordSet();
-    }, [loadWordSet]); // ← Teraz ESLint się nie będzie żalił
+    }, [loadWordSet]);
 
     const handleAddWords = async (request: AddWordRequest) => {
         if (!wordSet) return;
 
         try {
             await wordSetService.addWordsToSet(wordSet.id, request);
-            await loadWordSet(); // Przeładuj dane
+            await loadWordSet();
             setShowAddModal(false);
         } catch (err) {
             console.error('Error adding words:', err);
@@ -62,10 +62,10 @@ const WordSetDetailsPage: React.FC = () => {
 
         try {
             await wordSetService.updateWord(wordSet.id, wordId, {
-                word: englishWord,           // ← Poprawione nazwy pól
+                word: englishWord,
                 translation: polishTranslation
             });
-            await loadWordSet(); // Przeładuj dane
+            await loadWordSet();
             setEditingWord(null);
         } catch (err) {
             console.error('Error updating word:', err);
@@ -121,7 +121,29 @@ const WordSetDetailsPage: React.FC = () => {
         setSelectedWords(new Set());
     };
 
-    // Reszta komponentu bez zmian...
+    // 🚀 NOWE FUNKCJE - start fiszek i quiz
+    const handleStartFlashcards = () => {
+        if (!wordSet) return;
+
+        if (wordSet.words.length === 0) {
+            alert('Ten zestaw nie zawiera żadnych słówek. Dodaj najpierw słówka, aby rozpocząć naukę fiszkami.');
+            return;
+        }
+
+        navigate(`/flashcards/${wordSet.id}`);
+    };
+
+    const handleStartQuiz = () => {
+        if (!wordSet) return;
+
+        if (wordSet.words.length === 0) {
+            alert('Ten zestaw nie zawiera żadnych słówek. Dodaj najpierw słówka, aby rozpocząć quiz.');
+            return;
+        }
+
+        navigate(`/quiz/${wordSet.id}`);
+    };
+
     if (loading) {
         return (
             <div className="word-set-details-page">
@@ -161,6 +183,24 @@ const WordSetDetailsPage: React.FC = () => {
                     </div>
                 </div>
                 <div className="header-actions">
+                    {/* 🧠 PRZYCISK QUIZ */}
+                    <button
+                        onClick={handleStartQuiz}
+                        className="btn btn-warning btn-large quiz-btn"
+                        disabled={wordSet.words.length === 0}
+                    >
+                        🧠 Rozpocznij quiz
+                    </button>
+
+                    {/* 🎴 PRZYCISK FISZEK */}
+                    <button
+                        onClick={handleStartFlashcards}
+                        className="btn btn-success btn-large flashcards-btn"
+                        disabled={wordSet.words.length === 0}
+                    >
+                        🎴 Rozpocznij fiszki
+                    </button>
+
                     <button
                         onClick={() => navigate(`/word-sets/${wordSet.id}/edit`)}
                         className="btn btn-secondary"
@@ -219,42 +259,89 @@ const WordSetDetailsPage: React.FC = () => {
                         >
                             Dodaj słówka
                         </button>
+
+                        {/* 💡 HINT O FISZKACH I QUIZACH */}
+                        <div className="learning-hint">
+                            <p className="hint-text">
+                                💡 <strong>Wskazówka:</strong> Po dodaniu słówek będziesz mógł rozpocząć naukę z fiszkami i quizami!
+                            </p>
+                        </div>
                     </div>
                 ) : (
-                    <div className="words-grid">
-                        {wordSet.words.map(word => (
-                            <div
-                                key={word.id}
-                                className={`word-card ${selectedWords.has(word.id) ? 'selected' : ''}`}
-                            >
-                                <div className="word-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedWords.has(word.id)}
-                                        onChange={() => toggleWordSelection(word.id)}
-                                    />
-                                </div>
-                                <div className="word-content">
-                                    <div className="english-word">{word.word}</div>
-                                    <div className="polish-translation">{word.translation}</div>
-                                </div>
-                                <div className="word-actions">
+                    <>
+                        {/* 🚀 CTA SEKCJA NAUKI */}
+                        <div className="learning-cta-section">
+                            {/* Fiszki CTA */}
+                            <div className="flashcards-cta">
+                                <div className="cta-content">
+                                    <h3>🎴 Gotowy na fiszki?</h3>
+                                    <p>Przetestuj swoją wiedzę za pomocą interaktywnych fiszek!</p>
                                     <button
-                                        onClick={() => setEditingWord(word)}
-                                        className="btn btn-small"
+                                        onClick={handleStartFlashcards}
+                                        className="btn btn-success btn-large"
                                     >
-                                        Edytuj
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteWord(word.id)}
-                                        className="btn btn-small btn-danger"
-                                    >
-                                        Usuń
+                                        Rozpocznij naukę z fiszkami ({wordSet.words.length} słówek)
                                     </button>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+
+                            {/* Quiz CTA */}
+                            <div className="quiz-cta">
+                                <div className="cta-content">
+                                    <h3>🧠 Sprawdź swoją wiedzę!</h3>
+                                    <p>Przetestuj się różnymi typami pytań - od wyboru odpowiedzi po wpisywanie!</p>
+                                    <button
+                                        onClick={handleStartQuiz}
+                                        className="btn btn-warning btn-large"
+                                    >
+                                        Rozpocznij quiz ({wordSet.words.length} pytań)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="words-grid">
+                            {wordSet.words.map(word => (
+                                <div
+                                    key={word.id}
+                                    className={`word-card ${selectedWords.has(word.id) ? 'selected' : ''}`}
+                                >
+                                    <div className="word-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedWords.has(word.id)}
+                                            onChange={() => toggleWordSelection(word.id)}
+                                        />
+                                    </div>
+                                    <div className="word-content">
+                                        <div className="english-word">{word.word}</div>
+                                        <div className="polish-translation">{word.translation}</div>
+                                        {/* Dodatkowe info o słowie */}
+                                        {word.points && word.points > 0 && (
+                                            <div className="word-stats">
+                                                <span className="word-points">📊 {word.points} pkt</span>
+                                                {word.star && <span className="word-star">⭐</span>}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="word-actions">
+                                        <button
+                                            onClick={() => setEditingWord(word)}
+                                            className="btn btn-small"
+                                        >
+                                            Edytuj
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteWord(word.id)}
+                                            className="btn btn-small btn-danger"
+                                        >
+                                            Usuń
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
 

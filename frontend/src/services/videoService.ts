@@ -30,7 +30,7 @@ export const videoService = {
     },
 
     async getVideoById(id: number): Promise<Video> {
-        const response = await axiosInstance.get(`/videos/${id}`);
+        const response = await axiosInstance.get(`api/videos/${id}`);
         const video = response.data;
 
         return {
@@ -49,7 +49,7 @@ export const videoService = {
     },
 
     async getVideoComments(videoId: number): Promise<VideoComment[]> {
-        const response = await axiosInstance.get(`/videos/${videoId}`);
+        const response = await axiosInstance.get(`api/videos/${videoId}`);
         const comments = response.data.comments || [];
 
         return comments.map((comment: any) => ({
@@ -64,12 +64,12 @@ export const videoService = {
     },
 
     async addComment(videoId: number, content: string): Promise<VideoComment> {
-        const response = await axiosInstance.post(`/videos/${videoId}/comments`, { content });
+        const response = await axiosInstance.post(`api/videos/${videoId}/comments`, { content });
         return response.data;
     },
 
     async rateVideo(videoId: number, rating: number): Promise<void> {
-        await axiosInstance.post(`/videos/${videoId}/rate`, { rating });
+        await axiosInstance.post(`api/videos/${videoId}/rate`, { rating });
     },
 
     async incrementViews(videoId: number): Promise<void> {

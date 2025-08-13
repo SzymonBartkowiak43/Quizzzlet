@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { wordSetService } from '../../services/wordSetService';
-import { WordSet } from '../../types/wordSet';
-import { FlashcardSession, FlashcardSettings as FlashcardSettingsType, FlashcardItem } from '../../types/flashcard'; // ← POPRAWKA
-import FlashcardSettings from '../../components/Flashcards/FlashcardSettings'; // ← Ten zostaje bez zmian
-import FlashcardGame from '../../components/Flashcards/FlashcardGame';
+import { WordSet, Word } from '../../types/wordSet';
 import './FlashcardsPage.css';
 
-type PageState = 'loading' | 'settings' | 'playing' | 'results';
+interface FlashcardSession {
+    words: Word[];
+    currentIndex: number;
+    correctCount: number;
+    incorrectCount: number;
+    completedWords: Set<number>;
+}
 
 const FlashcardsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const [wordSet, setWordSet] = useState<WordSet | null>(null);
-    const [pageState, setPageState] = useState<PageState>('loading');
-    const [session, setSession] = useState<FlashcardSession | null>(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Flashcard state
+    const [session, setSession] = useState<FlashcardSession | null>(null);
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -26,6 +34,7 @@ const FlashcardsPage: React.FC = () => {
 
     const loadWordSet = async () => {
         try {
+            setLoading(true);
             const sets = await wordSetService.getAllWordSets();
             const currentSet = sets.find(set => set.id === Number(id));
 
@@ -40,69 +49,155 @@ const FlashcardsPage: React.FC = () => {
             }
 
             setWordSet(currentSet);
-            setPageState('settings');
+            initializeSession(currentSet);
         } catch (err) {
             setError('Nie udało się załadować zestawu');
             console.error('Error loading word set:', err);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleStartSession = (settings: FlashcardSettingsType) => { // ← POPRAWKA - użyj aliasu
-        if (!wordSet) return;
-
-        const cards: FlashcardItem[] = wordSet.words.map(word => ({
-            id: word.id,
-            word: word.word,
-            translation: word.translation,
-            difficulty: 'medium' as const,
-            timesShown: 0,
-            timesCorrect: 0,
-            timesIncorrect: 0  // ← POPRAWKA: było "timesIncorrected"
-        }));
-
-        // Pomieszaj karty jeśli ustawione
-        if (settings.shuffleCards) {
-            cards.sort(() => Math.random() - 0.5);
-        }
-
-        // Ogranicz liczbę kart jeśli ustawione
-        const finalCards = settings.sessionLimit
-            ? cards.slice(0, settings.sessionLimit)
-            : cards;
+    const initializeSession = (wordSet: WordSet) => {
+        // Pomieszaj słówka
+        const shuffledWords = [...wordSet.words].sort(() => Math.random() - 0.5);
 
         const newSession: FlashcardSession = {
-            wordSetId: wordSet.id,
-            wordSetTitle: wordSet.title,
-            cards: finalCards,
-            currentCardIndex: 0,
-            completedCards: 0,
-            correctAnswers: 0,
-            incorrectAnswers: 0,
-            startTime: new Date(),
-            settings
+            words: shuffledWords,
+            currentIndex: 0,
+            correctCount: 0,
+            incorrectCount: 0,
+            completedWords: new Set()
         };
 
         setSession(newSession);
-        setPageState('playing');
+        resetCardState();
     };
 
-    const handleSessionComplete = () => {
-        setPageState('results');
+    const resetCardState = () => {
+        setIsFlipped(false);
+        setShowAnswer(false);
+        setIsAnimating(false);
     };
 
-    const handleRestart = () => {
-        setSession(null);
-        setPageState('settings');
+    const handleFlipCard = () => {
+        if (isAnimating) return;
+
+        setIsAnimating(true);
+        setIsFlipped(!isFlipped);
+
+        // Reset animation po 300ms
+        setTimeout(() => {
+            setIsAnimating(false);
+        }, 300);
     };
 
-    const handleBackToWordSet = () => {
-        navigate(`/word-sets/${id}`);
+    const handleShowAnswer = () => {
+        if (!showAnswer) {
+            setShowAnswer(true);
+        }
     };
 
-    if (pageState === 'loading') {
+    const handleAnswer = (isCorrect: boolean) => {
+        if (!session) return;
+
+        const currentWord = session.words[session.currentIndex];
+
+        setSession(prev => {
+            if (!prev) return prev;
+
+            return {
+                ...prev,
+                correctCount: prev.correctCount + (isCorrect ? 1 : 0),
+                incorrectCount: prev.incorrectCount + (isCorrect ? 0 : 1),
+                completedWords: new Set(Array.from(prev.completedWords).concat(currentWord.id))
+            };
+        });
+
+        // Następna karta po 500ms
+        setTimeout(() => {
+            goToNextCard();
+        }, 500);
+    };
+
+    const goToNextCard = () => {
+        if (!session) return;
+
+        if (session.currentIndex >= session.words.length - 1) {
+            // Koniec sesji
+            return;
+        }
+
+        setSession(prev => {
+            if (!prev) return prev;
+
+            return {
+                ...prev,
+                currentIndex: prev.currentIndex + 1
+            };
+        });
+
+        resetCardState();
+    };
+
+    const goToPrevCard = () => {
+        if (!session || session.currentIndex <= 0) return;
+
+        setSession(prev => {
+            if (!prev) return prev;
+
+            return {
+                ...prev,
+                currentIndex: prev.currentIndex - 1
+            };
+        });
+
+        resetCardState();
+    };
+
+    const restartSession = () => {
+        if (wordSet) {
+            initializeSession(wordSet);
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        switch (e.code) {
+            case 'Space':
+                e.preventDefault();
+                if (!showAnswer) {
+                    handleShowAnswer();
+                } else {
+                    handleFlipCard();
+                }
+                break;
+            case 'ArrowLeft':
+                goToPrevCard();
+                break;
+            case 'ArrowRight':
+                if (showAnswer) {
+                    goToNextCard();
+                }
+                break;
+            case 'KeyY':
+            case 'Digit1':
+                if (showAnswer) {
+                    handleAnswer(true);
+                }
+                break;
+            case 'KeyN':
+            case 'Digit2':
+                if (showAnswer) {
+                    handleAnswer(false);
+                }
+                break;
+        }
+    };
+
+    if (loading) {
         return (
             <div className="flashcards-page">
-                <div className="loading">Ładowanie zestawu...</div>
+                <div className="loading">Ładowanie fiszek...</div>
             </div>
         );
     }
@@ -120,68 +215,183 @@ const FlashcardsPage: React.FC = () => {
         );
     }
 
-    if (!wordSet) {
+    if (!wordSet || !session) {
         return (
             <div className="flashcards-page">
-                <div className="error-message">Nie znaleziono zestawu</div>
+                <div className="error-message">Nie udało się załadować sesji</div>
+            </div>
+        );
+    }
+
+    const currentWord = session.words[session.currentIndex];
+    const progress = ((session.currentIndex + 1) / session.words.length) * 100;
+    const isSessionComplete = session.currentIndex >= session.words.length - 1 && session.completedWords.has(currentWord.id);
+
+    if (isSessionComplete) {
+        return (
+            <div className="flashcards-page">
+                <div className="session-complete">
+                    <h2>🎉 Sesja zakończona!</h2>
+                    <div className="final-stats">
+                        <div className="stat-item">
+                            <span className="stat-value">{session.correctCount}</span>
+                            <span className="stat-label">Poprawne</span>
+                        </div>
+                        <div className="stat-item">
+                            <span className="stat-value">{session.incorrectCount}</span>
+                            <span className="stat-label">Błędne</span>
+                        </div>
+                        <div className="stat-item">
+              <span className="stat-value">
+                {Math.round((session.correctCount / (session.correctCount + session.incorrectCount)) * 100)}%
+              </span>
+                            <span className="stat-label">Skuteczność</span>
+                        </div>
+                    </div>
+                    <div className="session-actions">
+                        <button onClick={restartSession} className="btn btn-primary">
+                            🔄 Powtórz sesję
+                        </button>
+                        <button onClick={() => navigate(`/word-sets/${id}`)} className="btn btn-secondary">
+                            Powrót do zestawu
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="flashcards-page">
-            <div className="page-header">
-                <button onClick={handleBackToWordSet} className="btn btn-secondary">
-                    ← Powrót do zestawu
+        <div
+            className="flashcards-page"
+            onKeyDown={handleKeyPress}
+            tabIndex={0}
+        >
+            {/* Header z postępem */}
+            <div className="flashcards-header">
+                <button
+                    onClick={() => navigate(`/word-sets/${id}`)}
+                    className="btn btn-secondary btn-small"
+                >
+                    ← Zakończ
                 </button>
-                <h1>🎴 Fiszki: {wordSet.title}</h1>
+
+                <div className="progress-info">
+                    <span className="set-title">{wordSet.title}</span>
+                    <span className="progress-text">
+            {session.currentIndex + 1} / {session.words.length}
+          </span>
+                </div>
+
+                <div className="session-stats">
+                    <span className="correct-count">✅ {session.correctCount}</span>
+                    <span className="incorrect-count">❌ {session.incorrectCount}</span>
+                </div>
             </div>
 
-            {pageState === 'settings' && (
-                <FlashcardSettings
-                    wordSet={wordSet}
-                    onStart={handleStartSession}
-                    onBack={handleBackToWordSet}
+            {/* Progress bar */}
+            <div className="progress-bar">
+                <div
+                    className="progress-fill"
+                    style={{ width: `${progress}%` }}
                 />
-            )}
+            </div>
 
-            {pageState === 'playing' && session && (
-                <FlashcardGame
-                    session={session}
-                    onSessionUpdate={setSession}
-                    onComplete={handleSessionComplete}
-                />
-            )}
-
-            {pageState === 'results' && session && (
-                <div className="session-results">
-                    <h2>🎉 Sesja zakończona!</h2>
-                    <div className="results-stats">
-                        <div className="stat-card">
-                            <div className="stat-value">{session.correctAnswers}</div>
-                            <div className="stat-label">Poprawne</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{session.incorrectAnswers}</div>
-                            <div className="stat-label">Błędne</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">
-                                {Math.round((session.correctAnswers / session.completedCards) * 100)}%
+            {/* Main flashcard */}
+            <div className="flashcard-container">
+                <div
+                    className={`flashcard ${isFlipped ? 'flipped' : ''} ${isAnimating ? 'animating' : ''}`}
+                    onClick={!showAnswer ? handleShowAnswer : handleFlipCard}
+                >
+                    {/* ✅ FRONT SIDE */}
+                    <div className="flashcard-front">
+                        <div className="card-content">
+                            <div className="word-text">
+                                {!isFlipped ? currentWord.word : currentWord.translation}
                             </div>
-                            <div className="stat-label">Skuteczność</div>
+                            <div className="card-language">
+                                {!isFlipped ? '🇬🇧 English' : '🇵🇱 Polski'}
+                            </div>
                         </div>
                     </div>
-                    <div className="results-actions">
-                        <button onClick={handleRestart} className="btn btn-primary">
-                            Jeszcze raz
+
+                    {/* ✅ BACK SIDE - NOWY! */}
+                    <div className="flashcard-back">
+                        <div className="card-content">
+                            <div className="word-text">
+                                {isFlipped ? currentWord.word : currentWord.translation}
+                            </div>
+                            <div className="card-language">
+                                {isFlipped ? '🇬🇧 English' : '🇵🇱 Polski'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {!showAnswer && (
+                    <div className="card-hint">
+                        <p>Kliknij kartę lub naciśnij <kbd>Spację</kbd>, aby zobaczyć tłumaczenie</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Answer section */}
+            {showAnswer && (
+                <div className="answer-section">
+                    <div className="answer-display">
+                        <div className="answer-label">
+                            {isFlipped ? 'Słowo angielskie:' : 'Tłumaczenie polskie:'}
+                        </div>
+                        <div className="answer-text">
+                            {isFlipped ? currentWord.word : currentWord.translation}
+                        </div>
+                    </div>
+
+                    <div className="answer-actions">
+                        <button
+                            onClick={() => handleAnswer(false)}
+                            className="btn btn-danger btn-large"
+                        >
+                            ❌ Nie wiedziałem
                         </button>
-                        <button onClick={handleBackToWordSet} className="btn btn-secondary">
-                            Powrót do zestawu
+                        <button
+                            onClick={handleFlipCard}
+                            className="btn btn-secondary btn-large"
+                        >
+                            🔄 Odwróć kartę
+                        </button>
+                        <button
+                            onClick={() => handleAnswer(true)}
+                            className="btn btn-success btn-large"
+                        >
+                            ✅ Wiedziałem
                         </button>
                     </div>
                 </div>
             )}
+
+            {/* Navigation */}
+            <div className="flashcard-navigation">
+                <button
+                    onClick={goToPrevCard}
+                    disabled={session.currentIndex <= 0}
+                    className="btn btn-secondary"
+                >
+                    ← Poprzednia
+                </button>
+
+                <div className="keyboard-hints">
+                    <kbd>←</kbd> Poprzednia | <kbd>Spacja</kbd> Pokaż/Odwróć | <kbd>1</kbd> Tak | <kbd>2</kbd> Nie
+                </div>
+
+                <button
+                    onClick={goToNextCard}
+                    disabled={!showAnswer}
+                    className="btn btn-secondary"
+                >
+                    Następna →
+                </button>
+            </div>
         </div>
     );
 };

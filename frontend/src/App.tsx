@@ -11,6 +11,8 @@ import WordSetsPage from './pages/WordSets/WordSetsPage';
 import CreateWordSetPage from './pages/WordSets/CreateWordSetPage';
 import EditWordSetPage from './pages/WordSets/EditWordSetPage';
 import WordSetDetailsPage from './pages/WordSets/WordSetDetailsPage';
+import FlashcardsPage from './pages/Flashcards/FlashcardsPage';
+import QuizPage from './pages/Quiz/QuizPage'; //
 import './App.css';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
                 <Route path="/word-sets/new" element={<CreateWordSetPage />} />
                 <Route path="/word-sets/:id" element={<WordSetDetailsPage />} />
                 <Route path="/word-sets/:id/edit" element={<EditWordSetPage />} />
+                <Route path="/flashcards/:id" element={<FlashcardsPage />} />
+                <Route path="/quiz/:id" element={<QuizPage />} />
                 <Route path="/profile" element={<div>Profile - Coming Soon</div>} />
                 <Route path="/videos" element={<VideosPage />} />
                 <Route path="/videos/:id" element={<VideoPlayerPage />} />

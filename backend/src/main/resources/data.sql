@@ -253,23 +253,49 @@ FROM word_sets ws JOIN users u ON ws.user_id = u.id
 WHERE u.email = 'admin@test.pl' AND ws.title = 'Jedzenie i gotowanie';
 
 -- ===== 🎥 DODATKOWE VIDEOS DLA ADMIN =====
+-- ===== VIDEOS (tylko title, url, user_id - dopasowane do Twojej encji) =====
 INSERT INTO videos (title, url, user_id, created_at, updated_at)
 VALUES
-    ('Advanced English Grammar - Complete Course',
-     'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-     (SELECT id FROM users WHERE email = 'admin@test.pl'),
-     '2025-01-12 08:00:00', '2025-01-12 08:00:00'),
+-- English Learning Videos
+('English Grammar Basics - Complete Guide',
+ 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+ (SELECT id FROM users WHERE email = 'admin@test.pl'),
+ '2025-01-08 10:00:00', '2025-01-11 22:15:13'),
 
-    ('English for Business Meetings',
-     'https://www.youtube.com/watch?v=J---aiyznGQ',
-     (SELECT id FROM users WHERE email = 'admin@test.pl'),
-     '2025-01-12 09:30:00', '2025-01-12 09:30:00'),
+('English Conversation Practice - Daily Situations',
+ 'https://www.youtube.com/watch?v=J---aiyznGQ',
+ (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+ '2025-01-09 14:30:00', '2025-01-11 22:15:13'),
 
-    ('Travel English - Airport and Hotel Conversations',
-     'https://www.youtube.com/watch?v=Tt7bzxurJ1I',
-     (SELECT id FROM users WHERE email = 'admin@test.pl'),
-     '2025-01-12 10:15:00', '2025-01-12 10:15:00');
+('English Pronunciation Masterclass',
+ 'https://www.youtube.com/watch?v=Tt7bzxurJ1I',
+ (SELECT id FROM users WHERE email = 'anna@test.pl'),
+ '2025-01-10 09:15:00', '2025-01-11 22:15:13'),
 
+('Business English Vocabulary',
+ 'https://www.youtube.com/watch?v=fJ9rUzIMcZQ',
+ (SELECT id FROM users WHERE email = 'admin@test.pl'),
+ '2025-01-10 16:00:00', '2025-01-11 22:15:13'),
+
+('IELTS Speaking Test Tips',
+ 'https://www.youtube.com/watch?v=qrO4YZeyl0I',
+ (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+ '2025-01-11 11:20:00', '2025-01-11 22:15:13'),
+
+('English Idioms and Phrases',
+ 'https://www.youtube.com/watch?v=y6120QOlsfU',
+ (SELECT id FROM users WHERE email = 'anna@test.pl'),
+ '2025-01-11 13:45:00', '2025-01-11 22:15:13'),
+
+('English Grammar: Past Tense vs Present Perfect',
+ 'https://www.youtube.com/watch?v=kJQP7kiw5Fk',
+ (SELECT id FROM users WHERE email = 'admin@test.pl'),
+ '2025-01-11 08:00:00', '2025-01-11 22:15:13'),
+
+('English Listening Practice - News Report',
+ 'https://www.youtube.com/watch?v=lXMskKTw3Bc',
+ (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+ '2025-01-11 15:30:00', '2025-01-11 22:15:13');
 -- ===== 📊 DODATKOWE ZESTAWY DLA INNYCH USERÓW (żeby było różnorodnie) =====
 INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
 SELECT

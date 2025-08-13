@@ -209,3 +209,63 @@
         align-self: flex-end;
     }
 }
+
+.quiz-btn {
+    background: linear-gradient(135deg, #ff9800, #f57c00) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.quiz-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
+    background: linear-gradient(135deg, #f57c00, #e65100) !important;
+}
+
+.quiz-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #ccc !important;
+}
+
+/* 📱 Responsive - porządek przycisków na mobile */
+@media (max-width: 768px) {
+    .header-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .quiz-btn {
+        order: -2; /* Quiz drugi na mobile (po fiszkach) */
+    }
+
+    .flashcards-btn {
+        order: -1; /* Fiszki pierwsze na mobile */
+    }
+}
+
+.quiz-cta {
+    background: linear-gradient(135deg, #fff3e0, #ffcc02);
+    border: 2px dashed #ff9800;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+}
+
+.quiz-cta h3 {
+    color: #e65100;
+    margin: 0 0 8px 0;
+    font-size: 1.4em;
+}
+
+.quiz-cta p {
+    color: #666;
+    margin: 0 0 16px 0;
+    font-size: 1.1em;
+}
