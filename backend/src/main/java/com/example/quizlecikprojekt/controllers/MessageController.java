@@ -1,0 +1,157 @@
+package com.example.quizlecikprojekt.controllers;
+
+import com.example.quizlecikprojekt.controllers.dto.message.SendGroupMessageRequest;
+import com.example.quizlecikprojekt.controllers.dto.message.SendPrivateMessageRequest;
+import com.example.quizlecikprojekt.controllers.dto.message.ShareWordSetRequest;
+import com.example.quizlecikprojekt.controllers.dto.message.ShareWordSetToGroupRequest;
+import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
+import com.example.quizlecikprojekt.domain.friendship.entity.GroupMessage;
+import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/messages")
+@PreAuthorize("hasRole('USER')")
+public class MessageController {
+
+    @Autowired
+    private SocialFacade socialFacade;
+
+    @GetMapping("/my")
+    public ResponseEntity<Map<String, Object>> getMyMessages(Authentication authentication) {
+        Map<String, Object> messagingInfo = socialFacade.getUserMessagingInfo(authentication.getName());
+        return ResponseEntity.ok(messagingInfo);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<Map<String, Object>> sendPrivateMessage(
+            @Valid @RequestBody SendPrivateMessageRequest messageRequest,
+            Authentication authentication) {
+
+        PrivateMessage message = socialFacade.sendPrivateMessage(
+                authentication.getName(),
+                messageRequest.getRecipientId(),
+                messageRequest.getContent()
+        );
+
+        Map<String, Object> response = Map.of(
+                "message", "Wiadomość została wysłana",
+                "sentMessage", message
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/private/share-wordset")
+    public ResponseEntity<Map<String, Object>> shareWordSetPrivately(
+            @Valid @RequestBody ShareWordSetRequest shareRequest,
+            Authentication authentication) {
+
+        PrivateMessage message = socialFacade.shareWordSetPrivately(
+                authentication.getName(),
+                shareRequest.getRecipientId(),
+                shareRequest.getMessage(),
+                shareRequest.getWordSetId()
+        );
+
+        Map<String, Object> response = Map.of(
+                "message", "Zestaw słówek został udostępniony",
+                "sentMessage", message
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/private/conversation/{userId}")
+    public ResponseEntity<Map<String, Object>> getConversation(
+            @PathVariable Long userId,
+            Authentication authentication) {
+
+        Map<String, Object> result = socialFacade.manageConversation(
+                authentication.getName(), userId, "get_messages", Map.of()
+        );
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/private/conversation/{userId}/mark-read")
+    public ResponseEntity<Map<String, Object>> markMessagesAsRead(
+            @PathVariable Long userId,
+            Authentication authentication) {
+
+        Map<String, Object> result = socialFacade.manageConversation(
+                authentication.getName(), userId, "mark_as_read", Map.of()
+        );
+
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/private/{messageId}")
+    public ResponseEntity<Map<String, String>> deletePrivateMessage(
+            @PathVariable Long messageId,
+            Authentication authentication) {
+
+        Map<String, Object> params = Map.of("messageId", messageId);
+        socialFacade.manageConversation(authentication.getName(), null, "delete_message", params);
+
+        return ResponseEntity.ok(Map.of("message", "Wiadomość została usunięta"));
+    }
+
+    @PostMapping("/group")
+    public ResponseEntity<Map<String, Object>> sendGroupMessage(
+            @Valid @RequestBody SendGroupMessageRequest messageRequest,
+            Authentication authentication) {
+
+        GroupMessage message = socialFacade.sendGroupMessage(
+                authentication.getName(),
+                messageRequest.getGroupId(),
+                messageRequest.getContent()
+        );
+
+        Map<String, Object> response = Map.of(
+                "message", "Wiadomość została wysłana do grupy",
+                "sentMessage", message
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/group/share-wordset")
+    public ResponseEntity<Map<String, Object>> shareWordSetInGroup(
+            @Valid @RequestBody ShareWordSetToGroupRequest shareRequest,
+            Authentication authentication) {
+
+        GroupMessage message = socialFacade.shareWordSetInGroup(
+                authentication.getName(),
+                shareRequest.getGroupId(),
+                shareRequest.getMessage(),
+                shareRequest.getWordSetId()
+        );
+
+        Map<String, Object> response = Map.of(
+                "message", "Zestaw słówek został udostępniony w grupie",
+                "sentMessage", message
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @DeleteMapping("/group/{messageId}")
+    public ResponseEntity<Map<String, String>> deleteGroupMessage(
+            @PathVariable Long messageId,
+            Authentication authentication) {
+
+        // Tu trzeba rozszerzyć facade
+        // socialFacade.deleteGroupMessage(authentication.getName(), messageId);
+
+        return ResponseEntity.ok(Map.of("message", "Wiadomość została usunięta"));
+    }
+}

@@ -1,0 +1,156 @@
+package com.example.quizlecikprojekt.domain.friendship.service;
+
+import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
+import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
+import com.example.quizlecikprojekt.domain.friendship.repository.FriendshipRepository;
+import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.domain.user.UserRepository;
+import com.example.quizlecikprojekt.exception.InvalidOperationException;
+import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class FriendshipService {
+
+    @Autowired
+    private FriendshipRepository friendshipRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // Wyślij zaproszenie do przyjaźni
+    public Friendship sendFriendRequest(Long requesterId, Long addresseeId) {
+        if (requesterId.equals(addresseeId)) {
+            throw new InvalidOperationException("Nie możesz zaprosić siebie do przyjaźni");
+        }
+
+        User requester = userRepository.findById(requesterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
+        User addressee = userRepository.findById(addresseeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
+
+        // Sprawdź czy już istnieje przyjaźń
+        Optional<Friendship> existingFriendship = friendshipRepository
+                .findFriendshipBetweenUsers(requesterId, addresseeId);
+
+        if (existingFriendship.isPresent()) {
+            Friendship friendship = existingFriendship.get();
+            if (friendship.getStatus() == FriendshipStatus.ACCEPTED) {
+                throw new InvalidOperationException("Już jesteście przyjaciółmi");
+            } else if (friendship.getStatus() == FriendshipStatus.PENDING) {
+                throw new InvalidOperationException("Zaproszenie już zostało wysłane");
+            } else if (friendship.getStatus() == FriendshipStatus.BLOCKED) {
+                throw new InvalidOperationException("Nie możesz zaprosić tego użytkownika");
+            }
+        }
+
+        Friendship newFriendship = new Friendship(requester, addressee);
+        return friendshipRepository.save(newFriendship);
+    }
+
+    // Zaakceptuj zaproszenie do przyjaźni
+    public Friendship acceptFriendRequest(Long userId, Long friendshipId) {
+        Friendship friendship = friendshipRepository.findById(friendshipId)
+                .orElseThrow(() -> new ResourceNotFoundException("Zaproszenie nie znalezione"));
+
+        if (!friendship.getAddressee().getId().equals(userId)) {
+            throw new InvalidOperationException("Nie możesz zaakceptować tego zaproszenia");
+        }
+
+        if (friendship.getStatus() != FriendshipStatus.PENDING) {
+            throw new InvalidOperationException("Zaproszenie nie jest aktywne");
+        }
+
+        friendship.setStatus(FriendshipStatus.ACCEPTED);
+        return friendshipRepository.save(friendship);
+    }
+
+    // Odrzuć zaproszenie do przyjaźni
+    public void declineFriendRequest(Long userId, Long friendshipId) {
+        Friendship friendship = friendshipRepository.findById(friendshipId)
+                .orElseThrow(() -> new ResourceNotFoundException("Zaproszenie nie znalezione"));
+
+        if (!friendship.getAddressee().getId().equals(userId)) {
+            throw new InvalidOperationException("Nie możesz odrzucić tego zaproszenia");
+        }
+
+        friendship.setStatus(FriendshipStatus.DECLINED);
+        friendshipRepository.save(friendship);
+    }
+
+    // Usuń przyjaźń
+    public void removeFriend(Long userId, Long friendId) {
+        Friendship friendship = friendshipRepository
+                .findFriendshipBetweenUsers(userId, friendId)
+                .orElseThrow(() -> new ResourceNotFoundException("Przyjaźń nie znaleziona"));
+
+        if (!friendship.involves(userRepository.findById(userId).get())) {
+            throw new InvalidOperationException("Nie możesz usunąć tej przyjaźni");
+        }
+
+        friendshipRepository.delete(friendship);
+    }
+
+    // Zablokuj użytkownika
+    public void blockUser(Long userId, Long userToBlockId) {
+        if (userId.equals(userToBlockId)) {
+            throw new InvalidOperationException("Nie możesz zablokować siebie");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
+        User userToBlock = userRepository.findById(userToBlockId)
+                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
+
+        Optional<Friendship> existingFriendship = friendshipRepository
+                .findFriendshipBetweenUsers(userId, userToBlockId);
+
+        if (existingFriendship.isPresent()) {
+            Friendship friendship = existingFriendship.get();
+            friendship.setStatus(FriendshipStatus.BLOCKED);
+            friendshipRepository.save(friendship);
+        } else {
+            Friendship blockFriendship = new Friendship(user, userToBlock);
+            blockFriendship.setStatus(FriendshipStatus.BLOCKED);
+            friendshipRepository.save(blockFriendship);
+        }
+    }
+
+    // Pobierz przyjaciół użytkownika
+    public List<User> getUserFriends(Long userId) {
+        return friendshipRepository.findUserFriends(userId);
+    }
+
+    // Pobierz oczekujące zaproszenia
+    public List<Friendship> getPendingFriendRequests(Long userId) {
+        return friendshipRepository.findPendingFriendRequestsForUser(userId);
+    }
+
+    // Pobierz wysłane zaproszenia
+    public List<Friendship> getSentFriendRequests(Long userId) {
+        return friendshipRepository.findSentFriendRequestsByUser(userId);
+    }
+
+    // Sprawdź czy użytkownicy są przyjaciółmi
+    public boolean areUsersFriends(Long userId1, Long userId2) {
+        return friendshipRepository.areUsersFriends(userId1, userId2);
+    }
+
+    // Pobierz status przyjaźni
+    public FriendshipStatus getFriendshipStatus(Long userId1, Long userId2) {
+        return friendshipRepository.findFriendshipBetweenUsers(userId1, userId2)
+                .map(Friendship::getStatus)
+                .orElse(null);
+    }
+
+    // Sugerowani znajomi
+    public List<User> getSuggestedFriends(Long userId) {
+        return friendshipRepository.findSuggestedFriends(userId);
+    }
+}

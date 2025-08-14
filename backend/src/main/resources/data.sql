@@ -325,3 +325,338 @@ INSERT INTO words (word, translation, word_set_id, points, star, last_practiced,
 SELECT 'red', 'czerwony', ws.id, 8, true, '2025-01-11 15:00:00', '2025-01-04 15:00:00', '2025-01-11 15:00:00'
 FROM word_sets ws JOIN users u ON ws.user_id = u.id
 WHERE u.email = 'piotr@test.pl' AND ws.title = 'Kolory i kształty';
+
+
+-- ===== PRZYJAŹNIE =====
+-- Anna i Piotr są przyjaciółmi
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'ACCEPTED',
+    CURRENT_TIMESTAMP - INTERVAL '5 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM friendships
+    WHERE requester_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+      AND addressee_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
+);
+
+-- Admin ma wysłane zaproszenie do Anny (pending)
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'admin@test.pl'),
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'PENDING',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM friendships
+    WHERE requester_id = (SELECT id FROM users WHERE email = 'admin@test.pl')
+      AND addressee_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+);
+
+-- ===== GRUPY NAUKI =====
+-- Grupa publiczna utworzona przez Annę
+INSERT INTO study_groups (name, description, creator_id, is_private, max_members, invite_code, created_at)
+SELECT
+    'Angielski dla początkujących',
+    'Grupa dla osób rozpoczynających naukę języka angielskiego. Wspólnie uczymy się podstaw gramatyki i słownictwa.',
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    false,
+    25,
+    'ENGL2024',
+    CURRENT_TIMESTAMP - INTERVAL '10 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM study_groups WHERE name = 'Angielski dla początkujących'
+);
+
+-- Grupa prywatna utworzona przez Piotra
+INSERT INTO study_groups (name, description, creator_id, is_private, max_members, invite_code, created_at)
+SELECT
+    'Advanced English Club',
+    'Zaawansowany klub języka angielskiego. Dyskusje, literatura, biznesowy angielski.',
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    true,
+    10,
+    'ADVENG01',
+    CURRENT_TIMESTAMP - INTERVAL '7 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM study_groups WHERE name = 'Advanced English Club'
+);
+
+-- Grupa publiczna utworzona przez Admina
+INSERT INTO study_groups (name, description, creator_id, is_private, max_members, invite_code, created_at)
+SELECT
+    'Konwersacje po angielsku',
+    'Codzienne konwersacje i praktyka mówienia. Mile widziani wszyscy poziomy!',
+    (SELECT id FROM users WHERE email = 'admin@test.pl'),
+    false,
+    50,
+    'CONV2024',
+    CURRENT_TIMESTAMP - INTERVAL '3 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM study_groups WHERE name = 'Konwersacje po angielsku'
+);
+
+-- ===== CZŁONKOSTWO W GRUPACH =====
+-- Anna jest twórcą pierwszej grupy (automatycznie admin)
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'ADMIN',
+    sg.created_at
+FROM study_groups sg
+WHERE sg.name = 'Angielski dla początkujących'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_members
+    WHERE group_id = sg.id
+      AND user_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+);
+
+-- Piotr dołączył do grupy Anny jako zwykły członek
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'MEMBER',
+    CURRENT_TIMESTAMP - INTERVAL '8 days'
+FROM study_groups sg
+WHERE sg.name = 'Angielski dla początkujących'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_members
+    WHERE group_id = sg.id
+      AND user_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
+);
+
+-- Piotr jest twórcą drugiej grupy (automatycznie admin)
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'ADMIN',
+    sg.created_at
+FROM study_groups sg
+WHERE sg.name = 'Advanced English Club'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_members
+    WHERE group_id = sg.id
+      AND user_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
+);
+
+-- Anna została zaproszona do grupy Piotra jako moderator
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'MODERATOR',
+    CURRENT_TIMESTAMP - INTERVAL '5 days'
+FROM study_groups sg
+WHERE sg.name = 'Advanced English Club'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_members
+    WHERE group_id = sg.id
+      AND user_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+);
+
+-- Admin jest twórcą trzeciej grupy (automatycznie admin)
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'admin@test.pl'),
+    'ADMIN',
+    sg.created_at
+FROM study_groups sg
+WHERE sg.name = 'Konwersacje po angielsku'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_members
+    WHERE group_id = sg.id
+      AND user_id = (SELECT id FROM users WHERE email = 'admin@test.pl')
+);
+
+-- Anna i Piotr dołączyli do grupy Admina
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+SELECT
+    sg.id,
+    u.id,
+    'MEMBER',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
+FROM study_groups sg, users u
+WHERE sg.name = 'Konwersacje po angielsku'
+  AND u.email IN ('anna@test.pl', 'piotr@test.pl')
+  AND NOT EXISTS (
+    SELECT 1 FROM group_members
+    WHERE group_id = sg.id AND user_id = u.id
+);
+
+-- ===== PRYWATNE WIADOMOŚCI =====
+-- Konwersacja między Anną a Piotrem
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'Cześć Piotr! Jak ci idzie nauka angielskiego?',
+    CURRENT_TIMESTAMP - INTERVAL '3 days',
+    true
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+      AND content = 'Cześć Piotr! Jak ci idzie nauka angielskiego?'
+);
+
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'Cześć Anna! Świetnie, dziękuję za pytanie. A tobie jak idzie grupa dla początkujących?',
+    CURRENT_TIMESTAMP - INTERVAL '3 days' + INTERVAL '30 minutes',
+    true
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
+      AND content LIKE 'Cześć Anna! Świetnie, dziękuję%'
+);
+
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'Super! Mam już kilku członków. Może byś mógł pomóc mi z organizacją zajęć?',
+    CURRENT_TIMESTAMP - INTERVAL '3 days' + INTERVAL '1 hour',
+    false
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+      AND content LIKE 'Super! Mam już kilku członków%'
+);
+
+-- Wiadomość od Admina do Anny
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'admin@test.pl'),
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'Witaj Anna! Widziałem, że prowadziś grupę dla początkujących. Może chciałabyś współpracować?',
+    CURRENT_TIMESTAMP - INTERVAL '1 day',
+    false
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'admin@test.pl')
+      AND content LIKE 'Witaj Anna! Widziałem%'
+);
+
+-- ===== WIADOMOŚCI GRUPOWE =====
+-- Wiadomości w grupie "Angielski dla początkujących"
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'Witajcie wszystkich w naszej grupie! Tutaj będziemy dzielić się materiałami i pomagać sobie nawzajem.',
+    CURRENT_TIMESTAMP - INTERVAL '9 days'
+FROM study_groups sg
+WHERE sg.name = 'Angielski dla początkujących'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND content LIKE 'Witajcie wszystkich%'
+);
+
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'Dzięki za zaproszenie Anna! Cieszę się, że mogę pomóc nowym uczniom.',
+    CURRENT_TIMESTAMP - INTERVAL '8 days' + INTERVAL '2 hours'
+FROM study_groups sg
+WHERE sg.name = 'Angielski dla początkujących'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND sender_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
+);
+
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'Dziś proponuję skupić się na czasach przeszłych. Kto ma pytania?',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
+FROM study_groups sg
+WHERE sg.name = 'Angielski dla początkujących'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND content LIKE 'Dziś proponuję skupić%'
+);
+
+-- Wiadomości w grupie "Advanced English Club"
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'Welcome to our advanced English club! Here we focus on business English and complex grammar structures.',
+    CURRENT_TIMESTAMP - INTERVAL '6 days'
+FROM study_groups sg
+WHERE sg.name = 'Advanced English Club'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND content LIKE 'Welcome to our advanced%'
+);
+
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'Thanks for inviting me, Piotr! I''m excited to improve my business English skills.',
+    CURRENT_TIMESTAMP - INTERVAL '5 days' + INTERVAL '3 hours'
+FROM study_groups sg
+WHERE sg.name = 'Advanced English Club'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND sender_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+);
+
+-- Wiadomości w grupie "Konwersacje po angielsku"
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'admin@test.pl'),
+    'Witam wszystkich! Ta grupa jest otwarta dla każdego, kto chce praktykować mówienie po angielsku.',
+    CURRENT_TIMESTAMP - INTERVAL '2 days' + INTERVAL '6 hours'
+FROM study_groups sg
+WHERE sg.name = 'Konwersacje po angielsku'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND content LIKE 'Witam wszystkich! Ta grupa%'
+);
+
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'Świetna inicjatywa! Może moglibyśmy organizować codzienne sesje rozmowy?',
+    CURRENT_TIMESTAMP - INTERVAL '2 days' + INTERVAL '7 hours'
+FROM study_groups sg
+WHERE sg.name = 'Konwersacje po angielsku'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND sender_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+      AND content LIKE 'Świetna inicjatywa%'
+);
+
+INSERT INTO group_messages (group_id, sender_id, content, created_at)
+SELECT
+    sg.id,
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'Great idea Anna! I can help with pronunciation sessions on weekends.',
+    CURRENT_TIMESTAMP - INTERVAL '1 day'
+FROM study_groups sg
+WHERE sg.name = 'Konwersacje po angielsku'
+  AND NOT EXISTS (
+    SELECT 1 FROM group_messages
+    WHERE group_id = sg.id
+      AND sender_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
+      AND content LIKE 'Great idea Anna%'
+);
