@@ -21,7 +21,7 @@ import PendingRequests from './PendingRequests';
 
 const SocialDashboard: React.FC = () => {
     const { dashboard, loading, error, refreshDashboard } = useSocialDashboard();
-    const { acceptFriendRequest, declineFriendRequest } = useFriendships();
+    // const { acceptFriendRequest, declineFriendRequest } = useFriendships();
     const [refreshing, setRefreshing] = useState(false);
 
     const handleRefresh = async () => {
@@ -157,14 +157,14 @@ const SocialDashboard: React.FC = () => {
 
                 {/* Sidebar */}
                 <div className="space-y-6">
-                    {/* Pending Friend Requests */}
-                    {dashboard.friendshipInfo.pendingRequests.length > 0 && (
-                        <PendingRequests
-                            requests={dashboard.friendshipInfo.pendingRequests}
-                            onAccept={acceptFriendRequest}
-                            onDecline={declineFriendRequest}
-                        />
-                    )}
+                    {/*/!* Pending Friend Requests *!/*/}
+                    {/*{dashboard.friendshipInfo.pendingRequests.length > 0 && (*/}
+                    {/*    <PendingRequests*/}
+                    {/*        requests={dashboard.friendshipInfo.pendingRequests}*/}
+                    {/*        onAccept={acceptFriendRequest}*/}
+                    {/*        onDecline={declineFriendRequest}*/}
+                    {/*    />*/}
+                    {/*)}*/}
 
                     {/* Suggested Friends */}
                     {/*{dashboard.friendshipInfo.suggestedFriends?.length > 0 && (*/}

@@ -103,18 +103,23 @@ export interface FriendRequestDto {
     addresseeId: number;
 }
 
-// ========== RESPONSE TYPES ==========
-interface FriendshipInfo {
-    activeFriendships: Friendship[];
-    pendingRequests: Friendship[];
-    sentRequests: Friendship[];
-    allFriendships: Friendship[];
-    friends: User[];
-    sentRequestsCount: number;
-    friendsCount?: number; // Mark as optional if not always present
-    suggestedFriends?: User[]; // Mark as optional if not always present
-}
+export type DisplayUser = {
+    id: number;
+    email: string;
+    name: string;
+};
 
+export type FriendshipInfo = {
+    friendsCount: number;
+    friends: DisplayUser[];
+    pendingRequestsCount: number;
+    pendingRequests: any[];
+    sentRequestsCount: number;
+    sentRequests: any[];
+    suggestedFriends: DisplayUser[];
+};
+
+// ========== RESPONSE TYPES ==========
 export interface GroupInfo {
     memberGroups: StudyGroup[];
     memberGroupsCount: number;

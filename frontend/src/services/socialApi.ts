@@ -8,7 +8,7 @@ import {
     GroupMessage,
     CreateGroupRequest,
     JoinGroupRequest,
-    UpdateGroupRequest
+    UpdateGroupRequest, FriendshipInfo
 } from '../types/social';
 
 const api = axios.create({
@@ -48,7 +48,7 @@ export const getSocialDashboard = async (): Promise<SocialDashboard> => {
 };
 
 // Friendship API
-export const getMyFriendships = async (): Promise<Friendship[]> => {
+export const getMyFriendships = async (): Promise<FriendshipInfo> => {
     const response = await api.get('/api/friendships/my');
     return response.data;
 };

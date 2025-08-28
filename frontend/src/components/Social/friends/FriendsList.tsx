@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User } from '../../../types/social';
+import { DisplayUser } from '../../../types/social';
 import {
     MessageCircle,
     MoreVertical,
@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 interface FriendsListProps {
-    friends: User[];
+    friends: DisplayUser[];
     onRemoveFriend: (friendId: number) => Promise<void>;
     onBlockUser: (userId: number) => Promise<void>;
     searchTerm?: string;
@@ -147,10 +147,6 @@ const FriendsList: React.FC<FriendsListProps> = ({
                             <div className="flex items-center gap-1">
                                 <Mail className="h-3 w-3" />
                                 <span>Aktywny</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <Calendar className="h-3 w-3" />
-                                <span>Od {formatDate(friend.createdAt)}</span>
                             </div>
                         </div>
 
