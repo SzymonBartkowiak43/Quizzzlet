@@ -386,7 +386,11 @@ public class SocialFacade {
         switch (action.toLowerCase()) {
             case "get_messages":
                 List<PrivateMessage> messages = messageService.getConversation(userId, otherUserId);
-                result.put("messages", messages);
+                // KONWERSJA NA DTO!
+                List<PrivateMessageDto> messageDtos = messages.stream()
+                        .map(SocialFacade::toDto)
+                        .toList();
+                result.put("messages", messageDtos);
                 break;
 
             case "mark_as_read":
@@ -515,5 +519,15 @@ public class SocialFacade {
         result.put("errorCount", errors.size());
 
         return result;
+    }
+
+    private static PrivateMessageDto toDto(PrivateMessage msg) {
+        return new PrivateMessageDto(
+                msg.getId(),
+                msg.getSender().getId(),
+                msg.getRecipient().getId(),
+                msg.getContent(),
+                msg.getCreatedAt().toString()
+        );
     }
 }

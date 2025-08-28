@@ -4,25 +4,27 @@ import './FriendsList.css';
 
 interface FriendsListProps {
     friends: DisplayUser[];
-    onRemoveFriend: (friendId: number) => Promise<void>;
-    onBlockUser: (userId: number) => Promise<void>;
+    onRemoveFriend: (friendId: number) => void;
+    onBlockUser: (userId: number) => void;
+    onOpenChat: (friend: DisplayUser) => void;
     searchTerm?: string;
+    processingId?: number | null;
 }
 
 const FriendsList: React.FC<FriendsListProps> = ({
                                                      friends,
                                                      onRemoveFriend,
                                                      onBlockUser,
-                                                     searchTerm
+                                                     onOpenChat,
+                                                     searchTerm,
+                                                     processingId
                                                  }) => {
     if (friends.length === 0) {
         return (
             <div className="friendslist-empty">
-                <span>
-                    {searchTerm
-                        ? <>Brak wyników dla "<b>{searchTerm}</b>"</>
-                        : "Nie masz jeszcze przyjaciół."}
-                </span>
+                {searchTerm
+                    ? <>Brak wyników dla "<b>{searchTerm}</b>"</>
+                    : "Nie masz jeszcze przyjaciół."}
             </div>
         );
     }
@@ -40,14 +42,22 @@ const FriendsList: React.FC<FriendsListProps> = ({
                     </div>
                     <div className="friendslist-actions">
                         <button
+                            className="friendslist-btn chat"
+                            onClick={() => onOpenChat(friend)}
+                        >
+                            Chat
+                        </button>
+                        <button
                             className="friendslist-btn remove"
                             onClick={() => onRemoveFriend(friend.id)}
+                            disabled={processingId === friend.id}
                         >
                             Usuń
                         </button>
                         <button
                             className="friendslist-btn block"
                             onClick={() => onBlockUser(friend.id)}
+                            disabled={processingId === friend.id}
                         >
                             Zablokuj
                         </button>

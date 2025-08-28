@@ -15,7 +15,6 @@ import {
     User
 } from 'lucide-react';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
-import MyGroupsList from './MyGroupsList';
 import GroupDetails from './GroupDetails';
 import CreateGroupModal from './CreateGroupModal';
 import JoinGroupModal from './JoinGroupModal';
@@ -267,16 +266,6 @@ const GroupsPage: React.FC = () => {
                         </div>
 
                         {/* Tab Content */}
-                        <div className="p-6">
-                            <MyGroupsList
-                                groups={searchTerm ? filteredGroups : currentGroups}
-                                searchTerm={searchTerm}
-                                onGroupSelect={handleGroupSelect}
-                                onLeaveGroup={leaveGroup}
-                                onDeleteGroup={leaveGroup}
-                                currentUser="SzymonBartkowiak43"
-                            />
-                        </div>
                     </div>
                 </>
             )}

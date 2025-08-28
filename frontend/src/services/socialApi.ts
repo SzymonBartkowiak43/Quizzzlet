@@ -126,10 +126,6 @@ export const getPrivateMessages = async (conversationId: number): Promise<Privat
     return [];
 };
 
-export const sendPrivateMessage = async (receiverId: number, content: string): Promise<PrivateMessage> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/messages/private
-    throw new Error('Messages not implemented yet');
-};
 
 export const getGroupMessages = async (groupId: number): Promise<GroupMessage[]> => {
     // TODO: Zaimplementuj gdy backend będzie miał /api/messages/group/{id}
@@ -146,6 +142,17 @@ export const getSocialStats = async (): Promise<any> => {
     const response = await api.get('/api/social/stats');
     return response.data;
 };
+
+export const getConversation = async (userId: number) => {
+    const res = await api.get(`/api/messages/private/conversation/${userId}`);
+    return res.data;
+};
+
+export const sendPrivateMessage = async (recipientId: number, content: string) => {
+    const res = await api.post(`/api/messages/private`, { recipientId, content });
+    return res.data;
+};
+
 
 // Export all functions
 export default {
@@ -166,5 +173,6 @@ export default {
     getPrivateMessages,
     sendPrivateMessage,
     getGroupMessages,
-    sendGroupMessage
+    sendGroupMessage,
+    getConversation
 };

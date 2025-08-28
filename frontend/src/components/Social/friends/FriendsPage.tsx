@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useFriendships } from '../../../hooks/userFriendships';
 import FriendsList from './FriendsList';
+import ChatPanel from './ChatPanel';
 import './FriendsPage.css';
 
 const FriendsPage: React.FC = () => {
     const { friendshipInfo, loading, error, removeFriend, blockUser } = useFriendships();
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeChatFriend, setActiveChatFriend] = useState<null | {id: number, name: string, email: string}>(null);
 
     if (loading) return (
         <div className="friends-loader">
@@ -32,11 +34,13 @@ const FriendsPage: React.FC = () => {
     return (
         <div className="friends-page">
             <div className="friends-header">
-                <h2>Twoi przyjaciele <span className="friends-count">({friendshipInfo.friendsCount})</span></h2>
+                <h2>
+                    Twoi przyjaciele <span className="friends-count">({friendshipInfo.friendsCount})</span>
+                </h2>
                 <input
                     type="text"
                     className="friends-search"
-                    placeholder="Szukaj imienia lub emailaAAAAAAAAA..."
+                    placeholder="Szukaj imienia lub emaila..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
                 />
@@ -45,8 +49,15 @@ const FriendsPage: React.FC = () => {
                 friends={searchTerm ? filteredFriends : friendshipInfo.friends}
                 onRemoveFriend={removeFriend}
                 onBlockUser={blockUser}
+                onOpenChat={setActiveChatFriend}
                 searchTerm={searchTerm}
             />
+            {activeChatFriend &&
+                <ChatPanel
+                    friend={activeChatFriend}
+                    onClose={() => setActiveChatFriend(null)}
+                />
+            }
         </div>
     );
 };

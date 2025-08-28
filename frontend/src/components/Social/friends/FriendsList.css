@@ -89,3 +89,8 @@
 .friendslist-btn.block:hover {
     background: #eab308;
 }
+
+.friendslist-btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

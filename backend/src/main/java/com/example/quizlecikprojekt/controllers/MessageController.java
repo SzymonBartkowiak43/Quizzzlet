@@ -7,6 +7,7 @@ import com.example.quizlecikprojekt.controllers.dto.message.ShareWordSetToGroupR
 import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
 import com.example.quizlecikprojekt.domain.friendship.entity.GroupMessage;
 import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessage;
+import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,38 +36,15 @@ public class MessageController {
     public ResponseEntity<Map<String, Object>> sendPrivateMessage(
             @Valid @RequestBody SendPrivateMessageRequest messageRequest,
             Authentication authentication) {
-
         PrivateMessage message = socialFacade.sendPrivateMessage(
                 authentication.getName(),
                 messageRequest.getRecipientId(),
                 messageRequest.getContent()
         );
-
         Map<String, Object> response = Map.of(
                 "message", "Wiadomość została wysłana",
-                "sentMessage", message
+                "sentMessage", toDto(message)
         );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @PostMapping("/private/share-wordset")
-    public ResponseEntity<Map<String, Object>> shareWordSetPrivately(
-            @Valid @RequestBody ShareWordSetRequest shareRequest,
-            Authentication authentication) {
-
-        PrivateMessage message = socialFacade.shareWordSetPrivately(
-                authentication.getName(),
-                shareRequest.getRecipientId(),
-                shareRequest.getMessage(),
-                shareRequest.getWordSetId()
-        );
-
-        Map<String, Object> response = Map.of(
-                "message", "Zestaw słówek został udostępniony",
-                "sentMessage", message
-        );
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -80,29 +58,6 @@ public class MessageController {
         );
 
         return ResponseEntity.ok(result);
-    }
-
-    @PostMapping("/private/conversation/{userId}/mark-read")
-    public ResponseEntity<Map<String, Object>> markMessagesAsRead(
-            @PathVariable Long userId,
-            Authentication authentication) {
-
-        Map<String, Object> result = socialFacade.manageConversation(
-                authentication.getName(), userId, "mark_as_read", Map.of()
-        );
-
-        return ResponseEntity.ok(result);
-    }
-
-    @DeleteMapping("/private/{messageId}")
-    public ResponseEntity<Map<String, String>> deletePrivateMessage(
-            @PathVariable Long messageId,
-            Authentication authentication) {
-
-        Map<String, Object> params = Map.of("messageId", messageId);
-        socialFacade.manageConversation(authentication.getName(), null, "delete_message", params);
-
-        return ResponseEntity.ok(Map.of("message", "Wiadomość została usunięta"));
     }
 
     @PostMapping("/group")
@@ -124,25 +79,6 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/group/share-wordset")
-    public ResponseEntity<Map<String, Object>> shareWordSetInGroup(
-            @Valid @RequestBody ShareWordSetToGroupRequest shareRequest,
-            Authentication authentication) {
-
-        GroupMessage message = socialFacade.shareWordSetInGroup(
-                authentication.getName(),
-                shareRequest.getGroupId(),
-                shareRequest.getMessage(),
-                shareRequest.getWordSetId()
-        );
-
-        Map<String, Object> response = Map.of(
-                "message", "Zestaw słówek został udostępniony w grupie",
-                "sentMessage", message
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
 
     @DeleteMapping("/group/{messageId}")
     public ResponseEntity<Map<String, String>> deleteGroupMessage(
@@ -153,5 +89,15 @@ public class MessageController {
         // socialFacade.deleteGroupMessage(authentication.getName(), messageId);
 
         return ResponseEntity.ok(Map.of("message", "Wiadomość została usunięta"));
+    }
+
+    public PrivateMessageDto toDto(PrivateMessage message) {
+        return new PrivateMessageDto(
+                message.getId(),
+                message.getSender().getId(),
+                message.getRecipient().getId(),
+                message.getContent(),
+                message.getCreatedAt().toString()
+        );
     }
 }
