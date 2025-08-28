@@ -53,20 +53,6 @@ export const getMyFriendships = async (): Promise<FriendshipInfo> => {
     return response.data;
 };
 
-export const sendFriendRequest = async (receiverEmail: string): Promise<Friendship> => {
-    const response = await api.post('/api/friendships/request', { receiverEmail });
-    return response.data;
-};
-
-export const acceptFriendRequest = async (friendshipId: number): Promise<Friendship> => {
-    const response = await api.put(`/api/friendships/${friendshipId}/accept`);
-    return response.data;
-};
-
-export const declineFriendRequest = async (friendshipId: number): Promise<void> => {
-    await api.put(`/api/friendships/${friendshipId}/decline`);
-};
-
 export const removeFriend = async (friendshipId: number): Promise<void> => {
     await api.delete(`/api/friendships/${friendshipId}`);
 };
@@ -153,6 +139,35 @@ export const sendPrivateMessage = async (recipientId: number, content: string) =
     return res.data;
 };
 
+export const getAllUsers = async (): Promise<User[]> => {
+    const response = await api.get('/api/users');
+    return response.data;
+};
+
+export const sendFriendRequest = async (addresseeId: number) => {
+    const response = await api.post('/api/friendships/send-request', { addresseeId });
+    return response.data;
+};
+
+// Akceptowanie zaproszenia
+export const acceptFriendRequest = async (friendshipId: number) => {
+    const response = await api.post(`/api/friendships/${friendshipId}/accept`);
+    return response.data;
+};
+
+// Odrzucanie zaproszenia
+export const declineFriendRequest = async (friendshipId: number) => {
+    const response = await api.post(`/api/friendships/${friendshipId}/decline`);
+    return response.data;
+};
+
+// Sprawdzanie statusu znajomości (np. czy już wysłałeś zaproszenie, czy już jesteście znajomymi)
+export const checkFriendshipStatus = async (userId: number) => {
+    const response = await api.get(`/api/friendships/status/${userId}`);
+    return response.data;
+};
+
+
 
 // Export all functions
 export default {
@@ -174,5 +189,7 @@ export default {
     sendPrivateMessage,
     getGroupMessages,
     sendGroupMessage,
-    getConversation
+    getConversation,
+    getAllUsers,
+    checkFriendshipStatus
 };

@@ -79,18 +79,6 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
-    @DeleteMapping("/group/{messageId}")
-    public ResponseEntity<Map<String, String>> deleteGroupMessage(
-            @PathVariable Long messageId,
-            Authentication authentication) {
-
-        // Tu trzeba rozszerzyć facade
-        // socialFacade.deleteGroupMessage(authentication.getName(), messageId);
-
-        return ResponseEntity.ok(Map.of("message", "Wiadomość została usunięta"));
-    }
-
     public PrivateMessageDto toDto(PrivateMessage message) {
         return new PrivateMessageDto(
                 message.getId(),

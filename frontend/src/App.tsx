@@ -23,6 +23,7 @@ import SocialDashboard from './components/Social/dashboard/SocialDashboard';
 import FriendsPage from './components/Social/friends/FriendsPage';
 import MessagesPage from './components/Social/messages/MessagesPage';
 import GroupsPage from './components/Social/groups/GroupsPage';
+import CommunityPage from './components/Social/friends/CommunityPage';
 
 import './App.css';
 
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/social/friends/*" element={<FriendsPage />} />
                 <Route path="/social/messages/*" element={<MessagesPage />} />
                 <Route path="/social/groups/*" element={<GroupsPage />} />
+                <Route path="/social/community" element={<CommunityPage />} />
 
                 {/* Catch all - redirect to home */}
                 <Route path="*" element={<Navigate to="/" replace />} />

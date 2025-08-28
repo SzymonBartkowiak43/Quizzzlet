@@ -57,7 +57,7 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
     const handleSendRequest = async (userEmail: string, userId: number) => {
         setSending(userId);
         try {
-            await sendFriendRequest(userEmail);
+            await sendFriendRequest(userId);
             setSentRequests(prev => new Set(prev).add(userId));
         } catch (error) {
             console.error('Failed to send friend request:', error);
