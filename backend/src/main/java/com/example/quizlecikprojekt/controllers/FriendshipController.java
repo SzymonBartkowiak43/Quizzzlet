@@ -16,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/friendships")
-@PreAuthorize("hasRole('USER')")
 public class FriendshipController {
 
     @Autowired

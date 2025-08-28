@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useSocialDashboard } from '../../../hooks/social/useSocialDashboard';
-import { useFriendships } from '../../../hooks/social/userFriendships';
-import { useGroups } from '../../../hooks/social/useGroups';
-import { useMessages } from '../../../hooks/social/useMessages';
+import { useSocialDashboard } from '../../../hooks/useSocialDashboard';
+import { useFriendships } from '../../../hooks/userFriendships';
+import { useGroups } from '../../../hooks/useGroups';
+import { useMessages } from '../../../hooks/useMessages';
 import {
     Users,
     UserPlus,
@@ -148,11 +148,11 @@ const SocialDashboard: React.FC = () => {
                     />
 
                     {/* Recent Activity */}
-                    <RecentActivity
-                        friendshipInfo={dashboard.friendshipInfo}
-                        groupInfo={dashboard.groupInfo}
-                        messagingInfo={dashboard.messagingInfo}
-                    />
+                    {/*<RecentActivity*/}
+                    {/*    friendshipInfo={dashboard.friendshipInfo}*/}
+                    {/*    groupInfo={dashboard.groupInfo}*/}
+                    {/*    messagingInfo={dashboard.messagingInfo}*/}
+                    {/*/>*/}
                 </div>
 
                 {/* Sidebar */}
@@ -167,33 +167,33 @@ const SocialDashboard: React.FC = () => {
                     )}
 
                     {/* Suggested Friends */}
-                    {dashboard.friendshipInfo.suggestedFriends.length > 0 && (
-                        <div className="bg-white rounded-lg shadow p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Sugerowani przyjaciele
-                            </h3>
-                            <div className="space-y-3">
-                                {dashboard.friendshipInfo.suggestedFriends.slice(0, 5).map(user => (
-                                    <div key={user.id} className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-gray-600">
-                          {user.name.charAt(0).toUpperCase()}
-                        </span>
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-gray-900">{user.name}</p>
-                                                <p className="text-sm text-gray-500">{user.email}</p>
-                                            </div>
-                                        </div>
-                                        <button className="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
-                                            Dodaj
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    {/*{dashboard.friendshipInfo.suggestedFriends?.length > 0 && (*/}
+                    {/*    <div className="bg-white rounded-lg shadow p-6">*/}
+                    {/*        <h3 className="text-lg font-semibold text-gray-900 mb-4">*/}
+                    {/*            Sugerowani przyjaciele*/}
+                    {/*        </h3>*/}
+                    {/*        <div className="space-y-3">*/}
+                    {/*            {dashboard.friendshipInfo.suggestedFriends .slice(0, 5).map(user => (*/}
+                    {/*                <div key={user.id} className="flex items-center justify-between">*/}
+                    {/*                    <div className="flex items-center gap-3">*/}
+                    {/*                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">*/}
+                    {/*    <span className="text-sm font-medium text-gray-600">*/}
+                    {/*      {user.name.charAt(0).toUpperCase()}*/}
+                    {/*    </span>*/}
+                    {/*                        </div>*/}
+                    {/*                        <div>*/}
+                    {/*                            <p className="font-medium text-gray-900">{user.name}</p>*/}
+                    {/*                            <p className="text-sm text-gray-500">{user.email}</p>*/}
+                    {/*                        </div>*/}
+                    {/*                    </div>*/}
+                    {/*                    <button className="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">*/}
+                    {/*                        Dodaj*/}
+                    {/*                    </button>*/}
+                    {/*                </div>*/}
+                    {/*            ))}*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     {/* Active Groups Preview */}
                     <div className="bg-white rounded-lg shadow p-6">

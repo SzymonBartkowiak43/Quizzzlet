@@ -36,11 +36,9 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     List<Friendship> findSentFriendRequestsByUser(@Param("userId") Long userId);
 
     // Znajdź przyjaciół użytkownika
-    @Query("SELECT CASE " +
-            "WHEN f.requester.id = :userId THEN f.addressee " +
-            "ELSE f.requester END " +
-            "FROM Friendship f WHERE " +
-            "(f.requester.id = :userId OR f.addressee.id = :userId) AND f.status = 'ACCEPTED'")
+    @Query("SELECT u FROM User u WHERE u.id IN (" +
+            "SELECT CASE WHEN f.requester.id = :userId THEN f.addressee.id ELSE f.requester.id END " +
+            "FROM Friendship f WHERE (f.requester.id = :userId OR f.addressee.id = :userId) AND f.status = 'ACCEPTED')")
     List<User> findUserFriends(@Param("userId") Long userId);
 
     // Sprawdź czy użytkownicy są przyjaciółmi
@@ -61,4 +59,10 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             "((f3.requester.id = :userId AND f3.addressee.id = u.id) OR " +
             "(f3.requester.id = u.id AND f3.addressee.id = :userId)))")
     List<User> findSuggestedFriends(@Param("userId") Long userId);
+
+    @Query("SELECT f.addressee FROM Friendship f WHERE f.requester.id = :userId AND f.status = 'ACCEPTED'")
+    List<User> findRequestedFriends(@Param("userId") Long userId);
+
+    @Query("SELECT f.requester FROM Friendship f WHERE f.addressee.id = :userId AND f.status = 'ACCEPTED'")
+    List<User> findAddedFriends(@Param("userId") Long userId);
 }

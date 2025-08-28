@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useMessages } from '../../../hooks/social/useMessages';
-import { useFriendships } from '../../../hooks/social/userFriendships';
-import { useGroups } from '../../../hooks/social/useGroups';
+import { useMessages } from '../../../hooks/useMessages';
+import { useFriendships } from '../../../hooks/userFriendships';
+import { useGroups } from '../../../hooks/useGroups';
 import {
     MessageCircle,
     Users,
@@ -69,7 +69,7 @@ const MessagesPage: React.FC = () => {
         });
         setViewMode('chat');
         await getConversation(userId);
-        await markMessagesAsRead(userId);
+        // await markMessagesAsRead(userId);
     };
 
     const openGroupChat = (groupId: number, groupName: string) => {
@@ -207,15 +207,15 @@ const MessagesPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Conversations List */}
-                    <ConversationsList
-                        messagingInfo={messagingInfo}
-                        friendshipInfo={friendshipInfo}
-                        groupInfo={groupInfo}
-                        searchTerm={searchTerm}
-                        onOpenPrivateChat={openPrivateChat}
-                        onOpenGroupChat={openGroupChat}
-                    />
+                     Conversations List
+                    {/*<ConversationsList*/}
+                    {/*    messagingInfo={messagingInfo}*/}
+                    {/*    friendshipInfo={friendshipInfo}*/}
+                    {/*    groupInfo={groupInfo}*/}
+                    {/*    searchTerm={searchTerm}*/}
+                    {/*    onOpenPrivateChat={openPrivateChat}*/}
+                    {/*    onOpenGroupChat={openGroupChat}*/}
+                    {/*/>*/}
                 </>
             )}
 
@@ -228,7 +228,7 @@ const MessagesPage: React.FC = () => {
                             messages={conversations[activeChat.id] || []}
                             onSendMessage={sendPrivateMessage}
                             onBack={backToConversations}
-                            onMarkAsRead={() => markMessagesAsRead(activeChat.id)}
+                            // onMarkAsRead={() => markMessagesAsRead(activeChat?.id)}
                         />
                     ) : (
                         <GroupChatWindow
@@ -244,7 +244,7 @@ const MessagesPage: React.FC = () => {
             {/* Modals */}
             {showNewMessage && (
                 <NewMessageModal
-                    friends={friendshipInfo?.friends || []}
+                    friends={[] || friendshipInfo?.friends}
                     groups={groupInfo?.memberGroups || []}
                     onClose={() => setShowNewMessage(false)}
                     onSendPrivate={async (userId, message) => {
@@ -260,7 +260,7 @@ const MessagesPage: React.FC = () => {
 
             {showShareWordSet && (
                 <ShareWordSetModal
-                    friends={friendshipInfo?.friends || []}
+                    friends={[] || friendshipInfo?.friends}
                     groups={groupInfo?.memberGroups || []}
                     onClose={() => setShowShareWordSet(false)}
                     onSharePrivate={shareWordSetPrivately}

@@ -1,9 +1,9 @@
 import React from 'react';
-import { FriendshipInfo, GroupInfo, MessagingInfo } from '../../../types/social';
+import { Friendship, GroupInfo, MessagingInfo } from '../../../types/social';
 import { Users, MessageCircle, Calendar, Clock } from 'lucide-react';
 
 interface RecentActivityProps {
-    friendshipInfo: FriendshipInfo;
+    friendshipInfo: Friendship;
     groupInfo: GroupInfo;
     messagingInfo: MessagingInfo;
 }
@@ -17,7 +17,7 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
     const activities = [
         {
             type: 'friend',
-            text: `Zaproszenie do przyjaźni od ${friendshipInfo.pendingRequests[0]?.requester?.name || 'użytkownika'}`,
+            text: `Zaproszenie do przyjaźni od ${friendshipInfo.requester?.name || 'użytkownika'}`,
             time: '2 godziny temu',
             icon: Users,
             color: 'text-blue-600 bg-blue-50'
@@ -38,7 +38,7 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
         }
     ].filter(activity => {
         // Filter out activities without data
-        if (activity.type === 'friend' && friendshipInfo.pendingRequests.length === 0) return false;
+        if (activity.type === 'friend' && friendshipInfo.requester.id === 0) return false;
         if (activity.type === 'group' && groupInfo.memberGroups.length === 0) return false;
         if (activity.type === 'message' && messagingInfo.unreadMessages.length === 0) return false;
         return true;

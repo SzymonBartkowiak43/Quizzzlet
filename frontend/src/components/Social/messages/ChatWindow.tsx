@@ -19,7 +19,7 @@ interface ChatWindowProps {
     messages: PrivateMessage[];
     onSendMessage: (userId: number, content: string) => Promise<void>;
     onBack: () => void;
-    onMarkAsRead: () => void;
+    // onMarkAsRead: () => void;
 }
 
 const ChatWindow: React.FC<ChatWindowProps> = ({
@@ -28,7 +28,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                                                    messages,
                                                    onSendMessage,
                                                    onBack,
-                                                   onMarkAsRead
+                                                   // onMarkAsRead
                                                }) => {
     const [newMessage, setNewMessage] = useState('');
     const [sending, setSending] = useState(false);
@@ -43,9 +43,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         scrollToBottom();
     }, [messages]);
 
-    useEffect(() => {
-        onMarkAsRead();
-    }, [onMarkAsRead]);
+    // useEffect(() => {
+    //     onMarkAsRead();
+    // }, [onMarkAsRead]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();

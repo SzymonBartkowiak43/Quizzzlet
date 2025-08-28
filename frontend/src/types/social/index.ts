@@ -104,14 +104,15 @@ export interface FriendRequestDto {
 }
 
 // ========== RESPONSE TYPES ==========
-export interface FriendshipInfo {
-    friends: User[];
-    friendsCount: number;
+interface FriendshipInfo {
+    activeFriendships: Friendship[];
     pendingRequests: Friendship[];
-    pendingRequestsCount: number;
     sentRequests: Friendship[];
+    allFriendships: Friendship[];
+    friends: User[];
     sentRequestsCount: number;
-    suggestedFriends: User[];
+    friendsCount?: number; // Mark as optional if not always present
+    suggestedFriends?: User[]; // Mark as optional if not always present
 }
 
 export interface GroupInfo {
@@ -151,4 +152,8 @@ export interface ApiResponse<T> {
     message?: string;
     data?: T;
     [key: string]: any;
+}
+
+export interface JoinGroupRequest {
+    inviteCode: string;
 }

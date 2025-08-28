@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.domain.friendship.service;
 
+import com.example.quizlecikprojekt.domain.friendship.entity.FriendDto;
 import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
 import com.example.quizlecikprojekt.domain.friendship.repository.FriendshipRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -123,8 +125,12 @@ public class FriendshipService {
     }
 
     // Pobierz przyjaciół użytkownika
-    public List<User> getUserFriends(Long userId) {
-        return friendshipRepository.findUserFriends(userId);
+    public List<FriendDto> getUserFriends(Long userId) {
+        List<User> users = friendshipRepository.findRequestedFriends(userId);
+        users.addAll(friendshipRepository.findAddedFriends(userId));
+        return users.stream()
+                .map(u -> new FriendDto(u.getId(), u.getEmail(), u.getName()))
+                .collect(Collectors.toList());
     }
 
     // Pobierz oczekujące zaproszenia

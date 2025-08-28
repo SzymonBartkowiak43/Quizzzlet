@@ -101,7 +101,7 @@ public class SocialFacade {
         Map<String, Object> friendshipInfo = new HashMap<>();
 
         // Przyjaciele
-        List<User> friends = friendshipService.getUserFriends(userId);
+        List<FriendDto> friends = friendshipService.getUserFriends(userId);
         friendshipInfo.put("friends", friends);
         friendshipInfo.put("friendsCount", friends.size());
 

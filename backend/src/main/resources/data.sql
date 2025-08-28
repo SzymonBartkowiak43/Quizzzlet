@@ -341,17 +341,30 @@ WHERE NOT EXISTS (
       AND addressee_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
 );
 
--- Admin ma wysłane zaproszenie do Anny (pending)
+-- Admin i Anna są przyjaciółmi
 INSERT INTO friendships (requester_id, addressee_id, status, created_at)
 SELECT
     (SELECT id FROM users WHERE email = 'admin@test.pl'),
     (SELECT id FROM users WHERE email = 'anna@test.pl'),
-    'PENDING',
+    'ACCEPTED',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 WHERE NOT EXISTS (
     SELECT 1 FROM friendships
     WHERE requester_id = (SELECT id FROM users WHERE email = 'admin@test.pl')
       AND addressee_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
+);
+
+-- Admin i Piotr są przyjaciółmi
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'admin@test.pl'),
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    'ACCEPTED',
+    CURRENT_TIMESTAMP - INTERVAL '1 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM friendships
+    WHERE requester_id = (SELECT id FROM users WHERE email = 'admin@test.pl')
+      AND addressee_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
 );
 
 -- ===== GRUPY NAUKI =====

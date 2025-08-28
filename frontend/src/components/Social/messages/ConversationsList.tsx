@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessagingInfo, FriendshipInfo, GroupInfo } from '../../../types/social';
+import { MessagingInfo, Friendship, GroupInfo } from '../../../types/social';
 import {
     MessageCircle,
     Users,
@@ -11,8 +11,8 @@ import {
 
 interface ConversationsListProps {
     messagingInfo: MessagingInfo;
-    friendshipInfo: FriendshipInfo | null;
-    groupInfo: GroupInfo | null;
+    friendshipInfo: Friendship;
+    groupInfo: any;
     searchTerm: string;
     onOpenPrivateChat: (userId: number, userName: string) => void;
     onOpenGroupChat: (groupId: number, groupName: string) => void;

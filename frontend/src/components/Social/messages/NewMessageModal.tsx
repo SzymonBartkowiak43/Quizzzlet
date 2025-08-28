@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { User, StudyGroup } from '../../../types/social';
+import { User, StudyGroup} from '../../../types/social';
 import { X, Send, Users, Hash, Search } from 'lucide-react';
 
 interface NewMessageModalProps {
     friends: User[];
-    groups: StudyGroup[];
+    groups: any[];
     onClose: () => void;
     onSendPrivate: (userId: number, message: string) => Promise<void>;
     onSendGroup: (groupId: number, message: string) => Promise<void>;

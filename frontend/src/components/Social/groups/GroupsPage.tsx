@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useGroups } from '../../../hooks/social/useGroups';
-import { useFriendships } from '../../../hooks/social/userFriendships';
+import { useGroups } from '../../../hooks/useGroups';
+import { useFriendships } from '../../../hooks/userFriendships';
 import {
     Users,
     Plus,
@@ -31,16 +31,16 @@ const GroupsPage: React.FC = () => {
         loading,
         error,
         createGroup,
-        joinGroup,
+        // joinGroup,
         joinByInviteCode,
         leaveGroup,
         updateGroup,
-        deleteGroup,
+        // deleteGroup,
         getGroupDetails,
         regenerateInviteCode,
-        removeMember,
-        changeRole,
-        searchGroups,
+        // removeMember,
+        // changeRole,
+        // searchGroups,
         refreshGroups
     } = useGroups();
 
@@ -273,7 +273,7 @@ const GroupsPage: React.FC = () => {
                                 searchTerm={searchTerm}
                                 onGroupSelect={handleGroupSelect}
                                 onLeaveGroup={leaveGroup}
-                                onDeleteGroup={deleteGroup}
+                                onDeleteGroup={leaveGroup}
                                 currentUser="SzymonBartkowiak43"
                             />
                         </div>
@@ -281,43 +281,43 @@ const GroupsPage: React.FC = () => {
                 </>
             )}
 
-            {viewMode === 'details' && selectedGroup && (
-                <GroupDetails
-                    group={selectedGroup}
-                    friends={friendshipInfo?.friends || []}
-                    onBack={backToList}
-                    onUpdateGroup={updateGroup}
-                    onDeleteGroup={deleteGroup}
-                    onLeaveGroup={leaveGroup}
-                    onRegenerateCode={regenerateInviteCode}
-                    onRemoveMember={removeMember}
-                    onChangeRole={changeRole}
-                    currentUser="SzymonBartkowiak43"
-                />
-            )}
+            {/*{viewMode === 'details' && selectedGroup && (*/}
+            {/*    <GroupDetails*/}
+            {/*        group={selectedGroup}*/}
+            {/*        friends={friendshipInfo?.friends || []}*/}
+            {/*        onBack={backToList}*/}
+            {/*        onUpdateGroup={updateGroup}*/}
+            {/*        onDeleteGroup={deleteGroup}*/}
+            {/*        onLeaveGroup={leaveGroup}*/}
+            {/*        onRegenerateCode={regenerateInviteCode}*/}
+            {/*        onRemoveMember={removeMember}*/}
+            {/*        onChangeRole={changeRole}*/}
+            {/*        currentUser="SzymonBartkowiak43"*/}
+            {/*    />*/}
+            {/*)}*/}
 
-            {/* Modals */}
-            {showCreateModal && (
-                <CreateGroupModal
-                    onClose={() => setShowCreateModal(false)}
-                    onCreate={createGroup}
-                />
-            )}
+            {/*/!* Modals *!/*/}
+            {/*{showCreateModal && (*/}
+            {/*    <CreateGroupModal*/}
+            {/*        onClose={() => setShowCreateModal(false)}*/}
+            {/*        onCreate={createGroup}*/}
+            {/*    />*/}
+            {/*)}*/}
 
-            {showJoinModal && (
-                <JoinGroupModal
-                    onClose={() => setShowJoinModal(false)}
-                    onJoinByCode={joinByInviteCode}
-                />
-            )}
+            {/*{showJoinModal && (*/}
+            {/*    <JoinGroupModal*/}
+            {/*        onClose={() => setShowJoinModal(false)}*/}
+            {/*        onJoinByCode={joinByInviteCode}*/}
+            {/*    />*/}
+            {/*)}*/}
 
-            {showSearch && (
-                <GroupSearch
-                    onClose={() => setShowSearch(false)}
-                    onJoinGroup={joinGroup}
-                    onSearch={searchGroups}
-                />
-            )}
+            {/*{showSearch && (*/}
+            {/*    <GroupSearch*/}
+            {/*        onClose={() => setShowSearch(false)}*/}
+            {/*        onJoinGroup={joinGroup}*/}
+            {/*        onSearch={searchGroups}*/}
+            {/*    />*/}
+            {/*)}*/}
         </div>
     );
 };
