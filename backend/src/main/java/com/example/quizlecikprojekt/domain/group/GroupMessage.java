@@ -33,6 +33,4 @@ public class GroupMessage {
         this.content = content;
         this.createdAt = LocalDateTime.now();
     }
-
-    // Gettery, settery
 }

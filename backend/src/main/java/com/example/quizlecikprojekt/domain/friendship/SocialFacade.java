@@ -3,7 +3,6 @@ package com.example.quizlecikprojekt.domain.friendship;
 import com.example.quizlecikprojekt.controllers.dto.UserDto;
 import com.example.quizlecikprojekt.domain.friendship.entity.*;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
-import com.example.quizlecikprojekt.domain.friendship.enums.GroupRole;
 import com.example.quizlecikprojekt.domain.friendship.service.FriendshipService;
 import com.example.quizlecikprojekt.domain.friendship.service.MessageService;
 import com.example.quizlecikprojekt.domain.group.*;
@@ -11,7 +10,7 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.exception.InvalidOperationException;
 import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,29 +19,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@AllArgsConstructor
 public class SocialFacade {
 
-    @Autowired
-    private FriendshipService friendshipService;
+    private final FriendshipService friendshipService;
 
-    @Autowired
-    private MessageService messageService;
+    private final MessageService messageService;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
-    @Autowired
-    private GroupMessageRepository groupMessageRepository;
+    private final GroupMessageRepository groupMessageRepository;
 
-    // ========== FRIENDSHIP OPERATIONS ==========
-
-    /**
-     * Wyślij zaproszenie do przyjaźni
-     */
     public FriendshipDto sendFriendRequest(String userEmail, Long addresseeId) {
         Long requesterId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -51,9 +40,6 @@ public class SocialFacade {
         return friendshipService.sendFriendRequest(requesterId, addresseeId);
     }
 
-    /**
-     * Zaakceptuj zaproszenie do przyjaźni
-     */
     public Friendship acceptFriendRequest(String userEmail, Long friendshipId) {
         Long userId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -61,9 +47,6 @@ public class SocialFacade {
         return friendshipService.acceptFriendRequest(userId, friendshipId);
     }
 
-    /**
-     * Odrzuć zaproszenie do przyjaźni
-     */
     public void declineFriendRequest(String userEmail, Long friendshipId) {
         Long userId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -71,9 +54,6 @@ public class SocialFacade {
         friendshipService.declineFriendRequest(userId, friendshipId);
     }
 
-    /**
-     * Usuń przyjaźń
-     */
     public void removeFriend(String userEmail, Long friendId) {
         Long userId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -81,9 +61,6 @@ public class SocialFacade {
         friendshipService.removeFriend(userId, friendId);
     }
 
-    /**
-     * Zablokuj użytkownika
-     */
     public void blockUser(String userEmail, Long userToBlockId) {
         Long userId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -91,9 +68,6 @@ public class SocialFacade {
         friendshipService.blockUser(userId, userToBlockId);
     }
 
-    /**
-     * Pobierz kompletne informacje o przyjaciołach użytkownika
-     */
     public Map<String, Object> getUserFriendshipInfo(String userName) {
         Long userId = userRepository.getUserByEmail(userName)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -101,19 +75,16 @@ public class SocialFacade {
 
         Map<String, Object> friendshipInfo = new HashMap<>();
 
-        // Przyjaciele
         List<FriendDto> friends = friendshipService.getUserFriends(userId);
         friendshipInfo.put("friends", friends);
         friendshipInfo.put("friendsCount", friends.size());
 
-        // Oczekujące zaproszenia
         List<FriendshipDto> pendingRequests = friendshipService.getPendingFriendRequests(userId)
                 .stream()
                 .map(SocialFacade::fromEntity)
                 .collect(Collectors.toList());
         friendshipInfo.put("pendingRequests", pendingRequests);
 
-        // Wysłane zaproszenia
         List<FriendshipDto> sentRequests = friendshipService.getSentFriendRequests(userId)
                 .stream()
                 .map(SocialFacade::fromEntity)
@@ -121,7 +92,6 @@ public class SocialFacade {
         friendshipInfo.put("sentRequests", sentRequests);
         friendshipInfo.put("sentRequestsCount", sentRequests.size());
 
-        // Sugerowani znajomi
         List<UserDto> suggestedFriends = friendshipService.getSuggestedFriends(userId)
                         .stream()
                         .map(u -> new UserDto(u.getId(), u.getName(), u.getEmail()))
@@ -131,9 +101,6 @@ public class SocialFacade {
         return friendshipInfo;
     }
 
-    /**
-     * Sprawdź status przyjaźni między dwoma użytkownikami
-     */
     public Map<String, Object> checkFriendshipStatus(String userName, Long userId2) {
         Long userId1 = userRepository.getUserByEmail(userName)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -152,14 +119,6 @@ public class SocialFacade {
         return status;
     }
 
-    // ========== GROUP OPERATIONS ==========
-
-
-    // ========== MESSAGING OPERATIONS ==========
-
-    /**
-     * Wyślij prywatną wiadomość
-     */
     public PrivateMessage sendPrivateMessage(String userEmail, Long recipientId, String content) {
         Long senderId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -167,20 +126,6 @@ public class SocialFacade {
         return messageService.sendPrivateMessage(senderId, recipientId, content);
     }
 
-    /**
-     * Wyślij zestaw słówek prywatnie
-     */
-    public PrivateMessage shareWordSetPrivately(String userEmail, Long recipientId, String message, Long wordSetId) {
-        Long senderId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-        return messageService.sendWordSet(senderId, recipientId, message, wordSetId);
-    }
-
-
-    /**
-     * Pobierz kompletne informacje o wiadomościach użytkownika
-     */
     public Map<String, Object> getUserMessagingInfo(String userEmail) {
         Map<String, Object> messagingInfo = new HashMap<>();
 
@@ -188,30 +133,18 @@ public class SocialFacade {
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
                 .getId();
 
-        // Prywatne konwersacje
         List<PrivateMessage> conversations = messageService.getUserConversations(userId);
         messagingInfo.put("conversations", conversations);
         messagingInfo.put("conversationsCount", conversations.size());
 
-        // Nieprzeczytane wiadomości
         List<PrivateMessage> unreadMessages = messageService.getUnreadMessages(userId);
         messagingInfo.put("unreadMessages", unreadMessages);
         messagingInfo.put("unreadCount", messageService.getUnreadMessageCount(userId));
 
-//        // Ostatnie aktywne grupy (z wiadomościami)
-//        List<StudyGroup> userGroups = studyGroupService.getUserGroups(userId);
-//        List<StudyGroup> activeGroups = userGroups.stream()
-//                .filter(group -> !group.getMessages().isEmpty())
-//                .limit(5)
-//                .toList();
-//        messagingInfo.put("activeGroups", activeGroups);
 
         return messagingInfo;
     }
 
-    /**
-     * Zarządzanie konwersacją
-     */
     public Map<String, Object> manageConversation(String userEmail, Long otherUserId, String action, Map<String, Object> params) {
         Map<String, Object> result = new HashMap<>();
 
@@ -222,7 +155,6 @@ public class SocialFacade {
         switch (action.toLowerCase()) {
             case "get_messages":
                 List<PrivateMessage> messages = messageService.getConversation(userId, otherUserId);
-                // KONWERSJA NA DTO!
                 List<PrivateMessageDto> messageDtos = messages.stream()
                         .map(SocialFacade::toDto)
                         .toList();
@@ -242,11 +174,7 @@ public class SocialFacade {
         return result;
     }
 
-    // ========== SEARCH AND DISCOVERY ==========
 
-    /**
-     * Wyszukaj użytkowników, grupy i zawartość
-     */
     public Map<String, Object> searchSocial(String searchTerm, String requestUserName, Pageable pageable) {
         Map<String, Object> searchResults = new HashMap<>();
 
@@ -254,11 +182,7 @@ public class SocialFacade {
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
                 .getId();
 
-//        // Wyszukaj grupy
-//        Page<StudyGroup> groups = studyGroupService.searchGroups(searchTerm, requestingUserId, pageable);
-//        searchResults.put("groups", groups);
 
-        // Sugerowani znajomi (jeśli brak search term)
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             List<User> suggestedFriends = friendshipService.getSuggestedFriends(requestingUserId);
             searchResults.put("suggestedFriends", suggestedFriends);
@@ -267,9 +191,6 @@ public class SocialFacade {
         return searchResults;
     }
 
-    /**
-     * Pobierz dashboard użytkownika - kompletny przegląd aktywności społecznościowej
-     */
     private Long getUserIdFromUsername(String username) {
         return userRepository.getUserByEmail(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
@@ -280,25 +201,20 @@ public class SocialFacade {
         Long userId = getUserIdFromUsername(username);
         Map<String, Object> dashboard = new HashMap<>();
 
-        // Podstawowe informacje
         dashboard.put("friendshipInfo", getUserFriendshipInfo(username));
-//        dashboard.put("groupInfo", getUserGroupInfo(username));
         dashboard.put("messagingInfo", getUserMessagingInfo(username));
 
-        // Statystyki
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalFriends", friendshipService.getUserFriends(userId).size());
-//        stats.put("totalGroups", studyGroupService.getUserGroups(userId).size());
         stats.put("unreadMessages", messageService.getUnreadMessageCount(userId));
         stats.put("pendingFriendRequests", friendshipService.getPendingFriendRequests(userId).size());
 
         dashboard.put("stats", stats);
 
-        // Szybkie akcje
         Map<String, Object> quickActions = new HashMap<>();
         quickActions.put("canCreateGroup", true);
         quickActions.put("hasUnreadMessages", messageService.getUnreadMessageCount(userId) > 0);
-        quickActions.put("hasPendingRequests", friendshipService.getPendingFriendRequests(userId).size() > 0);
+        quickActions.put("hasPendingRequests", !friendshipService.getPendingFriendRequests(userId).isEmpty());
 
         dashboard.put("quickActions", quickActions);
 
@@ -306,11 +222,6 @@ public class SocialFacade {
     }
 
 
-    // ========== BULK OPERATIONS ==========
-
-    /**
-     * Operacje hurtowe na przyjaciołach
-     */
     @Transactional
     public Map<String, Object> bulkFriendshipOperations(String userEmail, String operation, List<Long> targetUserIds) {
         Long userId = userRepository.getUserByEmail(userEmail)
@@ -350,7 +261,6 @@ public class SocialFacade {
 
         return result;
     }
-
 
     public GroupDto createGroup(String creatorEmail, String name, List<Long> memberIds) {
         User creator = userRepository.getUserByEmail(creatorEmail)
@@ -422,11 +332,6 @@ public class SocialFacade {
                 m.getCreatedAt().toString()
         )).toList();
     }
-
-
-
-
-
 
     private static PrivateMessageDto toDto(PrivateMessage msg) {
         return new PrivateMessageDto(

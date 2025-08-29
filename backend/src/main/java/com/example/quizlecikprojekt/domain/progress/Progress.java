@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "progress")
 @Getter
+@Setter
 public class Progress {
 
   @Id
@@ -81,118 +83,5 @@ public class Progress {
     } else {
       accuracyPercentage = 0.0;
     }
-  }
-
-  // Getters and setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public WordSet getWordSet() {
-    return wordSet;
-  }
-
-  public void setWordSet(WordSet wordSet) {
-    this.wordSet = wordSet;
-  }
-
-  public LocalDate getStudyDate() {
-    return studyDate;
-  }
-
-  public void setStudyDate(LocalDate studyDate) {
-    this.studyDate = studyDate;
-  }
-
-  public Integer getTotalWordsStudied() {
-    return totalWordsStudied;
-  }
-
-  public void setTotalWordsStudied(Integer totalWordsStudied) {
-    this.totalWordsStudied = totalWordsStudied;
-  }
-
-  public Integer getCorrectAnswers() {
-    return correctAnswers;
-  }
-
-  public void setCorrectAnswers(Integer correctAnswers) {
-    this.correctAnswers = correctAnswers;
-  }
-
-  public Integer getIncorrectAnswers() {
-    return incorrectAnswers;
-  }
-
-  public void setIncorrectAnswers(Integer incorrectAnswers) {
-    this.incorrectAnswers = incorrectAnswers;
-  }
-
-  public Integer getFlashcardsCompleted() {
-    return flashcardsCompleted;
-  }
-
-  public void setFlashcardsCompleted(Integer flashcardsCompleted) {
-    this.flashcardsCompleted = flashcardsCompleted;
-  }
-
-  public Integer getQuizzesCompleted() {
-    return quizzesCompleted;
-  }
-
-  public void setQuizzesCompleted(Integer quizzesCompleted) {
-    this.quizzesCompleted = quizzesCompleted;
-  }
-
-  public Integer getStudyTimeMinutes() {
-    return studyTimeMinutes;
-  }
-
-  public void setStudyTimeMinutes(Integer studyTimeMinutes) {
-    this.studyTimeMinutes = studyTimeMinutes;
-  }
-
-  public Integer getStreakCount() {
-    return streakCount;
-  }
-
-  public void setStreakCount(Integer streakCount) {
-    this.streakCount = streakCount;
-  }
-
-  public Double getAccuracyPercentage() {
-    return accuracyPercentage;
-  }
-
-  public void setAccuracyPercentage(Double accuracyPercentage) {
-    this.accuracyPercentage = accuracyPercentage;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 }

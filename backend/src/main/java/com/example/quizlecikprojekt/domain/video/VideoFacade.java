@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class VideoFacade {
 
-  private static final Logger logger = LoggerFactory.getLogger(VideoFacade.class);
-
   private final VideoService videoService;
   private final UserService userService;
   private final RatingService ratingService;
@@ -31,9 +29,6 @@ public class VideoFacade {
   }
 
   public VideoDetailsResponse getVideoDetails(String userEmail, Long videoId) {
-    logger.info("Getting video details for video: {} by user: {}", videoId, userEmail);
-
-    User currentUser = userService.getUserByEmail(userEmail);
     Video video = findVideoById(videoId);
     User videoOwner = userService.getUserById(video.getUserId());
 
@@ -46,17 +41,14 @@ public class VideoFacade {
         video.getUrl(),
         videoOwner.getName(),
         video.getUserId(),
-        List.of(), // Comments will be handled by CommentFacade
+        List.of(),
         userRating.orElse(0),
         averageRating,
-        0 // Comment count will be handled by CommentFacade
+        0
         );
   }
 
   public VideosListResponse getAllVideos(String userEmail) {
-    logger.info("Getting all videos for user: {}", userEmail);
-
-    User currentUser = userService.getUserByEmail(userEmail);
     List<Video> allVideos = videoService.findAll();
     List<Video> topRatedVideos = videoService.findTop4BestRatedVideosLast7Days();
 
@@ -69,8 +61,6 @@ public class VideoFacade {
   }
 
   public VideosListResponse searchVideos(String userEmail, String query) {
-    logger.info("Searching videos for user: {} with query: '{}'", userEmail, query);
-
     if (query == null || query.trim().isEmpty()) {
       throw new IllegalArgumentException("Search query cannot be empty");
     }
@@ -81,13 +71,11 @@ public class VideoFacade {
 
     return new VideosListResponse(
         searchResults.stream().map(video -> mapToVideoSummary(video, videoRatings)).toList(),
-        List.of(), // Empty list for search results
+        List.of(),
         searchResults.size());
   }
 
   public VideoSummaryResponse addVideo(String userEmail, AddVideoRequest request) {
-    logger.info("Adding video by user: {} - title: '{}'", userEmail, request.title());
-
     User currentUser = userService.getUserByEmail(userEmail);
     Video createdVideo = videoService.addVideo(request.url(), request.title(), currentUser.getId());
 
@@ -95,23 +83,15 @@ public class VideoFacade {
   }
 
   public void deleteVideo(String userEmail, Long videoId) {
-    logger.info("Deleting video {} by user: {}", videoId, userEmail);
-
     User currentUser = userService.getUserByEmail(userEmail);
     Video video = findVideoById(videoId);
 
     validateVideoDeletePermission(currentUser, video);
 
     videoService.deleteVideo(videoId);
-    logger.info("Video {} deleted successfully by user: {}", videoId, userEmail);
   }
 
   public RatingResponse rateVideo(String userEmail, Long videoId, RateVideoRequest request) {
-    logger.info("Rating video {} with {} by user: {}", videoId, request.rating(), userEmail);
-
-    User currentUser = userService.getUserByEmail(userEmail);
-    Video video = findVideoById(videoId);
-
     ratingService.addOrUpdateRating(userEmail, videoId, request.rating());
     double newAverageRating = ratingService.getAverageRatingForVideo(videoId);
 
@@ -119,18 +99,12 @@ public class VideoFacade {
   }
 
   public RatingResponse getVideoRating(String userEmail, Long videoId) {
-    logger.info("Getting rating for video {} by user: {}", videoId, userEmail);
-
-    User currentUser = userService.getUserByEmail(userEmail);
-    Video video = findVideoById(videoId);
-
     Optional<Integer> userRating = ratingService.getUserRatingForVideo(userEmail, videoId);
     double averageRating = ratingService.getAverageRatingForVideo(videoId);
 
     return new RatingResponse(userRating.orElse(0), averageRating);
   }
 
-  // Helper methods
   private Video findVideoById(Long videoId) {
     Video video = videoService.findById(videoId);
     if (video == null) {
@@ -157,7 +131,6 @@ public class VideoFacade {
           video.getUserId(),
           videoRatings.getOrDefault(video.getId(), 0.0));
     } catch (Exception e) {
-      logger.warn("Could not find owner for video {}", video.getId());
       return new VideoSummaryResponse(
           video.getId(),
           video.getTitle(),

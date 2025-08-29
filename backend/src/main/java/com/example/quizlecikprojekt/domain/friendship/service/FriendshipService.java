@@ -9,6 +9,7 @@ import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.exception.InvalidOperationException;
 import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +19,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@AllArgsConstructor
 public class FriendshipService {
 
-    @Autowired
-    private FriendshipRepository friendshipRepository;
+    private final FriendshipRepository friendshipRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    // Wyślij zaproszenie do przyjaźni
     public FriendshipDto sendFriendRequest(Long requesterId, Long addresseeId) {
         if (requesterId.equals(addresseeId)) {
             throw new InvalidOperationException("Nie możesz zaprosić siebie do przyjaźni");
@@ -38,7 +36,6 @@ public class FriendshipService {
         User addressee = userRepository.findById(addresseeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
 
-        // Sprawdź czy już istnieje przyjaźń
         Optional<Friendship> existingFriendship = friendshipRepository
                 .findFriendshipBetweenUsers(requesterId, addresseeId);
 
@@ -58,7 +55,6 @@ public class FriendshipService {
         return fromEntity(save);
     }
 
-    // Zaakceptuj zaproszenie do przyjaźni
     public Friendship acceptFriendRequest(Long userId, Long friendshipId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
                 .orElseThrow(() -> new ResourceNotFoundException("Zaproszenie nie znalezione"));
@@ -75,7 +71,6 @@ public class FriendshipService {
         return friendshipRepository.save(friendship);
     }
 
-    // Odrzuć zaproszenie do przyjaźni
     public void declineFriendRequest(Long userId, Long friendshipId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
                 .orElseThrow(() -> new ResourceNotFoundException("Zaproszenie nie znalezione"));
@@ -88,7 +83,6 @@ public class FriendshipService {
         friendshipRepository.save(friendship);
     }
 
-    // Usuń przyjaźń
     public void removeFriend(Long userId, Long friendId) {
         Friendship friendship = friendshipRepository
                 .findFriendshipBetweenUsers(userId, friendId)
@@ -101,7 +95,6 @@ public class FriendshipService {
         friendshipRepository.delete(friendship);
     }
 
-    // Zablokuj użytkownika
     public void blockUser(Long userId, Long userToBlockId) {
         if (userId.equals(userToBlockId)) {
             throw new InvalidOperationException("Nie możesz zablokować siebie");
@@ -126,7 +119,6 @@ public class FriendshipService {
         }
     }
 
-    // Pobierz przyjaciół użytkownika
     public List<FriendDto> getUserFriends(Long userId) {
         List<User> users = friendshipRepository.findRequestedFriends(userId);
         users.addAll(friendshipRepository.findAddedFriends(userId));
@@ -135,29 +127,24 @@ public class FriendshipService {
                 .collect(Collectors.toList());
     }
 
-    // Pobierz oczekujące zaproszenia
     public List<Friendship> getPendingFriendRequests(Long userId) {
         return friendshipRepository.findPendingFriendRequestsForUser(userId);
     }
 
-    // Pobierz wysłane zaproszenia
     public List<Friendship> getSentFriendRequests(Long userId) {
         return friendshipRepository.findSentFriendRequestsByUser(userId);
     }
 
-    // Sprawdź czy użytkownicy są przyjaciółmi
     public boolean areUsersFriends(Long userId1, Long userId2) {
         return friendshipRepository.areUsersFriends(userId1, userId2);
     }
 
-    // Pobierz status przyjaźni
     public FriendshipStatus getFriendshipStatus(Long userId1, Long userId2) {
         return friendshipRepository.findFriendshipBetweenUsers(userId1, userId2)
                 .map(Friendship::getStatus)
                 .orElse(null);
     }
 
-    // Sugerowani znajomi
     public List<User> getSuggestedFriends(Long userId) {
         return friendshipRepository.findSuggestedFriends(userId);
     }

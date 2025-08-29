@@ -24,5 +24,4 @@ public class GroupDto {
         this.memberNames = memberNames;
     }
 
-    // Gettery, settery
 }

@@ -18,5 +18,5 @@ public record RecordStudySessionRequest(
         Integer flashcardsCompleted,
     @Min(value = 0, message = "Quizzes completed cannot be negative") Integer quizzesCompleted,
     @Min(value = 1, message = "Study time must be at least 1 minute") Integer studyTimeMinutes,
-    String sessionType // "flashcard", "quiz", "mixed"
+    String sessionType
     ) {}

@@ -117,7 +117,7 @@ public class ProgressService {
         currentStreak,
         longestStreak,
         getMostActiveDay(user.getId()),
-        "Morning", // This could be calculated based on session times
+        "Morning",
         getMostStudiedWordSet(user.getId()),
         weeklyProgress,
         monthlyProgress);

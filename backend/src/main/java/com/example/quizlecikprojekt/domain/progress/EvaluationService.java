@@ -139,7 +139,6 @@ public class EvaluationService {
 
     Double averageRating = evaluationRepository.getAverageRatingForVideo(videoId);
 
-    // Calculate other statistics
     double averageUsefulness =
         evaluations.stream()
             .mapToInt(ResourceEvaluation::getUsefulnessRating)
@@ -150,7 +149,7 @@ public class EvaluationService {
         evaluations.stream().mapToLong(e -> e.getWouldRecommend() ? 1 : 0).sum();
 
     double recommendationPercentage =
-        evaluations.size() > 0 ? (double) recommendationCount / evaluations.size() * 100.0 : 0.0;
+            !evaluations.isEmpty() ? (double) recommendationCount / evaluations.size() * 100.0 : 0.0;
 
     List<EvaluationResponse> recentEvaluations =
         evaluations.stream()

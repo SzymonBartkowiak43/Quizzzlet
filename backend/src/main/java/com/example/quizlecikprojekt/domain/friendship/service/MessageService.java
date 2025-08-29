@@ -8,6 +8,7 @@ import com.example.quizlecikprojekt.domain.wordset.WordSet;
 import com.example.quizlecikprojekt.domain.wordset.WordSetRepository;
 import com.example.quizlecikprojekt.exception.InvalidOperationException;
 import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,31 +18,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@AllArgsConstructor
 public class MessageService {
 
-    @Autowired
-    private PrivateMessageRepository privateMessageRepository;
+    private final PrivateMessageRepository privateMessageRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private WordSetRepository wordSetRepository;
+    private final WordSetRepository wordSetRepository;
 
-    @Autowired
-    private FriendshipRepository friendshipRepository;
+    private final FriendshipRepository friendshipRepository;
 
-    // === PRYWATNE WIADOMOŚCI ===
-
-    // Wyślij prywatną wiadomość tekstową
     public PrivateMessage sendPrivateMessage(Long senderId, Long recipientId, String content) {
         User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Nadawca nie znaleziony"));
         User recipient = userRepository.findById(recipientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Odbiorca nie znaleziony"));
 
-        // Sprawdź czy użytkownicy są przyjaciółmi (opcjonalne)
         if (!friendshipRepository.areUsersFriends(senderId, recipientId)) {
             throw new InvalidOperationException("Możesz wysyłać wiadomości tylko do przyjaciół");
         }
@@ -50,7 +43,6 @@ public class MessageService {
         return privateMessageRepository.save(message);
     }
 
-    // Wyślij zestaw słówek
     public PrivateMessage sendWordSet(Long senderId, Long recipientId, String content, Long wordSetId) {
         User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Nadawca nie znaleziony"));
@@ -67,32 +59,23 @@ public class MessageService {
         return privateMessageRepository.save(message);
     }
 
-    // Pobierz konwersację między użytkownikami
     public List<PrivateMessage> getConversation(Long userId1, Long userId2) {
         return privateMessageRepository.findConversationBetweenUsers(userId1, userId2);
     }
 
-    // Pobierz konwersację z paginacją
-    public Page<PrivateMessage> getConversationPageable(Long userId1, Long userId2, Pageable pageable) {
-        return privateMessageRepository.findConversationBetweenUsersPageable(userId1, userId2, pageable);
-    }
-
-    // Pobierz listę konwersacji użytkownika
     public List<PrivateMessage> getUserConversations(Long userId) {
         return privateMessageRepository.findUserConversations(userId);
     }
 
-    // Oznacz wiadomości jako przeczytane
     public int markMessagesAsRead(Long recipientId, Long senderId) {
         return privateMessageRepository.markMessagesAsRead(recipientId, senderId);
     }
 
-    // Pobierz nieprzeczytane wiadomości
     public List<PrivateMessage> getUnreadMessages(Long userId) {
         return privateMessageRepository.findByRecipientIdAndIsReadFalseOrderByCreatedAtDesc(userId);
     }
 
-    // Liczba nieprzeczytanych wiadomości
+
     public Long getUnreadMessageCount(Long userId) {
         return privateMessageRepository.countUnreadMessages(userId);
     }

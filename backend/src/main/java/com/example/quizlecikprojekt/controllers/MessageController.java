@@ -5,7 +5,7 @@ import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
 import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessage;
 import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessageDto;
 import com.example.quizlecikprojekt.domain.group.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,10 +20,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/messages")
 @PreAuthorize("hasRole('USER')")
+@AllArgsConstructor
 public class MessageController {
 
-    @Autowired
-    private SocialFacade socialFacade;
+    private final SocialFacade socialFacade;
 
     @GetMapping("/my")
     public ResponseEntity<Map<String, Object>> getMyMessages(Authentication authentication) {
@@ -80,7 +80,6 @@ public class MessageController {
 
     @PostMapping("/groups")
     public ResponseEntity<GroupDto> createGroup(@RequestBody CreateGroupRequest req, Authentication auth) {
-        // req: nazwa, użytkownicyId[]
         GroupDto group = socialFacade.createGroup(auth.getName(), req.getName(), req.getMemberIds());
         return ResponseEntity.status(HttpStatus.CREATED).body(group);
     }
@@ -97,7 +96,6 @@ public class MessageController {
         return ResponseEntity.ok(Map.of("messages", messages));
     }
 
-
     public PrivateMessageDto toDto(PrivateMessage message) {
         return new PrivateMessageDto(
                 message.getId(),
@@ -107,4 +105,5 @@ public class MessageController {
                 message.getCreatedAt().toString()
         );
     }
+
 }

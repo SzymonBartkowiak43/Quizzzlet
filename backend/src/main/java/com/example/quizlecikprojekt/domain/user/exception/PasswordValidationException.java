@@ -1,7 +1,10 @@
 package com.example.quizlecikprojekt.domain.user.exception;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class PasswordValidationException extends RuntimeException {
   private final List<String> violations;
   private final String errorCode;
@@ -10,13 +13,5 @@ public class PasswordValidationException extends RuntimeException {
     super("Password validation failed");
     this.errorCode = errorCode;
     this.violations = violations;
-  }
-
-  public List<String> getViolations() {
-    return violations;
-  }
-
-  public String getErrorCode() {
-    return errorCode;
   }
 }

@@ -40,7 +40,6 @@ public interface ResourceEvaluationRepository extends JpaRepository<ResourceEval
       "SELECT e.difficultyLevel, COUNT(e) FROM ResourceEvaluation e WHERE e.wordSet.id = :wordSetId GROUP BY e.difficultyLevel ORDER BY COUNT(e) DESC")
   List<Object[]> getDifficultyDistributionForWordSet(@Param("wordSetId") Long wordSetId);
 
-  List<ResourceEvaluation> findTop10ByOrderByCreatedAtDesc();
 
   @Query("SELECT e FROM ResourceEvaluation e WHERE e.rating >= 4 ORDER BY e.createdAt DESC")
   List<ResourceEvaluation> findHighlyRatedResources();

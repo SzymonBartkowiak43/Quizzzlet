@@ -22,7 +22,6 @@ public class LearnFacade {
   private final Map<String, FlashcardSession> flashcardSessions = new ConcurrentHashMap<>();
   private final Map<String, QuizSession> quizSessions = new ConcurrentHashMap<>();
 
-  // Flashcard methods
   public FlashcardSessionResponse startFlashcardSession(
       String userEmail, StartFlashcardRequest request) {
     WordSet wordSet = wordSetFacade.getWordSetById(request.wordSetId());

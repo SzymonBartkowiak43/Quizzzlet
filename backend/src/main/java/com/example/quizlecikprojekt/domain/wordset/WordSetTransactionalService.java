@@ -1,16 +1,14 @@
 package com.example.quizlecikprojekt.domain.wordset;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 class WordSetTransactionalService {
 
   private final WordSetRepository wordSetRepository;
-
-  public WordSetTransactionalService(WordSetRepository wordSetRepository) {
-    this.wordSetRepository = wordSetRepository;
-  }
 
   @Transactional
   public WordSet createWordSet(WordSet wordSet) {

@@ -22,5 +22,4 @@ public class GroupMessageDto {
         this.createdAt = createdAt;
     }
 
-    // Gettery, settery
 }

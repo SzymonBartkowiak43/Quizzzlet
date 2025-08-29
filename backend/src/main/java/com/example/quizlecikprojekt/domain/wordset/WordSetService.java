@@ -10,11 +10,14 @@ import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundExce
 import com.example.quizlecikprojekt.domain.wordset.exception.WordSetOperationException;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 class WordSetService {
 
   private final WordSetRepository wordSetRepository;
@@ -22,37 +25,10 @@ class WordSetService {
   private final WordFacade wordFacade;
   private final WordSetTransactionalService transactionalService;
 
-  public WordSetService(
-      WordSetRepository wordSetRepository,
-      WordRepository wordRepository,
-      WordFacade wordFacade,
-      WordSetTransactionalService transactionalService) {
-    this.wordSetRepository = wordSetRepository;
-    this.wordRepository = wordRepository;
-    this.wordFacade = wordFacade;
-    this.transactionalService = transactionalService;
-  }
-
-  public List<Word> getWordsByWordSetId(Long wordSetId) {
-    Optional<WordSet> wordSetOptional = wordSetRepository.findById(wordSetId);
-    if (wordSetOptional.isEmpty()) {
-      return List.of();
-    }
-
-    WordSet wordSet = wordSetOptional.get();
-    return wordRepository.findByWordSet(Optional.of(wordSet));
-  }
-
   public WordSet getWordSetById(Long wordSetId) {
     return wordSetRepository
         .findById(wordSetId)
         .orElseThrow(() -> new WordSetNotFoundException("WordSet not found with id: " + wordSetId));
-  }
-
-  public boolean isWordSetOwnedByUser(Long wordSetId, String userEmail) {
-    WordSet wordSet = getWordSetById(wordSetId);
-
-    return !wordSet.getUser().getEmail().equals(userEmail);
   }
 
   public void deleteWordSet(Long id) {
