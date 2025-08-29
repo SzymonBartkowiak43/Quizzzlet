@@ -76,52 +76,7 @@ export const searchSocial = async (searchTerm: string, page: number = 0, size: n
 };
 
 // Groups API - mock implementations (dodaj gdy backend będzie miał groups)
-export const getMyGroups = async (): Promise<StudyGroup[]> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/groups/my
-    return [];
-};
 
-export const createGroup = async (request: CreateGroupRequest): Promise<StudyGroup> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/groups
-    throw new Error('Groups not implemented yet');
-};
-
-export const joinGroup = async (request: JoinGroupRequest): Promise<StudyGroup> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/groups/join
-    throw new Error('Groups not implemented yet');
-};
-
-export const leaveGroup = async (groupId: number): Promise<void> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/groups/{id}/leave
-    throw new Error('Groups not implemented yet');
-};
-
-export const updateGroup = async (groupId: number, request: UpdateGroupRequest): Promise<StudyGroup> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/groups/{id}
-    throw new Error('Groups not implemented yet');
-};
-
-export const regenerateInviteCode = async (groupId: number): Promise<StudyGroup> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/groups/{id}/regenerate-code
-    throw new Error('Groups not implemented yet');
-};
-
-// Messages API - mock implementations (dodaj gdy backend będzie miał messages)
-export const getPrivateMessages = async (conversationId: number): Promise<PrivateMessage[]> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/messages/private/{id}
-    return [];
-};
-
-
-export const getGroupMessages = async (groupId: number): Promise<GroupMessage[]> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/messages/group/{id}
-    return [];
-};
-
-export const sendGroupMessage = async (groupId: number, content: string): Promise<GroupMessage> => {
-    // TODO: Zaimplementuj gdy backend będzie miał /api/messages/group
-    throw new Error('Messages not implemented yet');
-};
 
 // Stats API (dodatkowy endpoint)
 export const getSocialStats = async (): Promise<any> => {
@@ -167,6 +122,24 @@ export const checkFriendshipStatus = async (userId: number) => {
     return response.data;
 };
 
+export const getMyGroups = async () => {
+    const response = await api.get('/api/messages/groups/my');
+    return response.data;
+};
+export const createGroup = async (name: string, memberIds: number[]) => {
+    const response = await api.post('/api/messages/groups', { name, memberIds });
+    return response.data;
+};
+export const getGroupMessages = async (groupId: number) => {
+    const response = await api.get(`/api/messages/groups/${groupId}/messages`);
+    return response.data;
+};
+export const sendGroupMessage = async (groupId: number, content: string) => {
+    const response = await api.post('/api/messages/group', { groupId, content });
+    return response.data;
+};
+
+
 
 
 // Export all functions
@@ -181,11 +154,6 @@ export default {
     getSocialStats,
     getMyGroups,
     createGroup,
-    joinGroup,
-    leaveGroup,
-    updateGroup,
-    regenerateInviteCode,
-    getPrivateMessages,
     sendPrivateMessage,
     getGroupMessages,
     sendGroupMessage,

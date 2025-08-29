@@ -96,7 +96,7 @@ export const useMessages = (): { messagingInfo: MessagingInfo | null; shareWordS
 
     const getConversation = useCallback(async (userId: number) => {
         try {
-            const messages = await socialApi.getPrivateMessages(userId);
+            const messages = await socialApi.getGroupMessages(userId);
             setConversations(prev => ({
                 ...prev,
                 [userId]: messages

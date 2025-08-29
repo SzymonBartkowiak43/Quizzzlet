@@ -6,21 +6,17 @@ import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
 import com.example.quizlecikprojekt.domain.friendship.enums.GroupRole;
 import com.example.quizlecikprojekt.domain.friendship.service.FriendshipService;
 import com.example.quizlecikprojekt.domain.friendship.service.MessageService;
-import com.example.quizlecikprojekt.domain.friendship.service.StudyGroupService;
+import com.example.quizlecikprojekt.domain.group.*;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
 import com.example.quizlecikprojekt.exception.InvalidOperationException;
 import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,13 +27,16 @@ public class SocialFacade {
     private FriendshipService friendshipService;
 
     @Autowired
-    private StudyGroupService studyGroupService;
-
-    @Autowired
     private MessageService messageService;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private GroupMessageRepository groupMessageRepository;
 
     // ========== FRIENDSHIP OPERATIONS ==========
 
@@ -155,158 +154,6 @@ public class SocialFacade {
 
     // ========== GROUP OPERATIONS ==========
 
-    /**
-     * Utwórz nową grupę nauki
-     */
-    public StudyGroup createStudyGroup(String userName, String name, String description, Boolean isPrivate) {
-        Long creatorId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-        return studyGroupService.createGroup(creatorId, name, description, isPrivate);
-    }
-
-    /**
-     * Dołącz do grupy
-     */
-    public GroupMember joinStudyGroup(String userName, Long groupId) {
-        Long userId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-        return studyGroupService.joinGroup(userId, groupId);
-    }
-
-    /**
-     * Dołącz do grupy przez kod zaproszenia
-     */
-    public GroupMember joinGroupByInviteCode(String userName, String inviteCode) {
-        Long userId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-        return studyGroupService.joinGroupByInviteCode(userId, inviteCode);
-    }
-
-    /**
-     * Opuść grupę
-     */
-    public void leaveStudyGroup(String userName, Long groupId) {
-        Long userId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-        studyGroupService.leaveGroup(userId, groupId);
-    }
-
-    /**
-     * Pobierz kompletne informacje o grupach użytkownika
-     */
-    public Map<String, Object> getUserGroupInfo(String userEmail) {
-
-        Long userId = userRepository.getUserByEmail(userEmail).get().getId();
-        Map<String, Object> groupInfo = new HashMap<>();
-
-        // Grupy członkowskie
-        List<StudyGroup> userGroups = studyGroupService.getUserGroups(userId);
-        groupInfo.put("memberGroups", userGroups);
-        groupInfo.put("memberGroupsCount", userGroups.size());
-
-        // Utworzone grupy
-        List<StudyGroup> createdGroups = userGroups.stream()
-                .filter(group -> group.getCreator().getId().equals(userId))
-                .toList();
-        groupInfo.put("createdGroups", createdGroups);
-        groupInfo.put("createdGroupsCount", createdGroups.size());
-
-        // Grupy z najnowszą aktywnością
-        groupInfo.put("activeGroups", userGroups.stream()
-                .filter(group -> !group.getMessages().isEmpty())
-                .toList());
-
-        return groupInfo;
-    }
-
-    /**
-     * Zarządzanie grupą - kompletne operacje
-     */
-    public Map<String, Object> manageGroup(String userName, Long groupId, String action, Map<String, Object> params) {
-
-        Long userId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-
-        Map<String, Object> result = new HashMap<>();
-
-        switch (action.toLowerCase()) {
-            case "update":
-                StudyGroup updatedGroup = studyGroupService.updateGroup(
-                        userId, groupId,
-                        (String) params.get("name"),
-                        (String) params.get("description"),
-                        (Boolean) params.get("isPrivate"),
-                        (Integer) params.get("maxMembers")
-                );
-                result.put("group", updatedGroup);
-                result.put("message", "Grupa została zaktualizowana");
-                break;
-
-            case "delete":
-                studyGroupService.deleteGroup(userId, groupId);
-                result.put("message", "Grupa została usunięta");
-                break;
-
-            case "regenerate_code":
-                StudyGroup groupWithNewCode = studyGroupService.regenerateInviteCode(userId, groupId);
-                result.put("newInviteCode", groupWithNewCode.getInviteCode());
-                result.put("message", "Kod zaproszenia został wygenerowany ponownie");
-                break;
-
-            case "remove_member":
-                Long memberToRemoveId = ((Number) params.get("memberId")).longValue();
-                studyGroupService.removeMember(userId, groupId, memberToRemoveId);
-                result.put("message", "Członek został usunięty z grupy");
-                break;
-
-            case "change_role":
-                Long memberId = ((Number) params.get("memberId")).longValue();
-                GroupRole newRole = GroupRole.valueOf((String) params.get("role"));
-                GroupMember updatedMember = studyGroupService.changeRole(userId, groupId, memberId, newRole);
-                result.put("member", updatedMember);
-                result.put("message", "Rola została zmieniona");
-                break;
-
-            default:
-                throw new InvalidOperationException("Nieznana operacja: " + action);
-        }
-
-        return result;
-    }
-
-    /**
-     * Pobierz szczegóły grupy z członkami
-     */
-    public Map<String, Object> getGroupDetails(Long groupId, String userName) {
-
-        Long requestingUserId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-        StudyGroup group = studyGroupService.getGroupById(groupId);
-
-        if (group.getIsPrivate() && !studyGroupService.isUserMember(requestingUserId, groupId)) {
-            throw new InvalidOperationException("Nie masz dostępu do tej grupy");
-        }
-
-        Map<String, Object> details = new HashMap<>();
-        details.put("group", group);
-        details.put("members", studyGroupService.getGroupMembers(groupId));
-        details.put("memberCount", group.getMemberCount());
-        details.put("isUserMember", studyGroupService.isUserMember(requestingUserId, groupId));
-        details.put("recentMessages", messageService.getGroupMessages(groupId));
-
-        return details;
-    }
 
     // ========== MESSAGING OPERATIONS ==========
 
@@ -330,27 +177,6 @@ public class SocialFacade {
         return messageService.sendWordSet(senderId, recipientId, message, wordSetId);
     }
 
-    /**
-     * Wyślij wiadomość do grupy
-     */
-    public GroupMessage sendGroupMessage(String userEmail, Long groupId, String content) {
-        Long senderId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-        return messageService.sendGroupMessage(senderId, groupId, content);
-    }
-
-    /**
-     * Udostępnij zestaw słówek w grupie
-     */
-    public GroupMessage shareWordSetInGroup(String userEmail, Long groupId, String message, Long wordSetId) {
-        Long senderId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
-
-        return messageService.sendWordSetToGroup(senderId, groupId, message, wordSetId);
-    }
 
     /**
      * Pobierz kompletne informacje o wiadomościach użytkownika
@@ -372,13 +198,13 @@ public class SocialFacade {
         messagingInfo.put("unreadMessages", unreadMessages);
         messagingInfo.put("unreadCount", messageService.getUnreadMessageCount(userId));
 
-        // Ostatnie aktywne grupy (z wiadomościami)
-        List<StudyGroup> userGroups = studyGroupService.getUserGroups(userId);
-        List<StudyGroup> activeGroups = userGroups.stream()
-                .filter(group -> !group.getMessages().isEmpty())
-                .limit(5)
-                .toList();
-        messagingInfo.put("activeGroups", activeGroups);
+//        // Ostatnie aktywne grupy (z wiadomościami)
+//        List<StudyGroup> userGroups = studyGroupService.getUserGroups(userId);
+//        List<StudyGroup> activeGroups = userGroups.stream()
+//                .filter(group -> !group.getMessages().isEmpty())
+//                .limit(5)
+//                .toList();
+//        messagingInfo.put("activeGroups", activeGroups);
 
         return messagingInfo;
     }
@@ -409,12 +235,6 @@ public class SocialFacade {
                 result.put("message", "Wiadomości zostały oznaczone jako przeczytane");
                 break;
 
-            case "delete_message":
-                Long messageId = ((Number) params.get("messageId")).longValue();
-                messageService.deletePrivateMessage(userId, messageId);
-                result.put("message", "Wiadomość została usunięta");
-                break;
-
             default:
                 throw new InvalidOperationException("Nieznana operacja: " + action);
         }
@@ -434,9 +254,9 @@ public class SocialFacade {
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
                 .getId();
 
-        // Wyszukaj grupy
-        Page<StudyGroup> groups = studyGroupService.searchGroups(searchTerm, requestingUserId, pageable);
-        searchResults.put("groups", groups);
+//        // Wyszukaj grupy
+//        Page<StudyGroup> groups = studyGroupService.searchGroups(searchTerm, requestingUserId, pageable);
+//        searchResults.put("groups", groups);
 
         // Sugerowani znajomi (jeśli brak search term)
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
@@ -462,13 +282,13 @@ public class SocialFacade {
 
         // Podstawowe informacje
         dashboard.put("friendshipInfo", getUserFriendshipInfo(username));
-        dashboard.put("groupInfo", getUserGroupInfo(username));
+//        dashboard.put("groupInfo", getUserGroupInfo(username));
         dashboard.put("messagingInfo", getUserMessagingInfo(username));
 
         // Statystyki
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalFriends", friendshipService.getUserFriends(userId).size());
-        stats.put("totalGroups", studyGroupService.getUserGroups(userId).size());
+//        stats.put("totalGroups", studyGroupService.getUserGroups(userId).size());
         stats.put("unreadMessages", messageService.getUnreadMessageCount(userId));
         stats.put("pendingFriendRequests", friendshipService.getPendingFriendRequests(userId).size());
 
@@ -530,6 +350,83 @@ public class SocialFacade {
 
         return result;
     }
+
+
+    public GroupDto createGroup(String creatorEmail, String name, List<Long> memberIds) {
+        User creator = userRepository.getUserByEmail(creatorEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Set<User> members = new HashSet<>((Collection) userRepository.findAllById(memberIds));
+        members.add(creator);
+        Group group = new Group(name, creator, members);
+        Group save = groupRepository.save(group);
+        return new GroupDto(
+                save.getId(),
+                save.getName(),
+                save.getCreator().getId(),
+                save.getCreator().getName(),
+                save.getMembers().stream().map(User::getId).toList(),
+                save.getMembers().stream().map(User::getName).toList()
+        );
+
+    }
+
+    public List<GroupDto> getGroupsForUser(String userEmail) {
+        User user = userRepository.getUserByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Group> groups = groupRepository.findByMembers_Id(user.getId());
+        return groups.stream().map(g -> new GroupDto(
+                g.getId(),
+                g.getName(),
+                g.getCreator().getId(),
+                g.getCreator().getName(),
+                g.getMembers().stream().map(User::getId).toList(),
+                g.getMembers().stream().map(User::getName).toList()
+        )).toList();
+    }
+
+    public GroupMessageDto sendGroupMessage(String senderEmail, Long groupId, String content) {
+        User sender = userRepository.getUserByEmail(senderEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        if (!group.getMembers().contains(sender)) {
+            throw new RuntimeException("User is not a member of the group");
+        }
+        GroupMessage msg = new GroupMessage(group, sender, content);
+        GroupMessage save = groupMessageRepository.save(msg);
+        return new GroupMessageDto(
+                save.getId(),
+                groupId,
+                sender.getId(),
+                sender.getName(),
+                save.getContent(),
+                save.getCreatedAt().toString()
+        );
+    }
+
+    public List<GroupMessageDto> getGroupMessages(String userEmail, Long groupId) {
+        User user = userRepository.getUserByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        if (!group.getMembers().contains(user)) {
+            throw new RuntimeException("User is not a member of the group");
+        }
+        List<GroupMessage> messages = groupMessageRepository.findByGroup_IdOrderByCreatedAtAsc(groupId);
+        return messages.stream().map(m -> new GroupMessageDto(
+                m.getId(),
+                groupId,
+                m.getSender().getId(),
+                m.getSender().getName(),
+                m.getContent(),
+                m.getCreatedAt().toString()
+        )).toList();
+    }
+
+
+
+
+
 
     private static PrivateMessageDto toDto(PrivateMessage msg) {
         return new PrivateMessageDto(

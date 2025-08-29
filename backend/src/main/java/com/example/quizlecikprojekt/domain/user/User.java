@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt.domain.user;
 
 import com.example.quizlecikprojekt.domain.friendship.entity.*;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
+import com.example.quizlecikprojekt.domain.group.GroupMessage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import java.util.Collection;
@@ -90,12 +91,6 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)
   private Set<Friendship> receivedFriendRequests = new HashSet<>();
 
-  @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
-  private Set<StudyGroup> createdGroups = new HashSet<>();
-
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private Set<GroupMember> groupMemberships = new HashSet<>();
-
   @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
   private Set<PrivateMessage> sentMessages = new HashSet<>();
 
@@ -122,12 +117,6 @@ public class User implements UserDetails {
     return friends;
   }
 
-  public Set<StudyGroup> getJoinedGroups() {
-    return groupMemberships.stream()
-            .map(GroupMember::getGroup)
-            .collect(Collectors.toSet());
-  }
-
   // Getters and Setters dla nowych pól
   public Set<Friendship> getSentFriendRequests() { return sentFriendRequests; }
   public void setSentFriendRequests(Set<Friendship> sentFriendRequests) { this.sentFriendRequests = sentFriendRequests; }
@@ -135,11 +124,7 @@ public class User implements UserDetails {
   public Set<Friendship> getReceivedFriendRequests() { return receivedFriendRequests; }
   public void setReceivedFriendRequests(Set<Friendship> receivedFriendRequests) { this.receivedFriendRequests = receivedFriendRequests; }
 
-  public Set<StudyGroup> getCreatedGroups() { return createdGroups; }
-  public void setCreatedGroups(Set<StudyGroup> createdGroups) { this.createdGroups = createdGroups; }
 
-  public Set<GroupMember> getGroupMemberships() { return groupMemberships; }
-  public void setGroupMemberships(Set<GroupMember> groupMemberships) { this.groupMemberships = groupMemberships; }
 
   public Set<PrivateMessage> getSentMessages() { return sentMessages; }
   public void setSentMessages(Set<PrivateMessage> sentMessages) { this.sentMessages = sentMessages; }

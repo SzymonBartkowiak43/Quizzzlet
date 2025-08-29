@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useSocialDashboard } from '../../../hooks/useSocialDashboard';
-import { useFriendships } from '../../../hooks/userFriendships';
-import { useGroups } from '../../../hooks/useGroups';
-import { useMessages } from '../../../hooks/useMessages';
+
 import {
     Users,
     UserPlus,

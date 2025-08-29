@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMessages } from '../../../hooks/useMessages';
 import { useFriendships } from '../../../hooks/userFriendships';
-import { useGroups } from '../../../hooks/useGroups';
 import {
     MessageCircle,
     Users,
@@ -45,7 +44,6 @@ const MessagesPage: React.FC = () => {
     } = useMessages();
 
     const { friendshipInfo } = useFriendships();
-    const { groupInfo } = useGroups();
 
     const [viewMode, setViewMode] = useState<ViewMode>('conversations');
     const [activeChat, setActiveChat] = useState<ActiveChat | null>(null);
@@ -242,31 +240,31 @@ const MessagesPage: React.FC = () => {
             )}
 
             {/* Modals */}
-            {showNewMessage && (
-                <NewMessageModal
-                    friends={[] || friendshipInfo?.friends}
-                    groups={groupInfo?.memberGroups || []}
-                    onClose={() => setShowNewMessage(false)}
-                    onSendPrivate={async (userId, message) => {
-                        await sendPrivateMessage(userId, message);
-                        setShowNewMessage(false);
-                    }}
-                    onSendGroup={async (groupId, message) => {
-                        await sendGroupMessage(groupId, message);
-                        setShowNewMessage(false);
-                    }}
-                />
-            )}
+            {/*{showNewMessage && (*/}
+            {/*    <NewMessageModal*/}
+            {/*        friends={[] || friendshipInfo?.friends}*/}
+            {/*        groups={groupInfo?.memberGroups || []}*/}
+            {/*        onClose={() => setShowNewMessage(false)}*/}
+            {/*        onSendPrivate={async (userId, message) => {*/}
+            {/*            await sendPrivateMessage(userId, message);*/}
+            {/*            setShowNewMessage(false);*/}
+            {/*        }}*/}
+            {/*        onSendGroup={async (groupId, message) => {*/}
+            {/*            await sendGroupMessage(groupId, message);*/}
+            {/*            setShowNewMessage(false);*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*)}*/}
 
-            {showShareWordSet && (
-                <ShareWordSetModal
-                    friends={[] || friendshipInfo?.friends}
-                    groups={groupInfo?.memberGroups || []}
-                    onClose={() => setShowShareWordSet(false)}
-                    onSharePrivate={shareWordSetPrivately}
-                    onShareGroup={shareWordSetInGroup}
-                />
-            )}
+            {/*{showShareWordSet && (*/}
+            {/*    <ShareWordSetModal*/}
+            {/*        friends={[] || friendshipInfo?.friends}*/}
+            {/*        groups={groupInfo?.memberGroups || []}*/}
+            {/*        onClose={() => setShowShareWordSet(false)}*/}
+            {/*        onSharePrivate={shareWordSetPrivately}*/}
+            {/*        onShareGroup={shareWordSetInGroup}*/}
+            {/*    />*/}
+            {/*)}*/}
         </div>
     );
 };

@@ -1,8 +1,6 @@
 package com.example.quizlecikprojekt.domain.friendship.service;
 
-import com.example.quizlecikprojekt.domain.friendship.entity.GroupMessage;
 import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessage;
-import com.example.quizlecikprojekt.domain.friendship.entity.StudyGroup;
 import com.example.quizlecikprojekt.domain.friendship.repository.*;
 import com.example.quizlecikprojekt.domain.user.User;
 import com.example.quizlecikprojekt.domain.user.UserRepository;
@@ -26,16 +24,7 @@ public class MessageService {
     private PrivateMessageRepository privateMessageRepository;
 
     @Autowired
-    private GroupMessageRepository groupMessageRepository;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private StudyGroupRepository studyGroupRepository;
-
-    @Autowired
-    private GroupMemberRepository groupMemberRepository;
 
     @Autowired
     private WordSetRepository wordSetRepository;
@@ -108,72 +97,5 @@ public class MessageService {
         return privateMessageRepository.countUnreadMessages(userId);
     }
 
-    // === WIADOMOŚCI GRUPOWE ===
 
-    // Wyślij wiadomość do grupy
-    public GroupMessage sendGroupMessage(Long senderId, Long groupId, String content) {
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Nadawca nie znaleziony"));
-        StudyGroup group = studyGroupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Grupa nie znaleziona"));
-
-        // Sprawdź czy użytkownik jest członkiem grupy
-        if (!groupMemberRepository.findByGroupIdAndUserId(groupId, senderId).isPresent()) {
-            throw new InvalidOperationException("Nie jesteś członkiem tej grupy");
-        }
-
-        GroupMessage message = new GroupMessage(group, sender, content);
-        return groupMessageRepository.save(message);
-    }
-
-    // Wyślij zestaw słówek do grupy
-    public GroupMessage sendWordSetToGroup(Long senderId, Long groupId, String content, Long wordSetId) {
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Nadawca nie znaleziony"));
-        StudyGroup group = studyGroupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Grupa nie znaleziona"));
-        WordSet wordSet = wordSetRepository.findById(wordSetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Zestaw słówek nie znaleziony"));
-
-        if (!groupMemberRepository.findByGroupIdAndUserId(groupId, senderId).isPresent()) {
-            throw new InvalidOperationException("Nie jesteś członkiem tej grupy");
-        }
-
-        GroupMessage message = new GroupMessage(group, sender, content, wordSet);
-        return groupMessageRepository.save(message);
-    }
-
-    // Pobierz wiadomości grupy
-    public List<GroupMessage> getGroupMessages(Long groupId) {
-        return groupMessageRepository.findByGroupIdOrderByCreatedAtDesc(groupId);
-    }
-
-    // Pobierz wiadomości grupy z paginacją
-    public Page<GroupMessage> getGroupMessagesPageable(Long groupId, Pageable pageable) {
-        return groupMessageRepository.findByGroupIdOrderByCreatedAtDesc(groupId, pageable);
-    }
-
-    // Usuń wiadomość prywatną
-    public void deletePrivateMessage(Long userId, Long messageId) {
-        PrivateMessage message = privateMessageRepository.findById(messageId)
-                .orElseThrow(() -> new ResourceNotFoundException("Wiadomość nie znaleziona"));
-
-        if (!message.getSender().getId().equals(userId)) {
-            throw new InvalidOperationException("Możesz usuwać tylko swoje wiadomości");
-        }
-
-        privateMessageRepository.delete(message);
-    }
-
-    // Usuń wiadomość grupową
-    public void deleteGroupMessage(Long userId, Long messageId) {
-        GroupMessage message = groupMessageRepository.findById(messageId)
-                .orElseThrow(() -> new ResourceNotFoundException("Wiadomość nie znaleziona"));
-
-        if (!message.canUserDeleteMessage(userRepository.findById(userId).get())) {
-            throw new InvalidOperationException("Nie masz uprawnień do usunięcia tej wiadomości");
-        }
-
-        groupMessageRepository.delete(message);
-    }
 }

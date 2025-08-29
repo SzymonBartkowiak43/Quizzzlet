@@ -62,6 +62,7 @@ const Header: React.FC = () => {
         { path: '/videos', label: 'Filmy', icon: Video },
         { path: '/social/community', label: 'Wszyscy użytkownicy', icon: Users2 },
         { path: '/social/friends', label: 'Przyjaciele', icon: Users2 },
+        { path: '/social/groups', label: 'Chaty grupowe', icon: Users },
     ];
 
     // Mock notification count

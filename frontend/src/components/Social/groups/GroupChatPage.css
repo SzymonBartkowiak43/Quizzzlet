@@ -1,0 +1,200 @@
+.group-chat-page {
+    display: flex;
+    gap: 32px;
+    max-width: 900px;
+    margin: 40px auto 0 auto;
+    background: #f8fafc;
+    border-radius: 14px;
+    box-shadow: 0 6px 34px rgba(30,41,59,0.08);
+    padding: 38px 32px 32px 32px;
+    min-height: 540px;
+}
+
+.group-chat-page aside {
+    flex: 1;
+    min-width: 260px;
+    padding-right: 8px;
+}
+
+.group-chat-page aside h3 {
+    font-size: 1.18em;
+    color: #2563eb;
+    margin-bottom: 10px;
+}
+
+.group-chat-page aside ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px 0;
+}
+
+.group-chat-page aside li {
+    margin-bottom: 7px;
+}
+
+.group-chat-page aside button {
+    background: #e2e8f0;
+    color: #334155;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 14px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+
+.group-chat-page aside button.active,
+.group-chat-page aside button:focus {
+    background: #2563eb;
+    color: #fff;
+}
+
+.group-chat-page aside .create-btn {
+    margin-top: 18px;
+    padding: 8px 18px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.group-chat-page .create-group-panel {
+    margin-top: 16px;
+    padding: 12px 10px 10px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+}
+
+.group-chat-page .create-group-panel input[type="text"] {
+    margin-bottom: 12px;
+    width: 100%;
+    padding: 7px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 1em;
+}
+
+.group-chat-page .create-group-panel .friend-list {
+    max-height: 110px;
+    overflow-y: auto;
+    margin-top: 8px;
+    margin-bottom: 6px;
+}
+
+.group-chat-page .create-group-panel label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.98em;
+    color: #475569;
+}
+
+.group-chat-page .create-group-panel .create-btn {
+    margin-top: 12px;
+    padding: 7px 16px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+}
+
+.group-chat-page section {
+    flex: 2;
+    min-width: 320px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.group-chat-page section h4 {
+    margin-bottom: 10px;
+    color: #2563eb;
+    font-size: 1.15em;
+}
+
+.group-chat-page section .chat-members {
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 0.98em;
+}
+
+.group-chat-page section .chat-messages {
+    height: 250px;
+    overflow-y: auto;
+    background: #f3f7fc;
+    border-radius: 7px;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-size: 1.02em;
+}
+
+.group-chat-page section .chat-message {
+    margin-bottom: 7px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.group-chat-page section .chat-message:last-child {
+    border-bottom: none;
+}
+
+.group-chat-page section .chat-message .sender {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.group-chat-page section .chat-message .timestamp {
+    float: right;
+    color: #94a3b8;
+    font-size: 0.88em;
+    margin-left: 12px;
+}
+
+.group-chat-page section .chat-input-row {
+    display: flex;
+    gap: 7px;
+}
+
+.group-chat-page section input[type="text"] {
+    flex: 1;
+    padding: 7px;
+    border-radius: 7px;
+    border: 1px solid #cbd5e1;
+    font-size: 1em;
+}
+
+.group-chat-page section .send-btn {
+    padding: 8px 17px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.group-chat-page section .empty-msg {
+    color: #64748b;
+    font-style: italic;
+    margin-top: 80px;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .group-chat-page {
+        flex-direction: column;
+        padding: 18px 8px;
+        gap: 16px;
+    }
+    .group-chat-page section {
+        padding: 16px 8px;
+    }
+}
