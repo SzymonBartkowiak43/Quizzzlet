@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.domain.friendship;
 
+import com.example.quizlecikprojekt.controllers.dto.UserDto;
 import com.example.quizlecikprojekt.domain.friendship.entity.*;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
 import com.example.quizlecikprojekt.domain.friendship.enums.GroupRole;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -42,7 +44,7 @@ public class SocialFacade {
     /**
      * Wyślij zaproszenie do przyjaźni
      */
-    public Friendship sendFriendRequest(String userEmail, Long addresseeId) {
+    public FriendshipDto sendFriendRequest(String userEmail, Long addresseeId) {
         Long requesterId = userRepository.getUserByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
                 .getId();
@@ -106,17 +108,25 @@ public class SocialFacade {
         friendshipInfo.put("friendsCount", friends.size());
 
         // Oczekujące zaproszenia
-        List<Friendship> pendingRequests = friendshipService.getPendingFriendRequests(userId);
+        List<FriendshipDto> pendingRequests = friendshipService.getPendingFriendRequests(userId)
+                .stream()
+                .map(SocialFacade::fromEntity)
+                .collect(Collectors.toList());
         friendshipInfo.put("pendingRequests", pendingRequests);
-        friendshipInfo.put("pendingRequestsCount", pendingRequests.size());
 
         // Wysłane zaproszenia
-        List<Friendship> sentRequests = friendshipService.getSentFriendRequests(userId);
+        List<FriendshipDto> sentRequests = friendshipService.getSentFriendRequests(userId)
+                .stream()
+                .map(SocialFacade::fromEntity)
+                .collect(Collectors.toList());
         friendshipInfo.put("sentRequests", sentRequests);
         friendshipInfo.put("sentRequestsCount", sentRequests.size());
 
         // Sugerowani znajomi
-        List<User> suggestedFriends = friendshipService.getSuggestedFriends(userId);
+        List<UserDto> suggestedFriends = friendshipService.getSuggestedFriends(userId)
+                        .stream()
+                        .map(u -> new UserDto(u.getId(), u.getName(), u.getEmail()))
+                        .collect(Collectors.toList());
         friendshipInfo.put("suggestedFriends", suggestedFriends);
 
         return friendshipInfo;
@@ -528,6 +538,19 @@ public class SocialFacade {
                 msg.getRecipient().getId(),
                 msg.getContent(),
                 msg.getCreatedAt().toString()
+        );
+    }
+
+    private static FriendshipDto fromEntity(Friendship f) {
+        return new FriendshipDto(
+                f.getId(),
+                f.getRequester().getId(),
+                f.getRequester().getName(),
+                f.getRequester().getEmail(),
+                f.getAddressee().getId(),
+                f.getAddressee().getName(),
+                f.getAddressee().getEmail(),
+                f.getStatus().name()
         );
     }
 }

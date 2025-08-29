@@ -54,3 +54,67 @@
     text-align: center;
     margin-top: 30px;
 }
+
+.community-layout {
+    display: flex;
+    gap: 32px;
+    max-width: 1100px;
+    margin: 38px auto 0 auto;
+    background: #f8fafc;
+    border-radius: 14px;
+    box-shadow: 0 6px 32px rgba(30,41,59,0.07);
+    padding: 38px 32px 32px 32px;
+}
+.community-left {
+    flex: 2;
+}
+.community-right {
+    flex: 1;
+    background: #fff;
+    border-radius: 11px;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+    padding: 16px 18px;
+    min-width: 300px;
+    max-width: 360px;
+    height: fit-content;
+}
+.pending-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.pending-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f3f7fc;
+    border-radius: 9px;
+    padding: 12px;
+}
+.pending-info {
+    flex: 1;
+}
+.pending-name {
+    font-weight: 600;
+    color: #334155;
+}
+.pending-email {
+    font-size: 0.94rem;
+    color: #64748b;
+}
+.pending-btn {
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 1rem;
+}
+.pending-btn.accept {
+    background: #2563eb;
+    color: #fff;
+}
+.pending-btn.decline {
+    background: #e2e8f0;
+    color: #334155;
+}

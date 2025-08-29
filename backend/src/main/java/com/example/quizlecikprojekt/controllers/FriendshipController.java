@@ -4,6 +4,7 @@ import com.example.quizlecikprojekt.controllers.dto.message.BulkFriendshipReques
 import com.example.quizlecikprojekt.controllers.dto.message.FriendRequestDto;
 import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
 import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
+import com.example.quizlecikprojekt.domain.friendship.entity.FriendshipDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class FriendshipController {
             @Valid @RequestBody FriendRequestDto requestDto,
             Authentication authentication) {
 
-        Friendship friendship = socialFacade.sendFriendRequest(
+        FriendshipDto friendship = socialFacade.sendFriendRequest(
                 authentication.getName(),
                 requestDto.getAddresseeId()
         );

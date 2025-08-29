@@ -2,6 +2,7 @@ package com.example.quizlecikprojekt.domain.friendship.service;
 
 import com.example.quizlecikprojekt.domain.friendship.entity.FriendDto;
 import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
+import com.example.quizlecikprojekt.domain.friendship.entity.FriendshipDto;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
 import com.example.quizlecikprojekt.domain.friendship.repository.FriendshipRepository;
 import com.example.quizlecikprojekt.domain.user.User;
@@ -27,7 +28,7 @@ public class FriendshipService {
     private UserRepository userRepository;
 
     // Wyślij zaproszenie do przyjaźni
-    public Friendship sendFriendRequest(Long requesterId, Long addresseeId) {
+    public FriendshipDto sendFriendRequest(Long requesterId, Long addresseeId) {
         if (requesterId.equals(addresseeId)) {
             throw new InvalidOperationException("Nie możesz zaprosić siebie do przyjaźni");
         }
@@ -53,7 +54,8 @@ public class FriendshipService {
         }
 
         Friendship newFriendship = new Friendship(requester, addressee);
-        return friendshipRepository.save(newFriendship);
+        Friendship save = friendshipRepository.save(newFriendship);
+        return fromEntity(save);
     }
 
     // Zaakceptuj zaproszenie do przyjaźni
@@ -158,5 +160,18 @@ public class FriendshipService {
     // Sugerowani znajomi
     public List<User> getSuggestedFriends(Long userId) {
         return friendshipRepository.findSuggestedFriends(userId);
+    }
+
+    private static FriendshipDto fromEntity(Friendship f) {
+        return new FriendshipDto(
+                f.getId(),
+                f.getRequester().getId(),
+                f.getRequester().getName(),
+                f.getRequester().getEmail(),
+                f.getAddressee().getId(),
+                f.getAddressee().getName(),
+                f.getAddressee().getEmail(),
+                f.getStatus().name()
+        );
     }
 }
