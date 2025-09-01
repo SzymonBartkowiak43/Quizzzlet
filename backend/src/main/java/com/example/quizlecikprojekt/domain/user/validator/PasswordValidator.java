@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.domain.user.validator;
 
-import com.example.quizlecikprojekt.domain.user.exception.PasswordValidationException;
+import com.example.quizlecikprojekt.exception.PasswordValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;

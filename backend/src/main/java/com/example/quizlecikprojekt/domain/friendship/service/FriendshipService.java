@@ -1,18 +1,16 @@
 package com.example.quizlecikprojekt.domain.friendship.service;
 
-import com.example.quizlecikprojekt.domain.friendship.entity.FriendDto;
-import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
-import com.example.quizlecikprojekt.domain.friendship.entity.FriendshipDto;
+import com.example.quizlecikprojekt.domain.friendship.dto.FriendDto;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
+import com.example.quizlecikprojekt.entity.Friendship;
+import com.example.quizlecikprojekt.domain.friendship.dto.FriendshipDto;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
 import com.example.quizlecikprojekt.domain.friendship.repository.FriendshipRepository;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.user.UserRepository;
+import com.example.quizlecikprojekt.entity.User;
 import com.example.quizlecikprojekt.exception.InvalidOperationException;
 import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,17 +22,15 @@ public class FriendshipService {
 
     private final FriendshipRepository friendshipRepository;
 
-    private final UserRepository userRepository;
+    private final UserFacade userFacade;
 
     public FriendshipDto sendFriendRequest(Long requesterId, Long addresseeId) {
         if (requesterId.equals(addresseeId)) {
-            throw new InvalidOperationException("Nie możesz zaprosić siebie do przyjaźni");
+            throw new InvalidOperationException("You can't invite yourself into friendship");
         }
 
-        User requester = userRepository.findById(requesterId)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
-        User addressee = userRepository.findById(addresseeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
+        User requester = userFacade.getUserById(requesterId);
+        User addressee = userFacade.getUserById(addresseeId);
 
         Optional<Friendship> existingFriendship = friendshipRepository
                 .findFriendshipBetweenUsers(requesterId, addresseeId);
@@ -44,9 +40,9 @@ public class FriendshipService {
             if (friendship.getStatus() == FriendshipStatus.ACCEPTED) {
                 throw new InvalidOperationException("Już jesteście przyjaciółmi");
             } else if (friendship.getStatus() == FriendshipStatus.PENDING) {
-                throw new InvalidOperationException("Zaproszenie już zostało wysłane");
+                throw new InvalidOperationException("You are already friends");
             } else if (friendship.getStatus() == FriendshipStatus.BLOCKED) {
-                throw new InvalidOperationException("Nie możesz zaprosić tego użytkownika");
+                throw new InvalidOperationException("You cannot invite this user");
             }
         }
 
@@ -57,14 +53,14 @@ public class FriendshipService {
 
     public Friendship acceptFriendRequest(Long userId, Long friendshipId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
-                .orElseThrow(() -> new ResourceNotFoundException("Zaproszenie nie znalezione"));
+                .orElseThrow(() -> new ResourceNotFoundException("Invitation not found"));
 
         if (!friendship.getAddressee().getId().equals(userId)) {
-            throw new InvalidOperationException("Nie możesz zaakceptować tego zaproszenia");
+            throw new InvalidOperationException("You cannot accept this invitation");
         }
 
         if (friendship.getStatus() != FriendshipStatus.PENDING) {
-            throw new InvalidOperationException("Zaproszenie nie jest aktywne");
+            throw new InvalidOperationException("The invitation is not active");
         }
 
         friendship.setStatus(FriendshipStatus.ACCEPTED);
@@ -73,10 +69,10 @@ public class FriendshipService {
 
     public void declineFriendRequest(Long userId, Long friendshipId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
-                .orElseThrow(() -> new ResourceNotFoundException("Zaproszenie nie znalezione"));
+                .orElseThrow(() -> new ResourceNotFoundException("Invitation not found"));
 
         if (!friendship.getAddressee().getId().equals(userId)) {
-            throw new InvalidOperationException("Nie możesz odrzucić tego zaproszenia");
+            throw new InvalidOperationException("You can't refuse this invitation");
         }
 
         friendship.setStatus(FriendshipStatus.DECLINED);
@@ -86,10 +82,10 @@ public class FriendshipService {
     public void removeFriend(Long userId, Long friendId) {
         Friendship friendship = friendshipRepository
                 .findFriendshipBetweenUsers(userId, friendId)
-                .orElseThrow(() -> new ResourceNotFoundException("Przyjaźń nie znaleziona"));
+                .orElseThrow(() -> new ResourceNotFoundException("Friendship not found"));
 
-        if (!friendship.involves(userRepository.findById(userId).get())) {
-            throw new InvalidOperationException("Nie możesz usunąć tej przyjaźni");
+        if (!friendship.involves(userFacade.getUserById(userId))) {
+            throw new InvalidOperationException("You can't delete this friendship");
         }
 
         friendshipRepository.delete(friendship);
@@ -97,13 +93,11 @@ public class FriendshipService {
 
     public void blockUser(Long userId, Long userToBlockId) {
         if (userId.equals(userToBlockId)) {
-            throw new InvalidOperationException("Nie możesz zablokować siebie");
+            throw new InvalidOperationException("You can't block yourself");
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
-        User userToBlock = userRepository.findById(userToBlockId)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"));
+        User user = userFacade.getUserById(userId);
+        User userToBlock = userFacade.getUserById(userToBlockId);
 
         Optional<Friendship> existingFriendship = friendshipRepository
                 .findFriendshipBetweenUsers(userId, userToBlockId);

@@ -3,10 +3,11 @@ package com.example.quizlecikprojekt.domain.progress;
 import com.example.quizlecikprojekt.domain.progress.dto.EvaluateResourceRequest;
 import com.example.quizlecikprojekt.domain.progress.dto.EvaluationResponse;
 import com.example.quizlecikprojekt.domain.progress.dto.ResourceEvaluationSummary;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.video.Video;
-import com.example.quizlecikprojekt.domain.video.VideoService;
-import com.example.quizlecikprojekt.domain.wordset.WordSet;
+import com.example.quizlecikprojekt.domain.video.VideoFacade;
+import com.example.quizlecikprojekt.entity.ResourceEvaluation;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Video;
+import com.example.quizlecikprojekt.entity.WordSet;
 import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @AllArgsConstructor
-public class EvaluationService {
+class EvaluationService {
 
   private final ResourceEvaluationRepository evaluationRepository;
   private final WordSetFacade wordSetFacade;
-  private final VideoService videoService;
+  private final VideoFacade videoFacade;
 
   public ResourceEvaluation evaluateResource(User user, EvaluateResourceRequest request) {
     if (request.wordSetId() == null && request.videoId() == null) {
@@ -50,7 +51,7 @@ public class EvaluationService {
       }
     } else {
       // Evaluate video
-      Video video = videoService.findById(request.videoId());
+      Video video = videoFacade.findById(request.videoId());
       Optional<ResourceEvaluation> existing =
           evaluationRepository.findByUserIdAndVideoId(user.getId(), request.videoId());
 
@@ -128,7 +129,7 @@ public class EvaluationService {
   }
 
   public ResourceEvaluationSummary getVideoEvaluationSummary(Long videoId) {
-    Video video = videoService.findById(videoId);
+    Video video = videoFacade.findById(videoId);
     List<ResourceEvaluation> evaluations =
         evaluationRepository.findByVideoIdOrderByCreatedAtDesc(videoId);
 

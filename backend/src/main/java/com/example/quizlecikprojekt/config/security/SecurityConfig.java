@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.config.security;
 
-import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public UserDetailsService userDetailsService(UserService userService) {
+  public UserDetailsService userDetailsService(UserFacade userService) {
     return new LoginUserDetailsService(userService);
   }
 

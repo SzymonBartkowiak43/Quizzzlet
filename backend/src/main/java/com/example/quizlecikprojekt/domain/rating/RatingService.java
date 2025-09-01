@@ -1,44 +1,31 @@
 package com.example.quizlecikprojekt.domain.rating;
 
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.user.UserRepository;
-import com.example.quizlecikprojekt.domain.video.Video;
-import com.example.quizlecikprojekt.domain.video.VideoRepository;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
+import com.example.quizlecikprojekt.domain.video.VideoFacade;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Video;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import com.example.quizlecikprojekt.entity.Rating;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RatingService {
+@AllArgsConstructor
+class RatingService {
+
   private final RatingRepository ratingRepository;
-  private final UserRepository userRepository;
-  private final VideoRepository videoRepository;
+  private final UserFacade userFacade;
 
-  public RatingService(
-      RatingRepository ratingRepository,
-      UserRepository userRepository,
-      VideoRepository videoRepository) {
-    this.ratingRepository = ratingRepository;
-    this.userRepository = userRepository;
-    this.videoRepository = videoRepository;
-  }
-
-  public void addOrUpdateRating(String userEmail, long videoId, int rating) {
+  public void addOrUpdateRating(String userEmail, long videoId, int rating, Video video) {
     Rating ratingToSave =
         ratingRepository.findByUserEmailAndVideoId(userEmail, videoId).orElseGet(Rating::new);
 
     if (ratingToSave.getUser() == null || ratingToSave.getVideo() == null) {
-      User user =
-          userRepository
-              .getUserByEmail(userEmail)
-              .orElseThrow(
-                  () -> new NoSuchElementException("User not found with email: " + userEmail));
-      Video video =
-          videoRepository
-              .findById(videoId)
-              .orElseThrow(() -> new NoSuchElementException("Video not found with id: " + videoId));
+      User user = userFacade.getUserByEmail(userEmail);
       ratingToSave.setUser(user);
       ratingToSave.setVideo(video);
     }

@@ -1,13 +1,12 @@
 package com.example.quizlecikprojekt.domain.progress;
 
 import com.example.quizlecikprojekt.domain.progress.dto.*;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
+import com.example.quizlecikprojekt.entity.User;
 import java.util.List;
 
+import com.example.quizlecikprojekt.entity.Progress;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,29 +14,29 @@ import org.springframework.stereotype.Component;
 public class ProgressFacade {
 
   private final ProgressService progressService;
-  private final UserService userService;
+  private final UserFacade userFacade;
 
   public DailyProgressResponse recordStudySession(
           String userEmail, RecordStudySessionRequest request) {
 
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     Progress progress = progressService.recordStudySession(user, request);
 
     return mapToDailyProgressResponse(progress);
   }
 
   public ProgressSummaryResponse getProgressSummary(String userEmail) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     return progressService.getProgressSummary(user);
   }
 
   public List<WeeklyProgressResponse> getWeeklyProgress(String userEmail, int weeks) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     return progressService.getWeeklyProgress(user, weeks);
   }
 
   public ProgressStatsResponse getProgressStats(String userEmail) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     return progressService.getProgressStats(user);
   }
 

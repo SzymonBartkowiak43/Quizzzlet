@@ -4,21 +4,20 @@ import com.example.quizlecikprojekt.domain.progress.ProgressFacade;
 import com.example.quizlecikprojekt.domain.progress.dto.*;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/progress")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ProgressController {
 
   private final ProgressFacade progressFacade;
-
-  public ProgressController(ProgressFacade progressFacade) {
-    this.progressFacade = progressFacade;
-  }
 
   @PostMapping("/record-session")
   public ResponseEntity<DailyProgressResponse> recordStudySession(

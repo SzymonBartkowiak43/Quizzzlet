@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.domain.comment.maper;
 
-import com.example.quizlecikprojekt.domain.comment.Comment;
+import com.example.quizlecikprojekt.entity.Comment;
 import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
 import java.util.List;
 import org.springframework.stereotype.Service;

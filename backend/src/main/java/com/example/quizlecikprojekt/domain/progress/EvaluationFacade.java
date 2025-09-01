@@ -3,8 +3,9 @@ package com.example.quizlecikprojekt.domain.progress;
 import com.example.quizlecikprojekt.domain.progress.dto.EvaluateResourceRequest;
 import com.example.quizlecikprojekt.domain.progress.dto.EvaluationResponse;
 import com.example.quizlecikprojekt.domain.progress.dto.ResourceEvaluationSummary;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
+import com.example.quizlecikprojekt.entity.ResourceEvaluation;
+import com.example.quizlecikprojekt.entity.User;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,17 +17,17 @@ import org.springframework.stereotype.Component;
 public class EvaluationFacade {
 
   private final EvaluationService evaluationService;
-  private final UserService userService;
+  private final UserFacade userFacade;
 
   public EvaluationResponse evaluateResource(String userEmail, EvaluateResourceRequest request) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     ResourceEvaluation evaluation = evaluationService.evaluateResource(user, request);
 
     return mapToEvaluationResponse(evaluation, user);
   }
 
   public List<EvaluationResponse> getUserEvaluations(String userEmail) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     return evaluationService.getUserEvaluations(user);
   }
 
@@ -39,7 +40,7 @@ public class EvaluationFacade {
   }
 
   public Optional<EvaluationResponse> getMyWordSetEvaluation(String userEmail, Long wordSetId) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     Optional<ResourceEvaluation> evaluation =
         evaluationService.getUserEvaluationForWordSet(user, wordSetId);
 
@@ -47,7 +48,7 @@ public class EvaluationFacade {
   }
 
   public Optional<EvaluationResponse> getMyVideoEvaluation(String userEmail, Long videoId) {
-    User user = userService.getUserByEmail(userEmail);
+    User user = userFacade.getUserByEmail(userEmail);
     Optional<ResourceEvaluation> evaluation =
         evaluationService.getUserEvaluationForVideo(user, videoId);
 

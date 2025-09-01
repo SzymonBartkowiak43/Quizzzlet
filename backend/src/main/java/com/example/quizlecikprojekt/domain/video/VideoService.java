@@ -1,22 +1,24 @@
 package com.example.quizlecikprojekt.domain.video;
 
-import com.example.quizlecikprojekt.domain.rating.RatingService;
+import com.example.quizlecikprojekt.controllers.dto.video.VideoSummaryResponse;
+import com.example.quizlecikprojekt.domain.rating.RatingFacade;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Video;
 import jakarta.persistence.EntityNotFoundException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
-public class VideoService {
-
-  private static final Logger logger = LoggerFactory.getLogger(VideoService.class);
+@AllArgsConstructor
+class VideoService {
 
   private static final Pattern YOUTUBE_WATCH_PATTERN =
       Pattern.compile("(?:youtube\\.com/watch\\?v=|youtu\\.be/)([a-zA-Z0-9_-]{11})");
@@ -24,12 +26,8 @@ public class VideoService {
       Pattern.compile("youtube\\.com/embed/([a-zA-Z0-9_-]{11})");
 
   private final VideoRepository videoRepository;
-  private final RatingService ratingService;
+  private final RatingFacade ratingFacade;
 
-  public VideoService(VideoRepository videoRepository, RatingService ratingService) {
-    this.videoRepository = videoRepository;
-    this.ratingService = ratingService;
-  }
 
   public Video findById(Long id) {
     if (id == null) {
@@ -52,7 +50,6 @@ public class VideoService {
     String processedTitle = title.trim();
 
     if (videoRepository.existsByUrl(processedUrl)) {
-      logger.warn("Attempt to add duplicate video URL: {}", processedUrl);
       throw new IllegalArgumentException("A video with this URL already exists");
     }
 
@@ -61,10 +58,7 @@ public class VideoService {
     video.setTitle(processedTitle);
     video.setUserId(userId);
 
-    Video savedVideo = videoRepository.save(video);
-    logger.info("Video created successfully: {} by user: {}", savedVideo.getId(), userId);
-
-    return savedVideo;
+    return videoRepository.save(video);
   }
 
   public List<Video> findTop4BestRatedVideosLast7Days() {
@@ -80,8 +74,8 @@ public class VideoService {
         .sorted(
             (v1, v2) ->
                 Double.compare(
-                    ratingService.getAverageRatingForVideoInLast7Days(v2.getId()),
-                    ratingService.getAverageRatingForVideoInLast7Days(v1.getId())))
+                        ratingFacade.getAverageRatingForVideoInLast7Days(v2.getId()),
+                        ratingFacade.getAverageRatingForVideoInLast7Days(v1.getId())))
         .limit(4)
         .toList();
   }
@@ -96,7 +90,6 @@ public class VideoService {
     try {
       return videoRepository.findByTitleContainingIgnoreCase(cleanQuery);
     } catch (Exception e) {
-      logger.warn("Repository search failed, using in-memory search", e);
       return videoRepository.findAll().stream()
           .filter(video -> video.getTitle().toLowerCase().contains(cleanQuery.toLowerCase()))
           .toList();
@@ -112,9 +105,7 @@ public class VideoService {
 
     try {
       videoRepository.delete(video);
-      logger.info("Video deleted successfully: {}", videoId);
     } catch (Exception e) {
-      logger.error("Error deleting video: {}", videoId, e);
       throw new RuntimeException("Failed to delete video", e);
     }
   }
@@ -169,4 +160,32 @@ public class VideoService {
           "Invalid video URL format. Please provide a valid YouTube URL.");
     }
   }
+
+  public Map<Long, Double> buildVideoRatingsMap(List<Video> videos) {
+    return videos.stream()
+            .collect(
+                    Collectors.toMap(
+                            Video::getId, video -> ratingFacade.getAverageRatingForVideo(video.getId())));
+  }
+
+  public VideoSummaryResponse mapToVideoSummary(Video video, Map<Long, Double> videoRatings, User owner) {
+    try {
+      return new VideoSummaryResponse(
+              video.getId(),
+              video.getTitle(),
+              video.getUrl(),
+              owner.getName(),
+              video.getUserId(),
+              videoRatings.getOrDefault(video.getId(), 0.0));
+    } catch (Exception e) {
+      return new VideoSummaryResponse(
+              video.getId(),
+              video.getTitle(),
+              video.getUrl(),
+              "Unknown",
+              video.getUserId(),
+              videoRatings.getOrDefault(video.getId(), 0.0));
+    }
+  }
+
 }

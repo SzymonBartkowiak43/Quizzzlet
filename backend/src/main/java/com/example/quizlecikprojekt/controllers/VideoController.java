@@ -5,22 +5,21 @@ import com.example.quizlecikprojekt.domain.comment.CommentFacade;
 import com.example.quizlecikprojekt.domain.video.VideoFacade;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/videos")
 public class VideoController {
 
   private final VideoFacade videoFacade;
   private final CommentFacade commentFacade;
 
-  public VideoController(VideoFacade videoFacade, CommentFacade commentFacade) {
-    this.videoFacade = videoFacade;
-    this.commentFacade = commentFacade;
-  }
 
   @GetMapping("/{id}")
   public ResponseEntity<VideoDetailsResponse> getVideoDetails(

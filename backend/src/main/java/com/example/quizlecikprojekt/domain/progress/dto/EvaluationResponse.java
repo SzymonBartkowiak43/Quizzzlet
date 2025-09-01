@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.domain.progress.dto;
 
-import com.example.quizlecikprojekt.domain.progress.ResourceEvaluation;
+import com.example.quizlecikprojekt.entity.ResourceEvaluation;
 import java.time.LocalDateTime;
 
 public record EvaluationResponse(

@@ -1,19 +1,21 @@
 package com.example.quizlecikprojekt.domain.progress;
 
 import com.example.quizlecikprojekt.domain.progress.dto.*;
-import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.entity.User;
 import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.example.quizlecikprojekt.entity.Progress;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class ProgressService {
+class ProgressService {
 
   private final ProgressRepository progressRepository;
   private final WordSetFacade wordSetService;

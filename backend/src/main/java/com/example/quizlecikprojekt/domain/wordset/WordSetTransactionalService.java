@@ -1,5 +1,6 @@
 package com.example.quizlecikprojekt.domain.wordset;
 
+import com.example.quizlecikprojekt.entity.WordSet;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

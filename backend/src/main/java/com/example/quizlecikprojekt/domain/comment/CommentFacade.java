@@ -3,37 +3,30 @@ package com.example.quizlecikprojekt.domain.comment;
 import com.example.quizlecikprojekt.controllers.dto.video.AddCommentRequest;
 import com.example.quizlecikprojekt.controllers.dto.video.CommentResponse;
 import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.user.UserService;
-import com.example.quizlecikprojekt.domain.video.Video;
-import com.example.quizlecikprojekt.domain.video.VideoService;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
+import com.example.quizlecikprojekt.domain.video.VideoFacade;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Video;
+import com.example.quizlecikprojekt.entity.Comment;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Component;
 
-@Component
+import lombok.AllArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
 public class CommentFacade {
 
-  private static final Logger logger = LoggerFactory.getLogger(CommentFacade.class);
-
   private final CommentService commentService;
-  private final UserService userService;
-  private final VideoService videoService;
+  private final UserFacade userFacade;
+  private final VideoFacade videoFacade;
 
-  public CommentFacade(
-      CommentService commentService, UserService userService, VideoService videoService) {
-    this.commentService = commentService;
-    this.userService = userService;
-    this.videoService = videoService;
-  }
+
 
   public CommentResponse addComment(String userEmail, Long videoId, AddCommentRequest request) {
-    logger.info("Adding comment by user: {} to video: {}", userEmail, videoId);
-
-    User currentUser = userService.getUserByEmail(userEmail);
+    User currentUser = userFacade.getUserByEmail(userEmail);
     Video video = findVideoById(videoId);
 
     Comment comment = commentService.addComment(request.content(), currentUser, video);
@@ -41,8 +34,6 @@ public class CommentFacade {
   }
 
   public List<CommentResponse> getVideoComments(Long videoId) {
-    logger.info("Getting comments for video: {}", videoId);
-
     Video video = findVideoById(videoId);
     List<CommentDto> comments = commentService.findAllDtoCommentsByVideoId(videoId);
 
@@ -50,20 +41,12 @@ public class CommentFacade {
   }
 
   public void deleteComment(String userEmail, Long videoId, Long commentId) {
-    logger.info("Deleting comment {} from video {} by user: {}", commentId, videoId, userEmail);
-
-    User currentUser = userService.getUserByEmail(userEmail);
+    User currentUser = userFacade.getUserByEmail(userEmail);
     Comment comment = findCommentById(commentId);
 
     validateCommentDeletePermission(currentUser, comment);
 
     commentService.deleteComment(commentId);
-    logger.info("Comment {} deleted successfully by user: {}", commentId, userEmail);
-  }
-
-  public int getVideoCommentsCount(Long videoId) {
-    List<CommentDto> comments = commentService.findAllDtoCommentsByVideoId(videoId);
-    return comments.size();
   }
 
   public List<CommentResponse> getVideoCommentsForDetails(Long videoId) {
@@ -71,9 +54,8 @@ public class CommentFacade {
     return comments.stream().map(this::mapToCommentResponse).toList();
   }
 
-  // Helper methods
   private Video findVideoById(Long videoId) {
-    Video video = videoService.findById(videoId);
+    Video video = videoFacade.findById(videoId);
     if (video == null) {
       throw new EntityNotFoundException("Video not found with id: " + videoId);
     }

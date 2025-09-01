@@ -1,6 +1,7 @@
 package com.example.quizlecikprojekt.controllers;
 
 import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/social")
 @PreAuthorize("hasRole('USER')")
+@AllArgsConstructor
 public class SocialDashboardController {
 
-    @Autowired
     private SocialFacade socialFacade;
 
     @GetMapping("/dashboard")

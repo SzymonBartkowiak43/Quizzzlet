@@ -2,8 +2,8 @@ package com.example.quizlecikprojekt.controllers;
 
 import com.example.quizlecikprojekt.controllers.dto.message.*;
 import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
-import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessage;
-import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessageDto;
+import com.example.quizlecikprojekt.entity.PrivateMessage;
+import com.example.quizlecikprojekt.domain.friendship.dto.PrivateMessageDto;
 import com.example.quizlecikprojekt.domain.group.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

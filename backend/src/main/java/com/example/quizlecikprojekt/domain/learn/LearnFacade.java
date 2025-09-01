@@ -1,9 +1,12 @@
 package com.example.quizlecikprojekt.domain.learn;
 
 import com.example.quizlecikprojekt.controllers.dto.learn.*;
-import com.example.quizlecikprojekt.domain.word.Word;
-import com.example.quizlecikprojekt.domain.word.WordFacade;
-import com.example.quizlecikprojekt.domain.wordset.WordSet;
+import com.example.quizlecikprojekt.domain.learn.dto.FlashcardSession;
+import com.example.quizlecikprojekt.domain.learn.dto.QuizQuestion;
+import com.example.quizlecikprojekt.domain.learn.dto.QuizSession;
+import com.example.quizlecikprojekt.entity.Word;
+import com.example.quizlecikprojekt.domain.wordset.WordFacade;
+import com.example.quizlecikprojekt.entity.WordSet;
 import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import java.time.LocalDateTime;
 import java.util.*;

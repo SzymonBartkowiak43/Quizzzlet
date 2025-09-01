@@ -1,6 +1,6 @@
 package com.example.quizlecikprojekt.controllers.loginandregister;
 
-import com.example.quizlecikprojekt.domain.user.UserService;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
 import lombok.AllArgsConstructor;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegisterController {
 
-  private final UserService userService;
+  private final UserFacade userFacade;
 
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody UserRegisterDto userRegisterDto) {
 
-    UserResponseDto body = userService.createNewUser(userRegisterDto);
+    UserResponseDto body = userFacade.createNewUser(userRegisterDto);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(body);
   }

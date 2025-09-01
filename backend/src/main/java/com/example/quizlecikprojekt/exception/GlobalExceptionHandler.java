@@ -3,8 +3,6 @@ package com.example.quizlecikprojekt.exception;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import com.example.quizlecikprojekt.domain.user.exception.PasswordValidationException;
-import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

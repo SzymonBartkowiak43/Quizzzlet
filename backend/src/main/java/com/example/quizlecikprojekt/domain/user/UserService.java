@@ -2,14 +2,17 @@ package com.example.quizlecikprojekt.domain.user;
 
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
-import com.example.quizlecikprojekt.domain.user.exception.UserNotFoundException;
+import com.example.quizlecikprojekt.exception.UserNotFoundException;
 import com.example.quizlecikprojekt.domain.user.validator.PasswordValidator;
 import java.util.Set;
+
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.UserRole;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+class UserService {
 
   private static final String DEFAULT_USER_ROLE = "USER";
 

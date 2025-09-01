@@ -2,10 +2,12 @@ package com.example.quizlecikprojekt.domain.comment;
 
 import com.example.quizlecikprojekt.domain.comment.dto.CommentDto;
 import com.example.quizlecikprojekt.domain.comment.maper.CommentDtoMapper;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.video.Video;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Video;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.example.quizlecikprojekt.entity.Comment;
 import org.springframework.stereotype.Service;
 
 @Service

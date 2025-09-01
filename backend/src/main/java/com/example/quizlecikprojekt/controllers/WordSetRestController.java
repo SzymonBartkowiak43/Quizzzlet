@@ -8,8 +8,8 @@ import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetCreateRequest
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetResponse;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetUpdateRequest;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordUpdateRequest;
-import com.example.quizlecikprojekt.domain.word.dto.WordAddRequest;
-import com.example.quizlecikprojekt.domain.word.dto.WordAddResponse;
+import com.example.quizlecikprojekt.domain.wordset.dto.WordAddRequest;
+import com.example.quizlecikprojekt.domain.wordset.dto.WordAddResponse;
 import com.example.quizlecikprojekt.domain.wordset.WordSetFacade;
 import jakarta.validation.Valid;
 import java.util.List;

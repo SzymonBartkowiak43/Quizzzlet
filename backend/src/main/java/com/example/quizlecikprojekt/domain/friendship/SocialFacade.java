@@ -1,13 +1,17 @@
 package com.example.quizlecikprojekt.domain.friendship;
 
 import com.example.quizlecikprojekt.controllers.dto.UserDto;
-import com.example.quizlecikprojekt.domain.friendship.entity.*;
+import com.example.quizlecikprojekt.domain.friendship.dto.*;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
 import com.example.quizlecikprojekt.domain.friendship.service.FriendshipService;
 import com.example.quizlecikprojekt.domain.friendship.service.MessageService;
 import com.example.quizlecikprojekt.domain.group.*;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.user.UserRepository;
+import com.example.quizlecikprojekt.domain.user.UserFacade;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Friendship;
+import com.example.quizlecikprojekt.entity.Group;
+import com.example.quizlecikprojekt.entity.GroupMessage;
+import com.example.quizlecikprojekt.entity.PrivateMessage;
 import com.example.quizlecikprojekt.exception.InvalidOperationException;
 import com.example.quizlecikprojekt.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
@@ -26,51 +30,45 @@ public class SocialFacade {
 
     private final MessageService messageService;
 
-    private final UserRepository userRepository;
+    private final UserFacade userFacade;
 
     private final GroupRepository groupRepository;
 
     private final GroupMessageRepository groupMessageRepository;
 
     public FriendshipDto sendFriendRequest(String userEmail, Long addresseeId) {
-        Long requesterId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long requesterId = userFacade.getUserByEmail(userEmail)
                 .getId();
 
         return friendshipService.sendFriendRequest(requesterId, addresseeId);
     }
 
     public Friendship acceptFriendRequest(String userEmail, Long friendshipId) {
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
         return friendshipService.acceptFriendRequest(userId, friendshipId);
     }
 
     public void declineFriendRequest(String userEmail, Long friendshipId) {
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
         friendshipService.declineFriendRequest(userId, friendshipId);
     }
 
     public void removeFriend(String userEmail, Long friendId) {
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
         friendshipService.removeFriend(userId, friendId);
     }
 
     public void blockUser(String userEmail, Long userToBlockId) {
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
         friendshipService.blockUser(userId, userToBlockId);
     }
 
     public Map<String, Object> getUserFriendshipInfo(String userName) {
-        Long userId = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userName)
                 .getId();
 
         Map<String, Object> friendshipInfo = new HashMap<>();
@@ -102,8 +100,7 @@ public class SocialFacade {
     }
 
     public Map<String, Object> checkFriendshipStatus(String userName, Long userId2) {
-        Long userId1 = userRepository.getUserByEmail(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId1 = userFacade.getUserByEmail(userName)
                 .getId();
 
         Map<String, Object> status = new HashMap<>();
@@ -120,17 +117,14 @@ public class SocialFacade {
     }
 
     public PrivateMessage sendPrivateMessage(String userEmail, Long recipientId, String content) {
-        Long senderId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
-                .getId();
+        Long senderId = userFacade.getUserByEmail(userEmail).getId();
         return messageService.sendPrivateMessage(senderId, recipientId, content);
     }
 
     public Map<String, Object> getUserMessagingInfo(String userEmail) {
         Map<String, Object> messagingInfo = new HashMap<>();
 
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
 
         List<PrivateMessage> conversations = messageService.getUserConversations(userId);
@@ -148,8 +142,7 @@ public class SocialFacade {
     public Map<String, Object> manageConversation(String userEmail, Long otherUserId, String action, Map<String, Object> params) {
         Map<String, Object> result = new HashMap<>();
 
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
 
         switch (action.toLowerCase()) {
@@ -178,8 +171,7 @@ public class SocialFacade {
     public Map<String, Object> searchSocial(String searchTerm, String requestUserName, Pageable pageable) {
         Map<String, Object> searchResults = new HashMap<>();
 
-        Long requestingUserId = userRepository.getUserByEmail(requestUserName)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long requestingUserId = userFacade.getUserByEmail(requestUserName)
                 .getId();
 
 
@@ -192,8 +184,7 @@ public class SocialFacade {
     }
 
     private Long getUserIdFromUsername(String username) {
-        return userRepository.getUserByEmail(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        return userFacade.getUserByEmail(username)
                 .getId();
     }
 
@@ -224,8 +215,7 @@ public class SocialFacade {
 
     @Transactional
     public Map<String, Object> bulkFriendshipOperations(String userEmail, String operation, List<Long> targetUserIds) {
-        Long userId = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Użytkownik nie znaleziony"))
+        Long userId = userFacade.getUserByEmail(userEmail)
                 .getId();
 
         Map<String, Object> result = new HashMap<>();
@@ -263,9 +253,8 @@ public class SocialFacade {
     }
 
     public GroupDto createGroup(String creatorEmail, String name, List<Long> memberIds) {
-        User creator = userRepository.getUserByEmail(creatorEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Set<User> members = new HashSet<>((Collection) userRepository.findAllById(memberIds));
+        User creator = userFacade.getUserByEmail(creatorEmail);
+        Set<User> members = new HashSet<>((Collection) userFacade.findAllById(memberIds));
         members.add(creator);
         Group group = new Group(name, creator, members);
         Group save = groupRepository.save(group);
@@ -281,8 +270,7 @@ public class SocialFacade {
     }
 
     public List<GroupDto> getGroupsForUser(String userEmail) {
-        User user = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userFacade.getUserByEmail(userEmail);
         List<Group> groups = groupRepository.findByMembers_Id(user.getId());
         return groups.stream().map(g -> new GroupDto(
                 g.getId(),
@@ -295,8 +283,7 @@ public class SocialFacade {
     }
 
     public GroupMessageDto sendGroupMessage(String senderEmail, Long groupId, String content) {
-        User sender = userRepository.getUserByEmail(senderEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User sender = userFacade.getUserByEmail(senderEmail);
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
         if (!group.getMembers().contains(sender)) {
@@ -315,8 +302,7 @@ public class SocialFacade {
     }
 
     public List<GroupMessageDto> getGroupMessages(String userEmail, Long groupId) {
-        User user = userRepository.getUserByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userFacade.getUserByEmail(userEmail);
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
         if (!group.getMembers().contains(user)) {

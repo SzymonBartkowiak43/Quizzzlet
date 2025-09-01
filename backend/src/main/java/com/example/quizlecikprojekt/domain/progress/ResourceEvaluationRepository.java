@@ -2,13 +2,15 @@ package com.example.quizlecikprojekt.domain.progress;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.example.quizlecikprojekt.entity.ResourceEvaluation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ResourceEvaluationRepository extends JpaRepository<ResourceEvaluation, Long> {
+interface ResourceEvaluationRepository extends JpaRepository<ResourceEvaluation, Long> {
 
   Optional<ResourceEvaluation> findByUserIdAndWordSetId(Long userId, Long wordSetId);
 

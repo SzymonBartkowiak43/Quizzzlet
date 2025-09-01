@@ -1,7 +1,7 @@
 package com.example.quizlecikprojekt.domain.friendship.repository;
 
-import com.example.quizlecikprojekt.domain.friendship.entity.PrivateMessage;
-import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.entity.PrivateMessage;
+import com.example.quizlecikprojekt.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

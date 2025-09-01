@@ -2,7 +2,9 @@ package com.example.quizlecikprojekt.domain.wordset;
 
 import com.example.quizlecikprojekt.controllers.dto.word.WordResponse;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetResponse;
-import com.example.quizlecikprojekt.domain.word.Word;
+import com.example.quizlecikprojekt.entity.Word;
+import com.example.quizlecikprojekt.entity.WordSet;
+
 import java.util.ArrayList;
 import java.util.List;
 

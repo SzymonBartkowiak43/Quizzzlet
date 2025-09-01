@@ -1,8 +1,8 @@
 package com.example.quizlecikprojekt.domain.friendship.repository;
 
-import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
+import com.example.quizlecikprojekt.entity.Friendship;
 import com.example.quizlecikprojekt.domain.friendship.enums.FriendshipStatus;
-import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

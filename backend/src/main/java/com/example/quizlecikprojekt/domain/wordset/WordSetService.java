@@ -1,16 +1,14 @@
 package com.example.quizlecikprojekt.domain.wordset;
 
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetCreateRequest;
-import com.example.quizlecikprojekt.domain.user.User;
-import com.example.quizlecikprojekt.domain.word.Word;
-import com.example.quizlecikprojekt.domain.word.WordFacade;
-import com.example.quizlecikprojekt.domain.word.WordRepository;
-import com.example.quizlecikprojekt.domain.word.dto.WordItem;
-import com.example.quizlecikprojekt.domain.wordset.exception.WordSetNotFoundException;
-import com.example.quizlecikprojekt.domain.wordset.exception.WordSetOperationException;
+import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.Word;
+import com.example.quizlecikprojekt.domain.wordset.dto.WordItem;
+import com.example.quizlecikprojekt.exception.WordSetNotFoundException;
+import com.example.quizlecikprojekt.exception.WordSetOperationException;
 import java.util.List;
-import java.util.Optional;
 
+import com.example.quizlecikprojekt.entity.WordSet;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;

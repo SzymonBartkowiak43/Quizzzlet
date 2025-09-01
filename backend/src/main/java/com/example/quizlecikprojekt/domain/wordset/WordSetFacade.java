@@ -8,13 +8,14 @@ import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetCreateRequest
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetResponse;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordSetUpdateRequest;
 import com.example.quizlecikprojekt.controllers.dto.wordset.WordUpdateRequest;
-import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.entity.User;
 import com.example.quizlecikprojekt.domain.user.UserFacade;
-import com.example.quizlecikprojekt.domain.word.Word;
-import com.example.quizlecikprojekt.domain.word.WordFacade;
-import com.example.quizlecikprojekt.domain.word.dto.WordAddRequest;
-import com.example.quizlecikprojekt.domain.word.dto.WordAddResponse;
+import com.example.quizlecikprojekt.entity.Word;
+import com.example.quizlecikprojekt.domain.wordset.dto.WordAddRequest;
+import com.example.quizlecikprojekt.domain.wordset.dto.WordAddResponse;
 import java.util.List;
+
+import com.example.quizlecikprojekt.entity.WordSet;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

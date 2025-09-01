@@ -3,13 +3,11 @@ package com.example.quizlecikprojekt.controllers;
 import com.example.quizlecikprojekt.controllers.dto.message.BulkFriendshipRequest;
 import com.example.quizlecikprojekt.controllers.dto.message.FriendRequestDto;
 import com.example.quizlecikprojekt.domain.friendship.SocialFacade;
-import com.example.quizlecikprojekt.domain.friendship.entity.Friendship;
-import com.example.quizlecikprojekt.domain.friendship.entity.FriendshipDto;
+import com.example.quizlecikprojekt.entity.Friendship;
+import com.example.quizlecikprojekt.domain.friendship.dto.FriendshipDto;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

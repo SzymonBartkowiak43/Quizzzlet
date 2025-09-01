@@ -1,14 +1,16 @@
 package com.example.quizlecikprojekt.domain.wordset;
 
-import com.example.quizlecikprojekt.domain.user.User;
+import com.example.quizlecikprojekt.entity.User;
 import java.util.List;
+
+import com.example.quizlecikprojekt.entity.WordSet;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WordSetRepository extends CrudRepository<WordSet, Long> {
+interface WordSetRepository extends CrudRepository<WordSet, Long> {
   @Query(
       "SELECT ws FROM WordSet ws LEFT JOIN FETCH ws.words WHERE ws.user = :user ORDER BY ws.createdAt DESC")
   List<WordSet> findByUserWithWordsOrderByCreatedAtDesc(@Param("user") User user);
