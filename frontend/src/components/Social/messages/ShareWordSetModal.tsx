@@ -23,7 +23,6 @@ const ShareWordSetModal: React.FC<ShareWordSetModalProps> = ({
     const [selectedWordSet, setSelectedWordSet] = useState<number | null>(null);
     const [sharing, setSharing] = useState(false);
 
-    // Mock word sets - w prawdziwej aplikacji pobrałbyś z API
     const mockWordSets = [
         { id: 1, name: 'Business English Basics', wordCount: 25 },
         { id: 2, name: 'Travel Vocabulary', wordCount: 30 },

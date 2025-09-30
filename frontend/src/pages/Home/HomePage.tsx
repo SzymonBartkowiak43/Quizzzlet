@@ -8,57 +8,57 @@ const HomePage: React.FC = () => {
     return (
         <div className="home-page">
             <div className="container1">
-                <h1>CHOOSE YOUR ACTIVITY</h1>
+                <h1>WYBIERZ SWOJĄ AKTYWNOŚĆ</h1>
             </div>
 
             <div className="container2">
                 <div className="activity-card blue-frame">
                     <div className="content-frame">
-                        <h2 className="title">Review Previous Words</h2>
+                        <h2 className="title">Przejrzyj poprzednie słowka</h2>
                         <p className="description">
-                            Here you can review the words you have previously learned. This section allows you to
-                            revisit and reinforce your vocabulary knowledge, ensuring better retention and understanding of the
-                            words you have studied.
+                            Tutaj możesz przejrzeć słowa, których się wcześniej nauczyłeś. Ta sekcja pozwala
+                            na powtórzenie i utrwalenie słownictwa, zapewniając lepsze zapamiętanie i zrozumienie
+                            nauczonych słów.
                         </p>
                         <button
                             className="action-button review-button"
-                            onClick={() => navigate('/review')}
+                            onClick={() => navigate('/word-sets')}
                         >
-                            REVIEW WORDS
+                            PRZEGLĄDAJ SŁOWA
                         </button>
                     </div>
                 </div>
 
                 <div className="activity-card red-frame">
                     <div className="content-frame">
-                        <h2 className="title">Watch Videos</h2>
+                        <h2 className="title">Obejrzyj filmy</h2>
                         <p className="description">
-                            Watch educational videos to improve your language skills. This section provides a variety
-                            of videos that cover different aspects of language learning, including grammar, vocabulary,
-                            pronunciation, and more.
+                            Oglądaj filmy edukacyjne, aby poprawić swoje umiejętności językowe. Ta sekcja zawiera różnorodne
+                            filmy, które obejmują różne aspekty nauki języków, w tym gramatykę, słownictwo,
+                            wymowę i wiele innych.
                         </p>
                         <button
                             className="action-button watch-button"
                             onClick={() => navigate('/videos')}
                         >
-                            LET'S WATCH
+                            OGLĄDAJ FILMY
                         </button>
                     </div>
                 </div>
 
                 <div className="activity-card green-frame">
                     <div className="content-frame">
-                        <h2 className="title">My Sets</h2>
+                        <h2 className="title">Moje zestawy</h2>
                         <p className="description">
-                            Explore your personalized sets! Create and manage your custom flashcard sets to enhance
-                            your learning experience. Dive into a world of tailored content that suits your study needs and track
-                            your progress as you master new topics.
+                            Odkryj swoje spersonalizowane zestawy! Twórz i zarządzaj własnymi zestawami fiszek, aby ulepszyć
+                            swoje doświadczenie w nauce. Zanurz się w świecie spersonalizowanych treści, które odpowiadają Twoim potrzebom w nauce i śledź
+                            swoje postępy w miarę opanowywania nowych tematów.
                         </p>
                         <button
                             className="action-button sets-button"
                             onClick={() => navigate('/word-sets')}
                         >
-                            GO TO SETS
+                            PRZEJDŹ DO ZESTAWÓW
                         </button>
                     </div>
                 </div>

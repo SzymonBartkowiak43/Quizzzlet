@@ -4,7 +4,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SendPrivateMessageRequest {
 
     @NotNull(message = "ID odbiorcy nie może być puste")
@@ -15,18 +23,4 @@ public class SendPrivateMessageRequest {
     @Size(max = 1000, message = "Wiadomość nie może przekraczać 1000 znaków")
     private String content;
 
-    // Constructors
-    public SendPrivateMessageRequest() {}
-
-    public SendPrivateMessageRequest(Long recipientId, String content) {
-        this.recipientId = recipientId;
-        this.content = content;
-    }
-
-    // Getters and Setters
-    public Long getRecipientId() { return recipientId; }
-    public void setRecipientId(Long recipientId) { this.recipientId = recipientId; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
 }

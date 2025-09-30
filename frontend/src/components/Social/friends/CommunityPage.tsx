@@ -35,7 +35,6 @@ const CommunityPage: React.FC = () => {
 
     const currentUserId = getCurrentUserId();
 
-    // Pobieranie użytkowników
     useEffect(() => {
         const fetchUsers = async () => {
             setLoading(true);
@@ -51,13 +50,11 @@ const CommunityPage: React.FC = () => {
         fetchUsers();
     }, []);
 
-    // Pobieranie oczekujących zaproszeń
     useEffect(() => {
         const fetchRequests = async () => {
             setRequestsLoading(true);
             try {
                 const data = await socialApi.getMyFriendships();
-                // Załóż, że backend zwraca pole "pendingRequests" jako tablicę oczekujących zaproszeń
                 setPendingRequests(data.pendingRequests || []);
             } catch (e) {
                 setPendingRequests([]);

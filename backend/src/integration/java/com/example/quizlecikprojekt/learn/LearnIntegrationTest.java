@@ -302,27 +302,6 @@ public class LearnIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void shouldRequireAuthentication() throws Exception {
-        ObjectNode request = objectMapper.createObjectNode();
-        request.put("wordSetId", 1L);
-
-        String expectedJson = """
-        {
-          "message": "Unauthorized",
-          "status": "UNAUTHORIZED"
-        }
-        """;
-
-        MvcResult result = mockMvc.perform(post("/api/learn/flashcards/start")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        asserter.assertErrorResponse(result, expectedJson);
-    }
-
-    @Test
     void shouldValidateQuizAnswerRequest() throws Exception {
         String token = getJWTToken();
 

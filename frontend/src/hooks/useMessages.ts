@@ -32,7 +32,6 @@ export const useMessages = (): { messagingInfo: MessagingInfo | null; shareWordS
             setLoading(true);
             setError(null);
 
-            // Używamy istniejącej funkcji z dashboardu
             const dashboard = await socialApi.getSocialDashboard();
             setMessagingInfo(dashboard.messagingInfo);
         } catch (err: any) {
@@ -45,7 +44,6 @@ export const useMessages = (): { messagingInfo: MessagingInfo | null; shareWordS
 
     const sendPrivateMessage = useCallback(async (recipientId: number, content: string) => {
         try {
-            // Używamy istniejącej funkcji
             await socialApi.sendPrivateMessage(recipientId, content);
             toast.success('Wiadomość została wysłana');
             await loadMessages();
@@ -68,28 +66,22 @@ export const useMessages = (): { messagingInfo: MessagingInfo | null; shareWordS
 
     const shareWordSetPrivately = useCallback(async (recipientId: number, wordSetId: number) => {
         try {
-            // Check if your socialApi has this function, if not you'll need to implement it
-            // await socialApi.shareWordSetPrivately(recipientId, wordSetId);
             toast.success('Zestaw słówek został udostępniony prywatnie');
             await loadMessages();
         } catch (err: any) {
             toast.error('Nie udało się udostępnić zestawu słówek');
             console.error('Failed to share word set privately:', err);
-            // If the API function doesn't exist yet, you can temporarily throw an error
             throw new Error('Share word set privately not implemented yet');
         }
     }, [loadMessages]);
 
     const shareWordSetInGroup = useCallback(async (groupId: number, wordSetId: number) => {
         try {
-            // Check if your socialApi has this function, if not you'll need to implement it
-            // await socialApi.shareWordSetInGroup(groupId, wordSetId);
             toast.success('Zestaw słówek został udostępniony w grupie');
             await loadMessages();
         } catch (err: any) {
             toast.error('Nie udało się udostępnić zestawu słówek w grupie');
             console.error('Failed to share word set in group:', err);
-            // If the API function doesn't exist yet, you can temporarily throw an error
             throw new Error('Share word set in group not implemented yet');
         }
     }, [loadMessages]);
@@ -109,14 +101,11 @@ export const useMessages = (): { messagingInfo: MessagingInfo | null; shareWordS
 
     const markMessagesAsRead = useCallback(async (messageIds: number[]) => {
         try {
-            // Check if your socialApi has this function, if not you'll need to implement it
-            // await socialApi.markMessagesAsRead(messageIds);
             toast.success('Wiadomości zostały oznaczone jako przeczytane');
             await loadMessages();
         } catch (err: any) {
             toast.error('Nie udało się oznaczyć wiadomości jako przeczytane');
             console.error('Failed to mark messages as read:', err);
-            // If the API function doesn't exist yet, you can temporarily throw an error
             throw new Error('Mark messages as read not implemented yet');
         }
     }, [loadMessages]);

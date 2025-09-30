@@ -187,7 +187,6 @@
     margin-top: 2rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .flashcard-settings {
         padding: 1.5rem;

@@ -19,7 +19,6 @@ interface ChatWindowProps {
     messages: PrivateMessage[];
     onSendMessage: (userId: number, content: string) => Promise<void>;
     onBack: () => void;
-    // onMarkAsRead: () => void;
 }
 
 const ChatWindow: React.FC<ChatWindowProps> = ({
@@ -28,12 +27,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                                                    messages,
                                                    onSendMessage,
                                                    onBack,
-                                                   // onMarkAsRead
                                                }) => {
     const [newMessage, setNewMessage] = useState('');
     const [sending, setSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const currentUser = 'SzymonBartkowiak43'; // W prawdziwej aplikacji to by było z contextu
+    const currentUser = 'SzymonBartkowiak43';
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -43,9 +41,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         scrollToBottom();
     }, [messages]);
 
-    // useEffect(() => {
-    //     onMarkAsRead();
-    // }, [onMarkAsRead]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -82,7 +77,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         }
     };
 
-    // Group messages by date
     const groupedMessages = messages.reduce((groups, message) => {
         const date = formatDate(message.createdAt);
         if (!groups[date]) {

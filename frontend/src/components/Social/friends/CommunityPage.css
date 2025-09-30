@@ -1,25 +1,60 @@
-.community-page {
-    max-width: 800px;
+.community-layout {
+    display: flex;
+    gap: 32px;
+    max-width: 1100px;
     margin: 38px auto 0 auto;
     background: #f8fafc;
     border-radius: 14px;
     box-shadow: 0 6px 32px rgba(30,41,59,0.07);
     padding: 38px 32px 32px 32px;
 }
+
+.community-left {
+    flex: 2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.community-right {
+    flex: 1;
+    background: #fff;
+    border-radius: 11px;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+    padding: 16px 18px;
+    min-width: 300px;
+    max-width: 360px;
+    height: fit-content;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.community-page h2 {
+    margin-bottom: 18px;
+    color: #2563eb;
+    font-size: 1.35rem;
+}
+
 .community-search {
     padding: 9px 16px;
     border-radius: 8px;
     border: 1.5px solid #e2e8f0;
-    width: 220px;
+    width: 100%;
+    max-width: 320px;
     font-size: 1rem;
     margin-bottom: 24px;
     background: #fff;
+    box-sizing: border-box;
 }
+
 .community-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
+
 .community-user {
     display: flex;
     align-items: center;
@@ -28,7 +63,14 @@
     border-radius: 11px;
     box-shadow: 0 2px 12px rgba(37,99,235,0.06);
     padding: 14px 18px;
+    transition: box-shadow 0.2s;
 }
+
+.community-user:hover {
+    box-shadow: 0 4px 20px rgba(37,99,235,0.10);
+    background: #f3f7fc;
+}
+
 .community-avatar {
     background: #2563eb;
     color: #fff;
@@ -40,49 +82,54 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
+
 .community-name {
     font-weight: 600;
     color: #334155;
 }
+
 .community-email {
     font-size: 0.97rem;
     color: #64748b;
 }
+
+.community-btn {
+    padding: 7px 18px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: auto;
+    transition: background 0.15s;
+}
+
+.community-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .community-loader, .community-empty {
     color: #64748b;
     text-align: center;
     margin-top: 30px;
 }
 
-.community-layout {
-    display: flex;
-    gap: 32px;
-    max-width: 1100px;
-    margin: 38px auto 0 auto;
-    background: #f8fafc;
-    border-radius: 14px;
-    box-shadow: 0 6px 32px rgba(30,41,59,0.07);
-    padding: 38px 32px 32px 32px;
+.community-right h3 {
+    margin-bottom: 18px;
+    color: #2563eb;
+    font-size: 1.1rem;
 }
-.community-left {
-    flex: 2;
-}
-.community-right {
-    flex: 1;
-    background: #fff;
-    border-radius: 11px;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
-    padding: 16px 18px;
-    min-width: 300px;
-    max-width: 360px;
-    height: fit-content;
-}
+
 .pending-list {
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
+
 .pending-item {
     display: flex;
     align-items: center;
@@ -90,31 +137,77 @@
     background: #f3f7fc;
     border-radius: 9px;
     padding: 12px;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.04);
 }
+
 .pending-info {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
+
 .pending-name {
     font-weight: 600;
     color: #334155;
+    margin-bottom: 2px;
 }
+
 .pending-email {
     font-size: 0.94rem;
     color: #64748b;
 }
+
 .pending-btn {
-    padding: 5px 14px;
-    border-radius: 6px;
+    padding: 7px 18px;
+    border-radius: 7px;
     border: none;
     cursor: pointer;
     margin-left: 6px;
     font-size: 1rem;
+    font-weight: 500;
+    transition: background 0.15s;
 }
+
 .pending-btn.accept {
     background: #2563eb;
     color: #fff;
 }
+
 .pending-btn.decline {
     background: #e2e8f0;
     color: #334155;
+}
+
+@media (max-width: 900px) {
+    .community-layout {
+        flex-direction: column;
+        padding: 16px 6px;
+        gap: 18px;
+    }
+    .community-left, .community-right {
+        min-width: 0;
+        max-width: 100%;
+    }
+    .community-right {
+        margin-top: 24px;
+        padding: 12px 8px;
+    }
+    .community-search {
+        max-width: 100%;
+        width: 100%;
+    }
+    .pending-list, .community-list {
+        gap: 10px;
+    }
+    .community-user, .pending-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+        padding: 11px 10px;
+    }
+    .pending-btn, .community-btn {
+        width: 100%;
+        margin-left: 0;
+    }
 }

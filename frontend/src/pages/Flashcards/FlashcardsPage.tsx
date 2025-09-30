@@ -59,7 +59,6 @@ const FlashcardsPage: React.FC = () => {
     };
 
     const initializeSession = (wordSet: WordSet) => {
-        // Pomieszaj słówka
         const shuffledWords = [...wordSet.words].sort(() => Math.random() - 0.5);
 
         const newSession: FlashcardSession = {
@@ -114,7 +113,6 @@ const FlashcardsPage: React.FC = () => {
             };
         });
 
-        // Następna karta po 500ms
         setTimeout(() => {
             goToNextCard();
         }, 500);
@@ -124,7 +122,6 @@ const FlashcardsPage: React.FC = () => {
         if (!session) return;
 
         if (session.currentIndex >= session.words.length - 1) {
-            // Koniec sesji
             return;
         }
 
@@ -267,7 +264,6 @@ const FlashcardsPage: React.FC = () => {
             onKeyDown={handleKeyPress}
             tabIndex={0}
         >
-            {/* Header z postępem */}
             <div className="flashcards-header">
                 <button
                     onClick={() => navigate(`/word-sets/${id}`)}
@@ -289,7 +285,6 @@ const FlashcardsPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Progress bar */}
             <div className="progress-bar">
                 <div
                     className="progress-fill"
@@ -297,13 +292,11 @@ const FlashcardsPage: React.FC = () => {
                 />
             </div>
 
-            {/* Main flashcard */}
             <div className="flashcard-container">
                 <div
                     className={`flashcard ${isFlipped ? 'flipped' : ''} ${isAnimating ? 'animating' : ''}`}
                     onClick={!showAnswer ? handleShowAnswer : handleFlipCard}
                 >
-                    {/* ✅ FRONT SIDE */}
                     <div className="flashcard-front">
                         <div className="card-content">
                             <div className="word-text">
@@ -315,7 +308,6 @@ const FlashcardsPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* ✅ BACK SIDE - NOWY! */}
                     <div className="flashcard-back">
                         <div className="card-content">
                             <div className="word-text">
@@ -335,7 +327,6 @@ const FlashcardsPage: React.FC = () => {
                 )}
             </div>
 
-            {/* Answer section */}
             {showAnswer && (
                 <div className="answer-section">
                     <div className="answer-display">
@@ -370,7 +361,6 @@ const FlashcardsPage: React.FC = () => {
                 </div>
             )}
 
-            {/* Navigation */}
             <div className="flashcard-navigation">
                 <button
                     onClick={goToPrevCard}

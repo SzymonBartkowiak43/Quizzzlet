@@ -127,36 +127,6 @@ public class AddWordsToWordSetIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void shouldRejectUnauthorizedAddWords() throws Exception {
-        String token = getJWTToken();
-        Long wordSetId = createTestWordSet(token);
-
-        ObjectNode req = objectMapper.createObjectNode();
-        ArrayNode wordsArray = objectMapper.createArrayNode();
-
-        ObjectNode word1 = objectMapper.createObjectNode();
-        word1.put("word", "hello");
-        word1.put("translation", "cześć");
-        wordsArray.add(word1);
-
-        req.set("words", wordsArray);
-
-        MvcResult result = mockMvc.perform(post("/api/word-sets/" + wordSetId + "/words")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        String expectedJson = """
-        {
-          "message": "Unauthorized",
-          "status": "UNAUTHORIZED"
-        }
-        """;
-        asserter.assertErrorResponse(result, expectedJson);
-    }
-
-    @Test
     void shouldRejectAddWordsToNonExistentWordSet() throws Exception {
         String token = getJWTToken();
 

@@ -129,7 +129,7 @@ const VideoPlayerPage: React.FC = () => {
                         </div>
 
                         <div className="rating-section">
-                            <span>Rate this video:</span>
+                            <span>Oceń:</span>
                             <div className="stars-interactive">
                                 {[1, 2, 3, 4, 5].map(star => (
                                     <button
@@ -160,7 +160,7 @@ const VideoPlayerPage: React.FC = () => {
             </div>
 
             <div className="comments-section">
-                <h3>{comments.length} Comments</h3>
+                <h3>{comments.length} Komentarze</h3>
 
                 {isAuthenticated ? (
                     <form onSubmit={handleAddComment} className="comment-form">
@@ -168,7 +168,7 @@ const VideoPlayerPage: React.FC = () => {
               <textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment..."
+                  placeholder="Dodaj komentarz..."
                   className="comment-input"
                   rows={3}
               />
@@ -178,14 +178,14 @@ const VideoPlayerPage: React.FC = () => {
                                     onClick={() => setNewComment('')}
                                     className="cancel-btn"
                                 >
-                                    Cancel
+                                    Rezygnuj
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={!newComment.trim()}
                                     className="submit-btn"
                                 >
-                                    Comment
+                                    Skomentuj
                                 </button>
                             </div>
                         </div>
@@ -217,7 +217,7 @@ const VideoPlayerPage: React.FC = () => {
             </div>
 
             <div className="back-to-videos">
-                <Link to="/videos" className="back-link">← Back to all videos</Link>
+                <Link to="/videos" className="back-link">← Cofnij się do poprzednich video</Link>
             </div>
         </div>
     );

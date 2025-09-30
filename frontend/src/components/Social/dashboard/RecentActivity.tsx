@@ -13,7 +13,6 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
                                                            groupInfo,
                                                            messagingInfo
                                                        }) => {
-    // Mock recent activity data - w prawdziwej aplikacji to by przyszło z API
     const activities = [
         {
             type: 'friend',
@@ -37,7 +36,6 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
             color: 'text-orange-600 bg-orange-50'
         }
     ].filter(activity => {
-        // Filter out activities without data
         if (activity.type === 'friend' && friendshipInfo.requester.id === 0) return false;
         if (activity.type === 'group' && groupInfo.memberGroups.length === 0) return false;
         if (activity.type === 'message' && messagingInfo.unreadMessages.length === 0) return false;

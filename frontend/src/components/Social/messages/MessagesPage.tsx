@@ -12,11 +12,9 @@ import {
     PaperclipIcon
 } from 'lucide-react';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
-import ConversationsList from './ConversationsList';
 import ChatWindow from './ChatWindow';
 import GroupChatWindow from './GroupChatWindow';
-import NewMessageModal from './NewMessageModal';
-import ShareWordSetModal from './ShareWordSetModal';
+
 
 type ChatType = 'private' | 'group';
 type ViewMode = 'conversations' | 'chat';
@@ -36,10 +34,7 @@ const MessagesPage: React.FC = () => {
         error,
         sendPrivateMessage,
         sendGroupMessage,
-        shareWordSetPrivately,
-        shareWordSetInGroup,
         getConversation,
-        markMessagesAsRead,
         refreshMessages
     } = useMessages();
 
@@ -47,8 +42,6 @@ const MessagesPage: React.FC = () => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('conversations');
     const [activeChat, setActiveChat] = useState<ActiveChat | null>(null);
-    const [showNewMessage, setShowNewMessage] = useState(false);
-    const [showShareWordSet, setShowShareWordSet] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
@@ -67,7 +60,6 @@ const MessagesPage: React.FC = () => {
         });
         setViewMode('chat');
         await getConversation(userId);
-        // await markMessagesAsRead(userId);
     };
 
     const openGroupChat = (groupId: number, groupName: string) => {
@@ -206,14 +198,6 @@ const MessagesPage: React.FC = () => {
                     </div>
 
                      Conversations List
-                    {/*<ConversationsList*/}
-                    {/*    messagingInfo={messagingInfo}*/}
-                    {/*    friendshipInfo={friendshipInfo}*/}
-                    {/*    groupInfo={groupInfo}*/}
-                    {/*    searchTerm={searchTerm}*/}
-                    {/*    onOpenPrivateChat={openPrivateChat}*/}
-                    {/*    onOpenGroupChat={openGroupChat}*/}
-                    {/*/>*/}
                 </>
             )}
 
@@ -238,33 +222,6 @@ const MessagesPage: React.FC = () => {
                     )}
                 </>
             )}
-
-            {/* Modals */}
-            {/*{showNewMessage && (*/}
-            {/*    <NewMessageModal*/}
-            {/*        friends={[] || friendshipInfo?.friends}*/}
-            {/*        groups={groupInfo?.memberGroups || []}*/}
-            {/*        onClose={() => setShowNewMessage(false)}*/}
-            {/*        onSendPrivate={async (userId, message) => {*/}
-            {/*            await sendPrivateMessage(userId, message);*/}
-            {/*            setShowNewMessage(false);*/}
-            {/*        }}*/}
-            {/*        onSendGroup={async (groupId, message) => {*/}
-            {/*            await sendGroupMessage(groupId, message);*/}
-            {/*            setShowNewMessage(false);*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*)}*/}
-
-            {/*{showShareWordSet && (*/}
-            {/*    <ShareWordSetModal*/}
-            {/*        friends={[] || friendshipInfo?.friends}*/}
-            {/*        groups={groupInfo?.memberGroups || []}*/}
-            {/*        onClose={() => setShowShareWordSet(false)}*/}
-            {/*        onSharePrivate={shareWordSetPrivately}*/}
-            {/*        onShareGroup={shareWordSetInGroup}*/}
-            {/*    />*/}
-            {/*)}*/}
         </div>
     );
 };

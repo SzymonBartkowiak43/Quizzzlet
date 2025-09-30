@@ -139,10 +139,6 @@ export const sendGroupMessage = async (groupId: number, content: string) => {
     return response.data;
 };
 
-
-
-
-// Export all functions
 export default {
     getSocialDashboard,
     getMyFriendships,

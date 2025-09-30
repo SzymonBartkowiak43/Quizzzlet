@@ -20,7 +20,6 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
 
         setLoading(true);
         try {
-            // Mock search results - w prawdziwej aplikacji to by było API call
             const mockResults = [
                 { id: 4, name: 'Jan Kowalski', email: 'jan@example.com' },
                 { id: 5, name: 'Maria Nowak', email: 'maria@example.com' }
@@ -62,9 +61,7 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
                     </button>
                 </div>
 
-                {/* Content */}
                 <div className="p-6">
-                    {/* Search Input */}
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Wyszukaj użytkownika
@@ -92,7 +89,6 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
                         </div>
                     </div>
 
-                    {/* Search Results */}
                     {searchResults.length > 0 && (
                         <div className="space-y-3">
                             <h3 className="text-sm font-medium text-gray-700 mb-3">
@@ -127,7 +123,6 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
                         </div>
                     )}
 
-                    {/* No Results */}
                     {searchTerm && searchResults.length === 0 && !loading && (
                         <div className="text-center py-6">
                             <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
@@ -137,7 +132,6 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
                         </div>
                     )}
 
-                    {/* Instructions */}
                     <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                         <h4 className="font-medium text-blue-900 mb-2">💡 Wskazówka</h4>
                         <p className="text-sm text-blue-800">
@@ -147,7 +141,6 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
                     <button
                         onClick={onClose}

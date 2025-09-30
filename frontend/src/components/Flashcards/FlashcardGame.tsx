@@ -40,7 +40,6 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
             responseTime
         };
 
-        // Aktualizuj statystyki karty
         const updatedCard = {
             ...currentCard,
             timesShown: currentCard.timesShown + 1,
@@ -50,12 +49,10 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
             difficulty: calculateDifficulty(currentCard, isCorrect) // 🔥 POPRAWKA - explicit typing
         };
 
-        // Aktualizuj karty w sesji
         const updatedCards = session.cards.map(card =>
             card.id === currentCard.id ? updatedCard : card
         );
 
-        // Jeśli błędna odpowiedź i włączone powtórki, dodaj do kolejki
         let newReviewQueue = [...reviewQueue];
         if (!isCorrect && session.settings.reviewIncorrect && !reviewQueue.includes(currentCard.id)) {
             newReviewQueue.push(currentCard.id);
@@ -73,13 +70,11 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
         setReviewQueue(newReviewQueue);
         setShowResult(true);
 
-        // Automatycznie przejdź do następnej karty po 1.5s
         setTimeout(() => {
             nextCard(updatedSession, newReviewQueue);
         }, 1500);
     };
 
-    // 🔥 POPRAWKA - explicit return type
     const calculateDifficulty = (card: any, isCorrect: boolean): FlashcardDifficulty => {
         const accuracy = card.timesShown > 0
             ? (card.timesCorrect + (isCorrect ? 1 : 0)) / (card.timesShown + 1)
@@ -94,15 +89,12 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
         setIsCardFlipped(false);
         setShowResult(false);
 
-        // Sprawdź czy są jeszcze karty do przejrzenia
         if (updatedSession.currentCardIndex < session.cards.length - 1) {
-            // Przejdź do następnej karty
             onSessionUpdate({
                 ...updatedSession,
                 currentCardIndex: updatedSession.currentCardIndex + 1
             });
         } else if (newReviewQueue.length > 0) {
-            // Przejdź do powtórek
             const nextReviewCardId = newReviewQueue[0];
             const reviewCardIndex = session.cards.findIndex(card => card.id === nextReviewCardId);
 
@@ -113,13 +105,11 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
 
             setReviewQueue(newReviewQueue.slice(1));
         } else {
-            // Sesja zakończona
             onComplete();
         }
     };
 
     const handleSkipCard = () => {
-        // Potraktuj jako błędną odpowiedź ale bez zliczania do statystyk
         handleAnswer(false);
     };
 
@@ -208,7 +198,6 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
                 )}
             </div>
 
-            {/* Statystyki sesji na żywo */}
             <div className="live-stats">
                 <div className="stat">
                     <span className="stat-value">{session.correctAnswers}</span>

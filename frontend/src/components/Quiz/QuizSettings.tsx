@@ -34,7 +34,6 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
     const maxQuestions = wordSet.words.length;
     const questionCount = settings.questionCount || maxQuestions;
 
-    // Sprawdź czy wybrano przynajmniej jeden typ pytań
     const hasSelectedQuestionType = settings.includeMultipleChoice || settings.includeTyping;
 
     return (
@@ -45,7 +44,6 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
             </div>
 
             <div className="settings-grid">
-                {/* Typ pytań */}
                 <div className="setting-group">
                     <h3>Rodzaje pytań</h3>
                     <div className="setting-checkboxes">
@@ -76,7 +74,6 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                     </div>
                 </div>
 
-                {/* Kierunek testu */}
                 <div className="setting-group">
                     <h3>Kierunek tłumaczenia</h3>
                     <div className="setting-options">
@@ -107,7 +104,6 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                     </div>
                 </div>
 
-                {/* Liczba pytań */}
                 <div className="setting-group">
                     <h3>Liczba pytań</h3>
                     <div className="question-limit">
@@ -164,7 +160,6 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                     </div>
                 </div>
 
-                {/* Limit czasu */}
                 <div className="setting-group">
                     <h3>Limit czasu</h3>
                     <div className="time-limit">
@@ -219,7 +214,6 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                     </div>
                 </div>
 
-                {/* Dodatkowe opcje */}
                 <div className="setting-group">
                     <h3>Dodatkowe opcje</h3>
                     <label className="setting-checkbox">

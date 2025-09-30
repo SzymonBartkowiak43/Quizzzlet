@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { WordSet } from '../../types/wordSet';
-import { FlashcardSettings as FlashcardSettingsType } from '../../types/flashcard'; // ← POPRAWKA
+import { FlashcardSettings as FlashcardSettingsType } from '../../types/flashcard';
 import './FlashcardSettings.css';
 
 interface FlashcardSettingsProps {
     wordSet: WordSet;
-    onStart: (settings: FlashcardSettingsType) => void; // ← POPRAWKA
+    onStart: (settings: FlashcardSettingsType) => void;
     onBack: () => void;
 }
 
 const FlashcardSettings: React.FC<FlashcardSettingsProps> = ({ wordSet, onStart, onBack }) => {
-    const [settings, setSettings] = useState<FlashcardSettingsType>({ // ← POPRAWKA
+    const [settings, setSettings] = useState<FlashcardSettingsType>({
         showWordFirst: true,
         shuffleCards: true,
         reviewIncorrect: true,
         sessionLimit: undefined
     });
 
-    const handleSettingChange = (key: keyof FlashcardSettingsType, value: any) => { // ← POPRAWKA
+    const handleSettingChange = (key: keyof FlashcardSettingsType, value: any) => {
         setSettings(prev => ({
             ...prev,
             [key]: value
@@ -39,7 +39,6 @@ const FlashcardSettings: React.FC<FlashcardSettingsProps> = ({ wordSet, onStart,
             </div>
 
             <div className="settings-grid">
-                {/* Kierunek nauki */}
                 <div className="setting-group">
                     <h3>Kierunek nauki</h3>
                     <div className="setting-options">
@@ -70,7 +69,6 @@ const FlashcardSettings: React.FC<FlashcardSettingsProps> = ({ wordSet, onStart,
                     </div>
                 </div>
 
-                {/* Kolejność kart */}
                 <div className="setting-group">
                     <h3>Kolejność kart</h3>
                     <label className="setting-checkbox">
@@ -84,7 +82,6 @@ const FlashcardSettings: React.FC<FlashcardSettingsProps> = ({ wordSet, onStart,
                     </label>
                 </div>
 
-                {/* Powtórki */}
                 <div className="setting-group">
                     <h3>Dodatkowe opcje</h3>
                     <label className="setting-checkbox">
@@ -98,7 +95,6 @@ const FlashcardSettings: React.FC<FlashcardSettingsProps> = ({ wordSet, onStart,
                     </label>
                 </div>
 
-                {/* Limit sesji */}
                 <div className="setting-group">
                     <h3>Liczba kart w sesji</h3>
                     <div className="session-limit">

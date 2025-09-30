@@ -19,22 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Component
 public class Asserter {
 
-    private final ApplicationContext applicationContext;
-
-    public Asserter(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    public <T> void assertApiAndDbState(
-            MvcResult apiResponse,
-            String expectedJson,
-            long expectedDbCount,
-            T expectedDbEntity) throws Exception {
-
-        assertApiResponse(apiResponse, expectedJson);
-        assertDbMatch(expectedDbEntity, expectedDbCount);
-    }
-
     public void assertErrorResponse(MvcResult apiResponse, String expectedErrorJson) throws Exception {
         String actual = apiResponse.getResponse().getContentAsString();
         JSONAssert.assertEquals(expectedErrorJson, actual, JSONCompareMode.NON_EXTENSIBLE);
@@ -57,26 +41,6 @@ public class Asserter {
         JSONAssert.assertEquals(expectedJson, actualJson, comparator);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> void assertDbMatch(T expectedDbEntity, long expectedDbCount) throws Exception {
-        if (expectedDbEntity != null) {
-            Object id = getIdValue(expectedDbEntity);
-            if (id == null) {
-                throw new IllegalArgumentException("Expected entity has no 'id' field or it's null");
-            }
-
-            JpaRepository<T, Object> repository = (JpaRepository<T, Object>)
-                    applicationContext.getBean(getRepositoryBeanName(expectedDbEntity.getClass()));
-
-            assertThat(repository.count()).isEqualTo(expectedDbCount);
-
-            T entityFromDb = repository.findById(id).orElseThrow();
-            assertThat(entityFromDb)
-                    .usingRecursiveComparison()
-                    .ignoringFieldsMatchingRegexes(".*createdAt.*", ".*updatedAt.*", ".*hibernate.*")
-                    .isEqualTo(expectedDbEntity);
-        }
-    }
     public void assertAuthResponse(MvcResult apiResponse, String expectedEmail) throws Exception {
         String actualJson = apiResponse.getResponse().getContentAsString();
 
@@ -98,27 +62,4 @@ public class Asserter {
                 .isNotBlank();
     }
 
-
-
-
-    private String getRepositoryBeanName(Class<?> entityClass) {
-        String simpleName = entityClass.getSimpleName();
-        return Character.toLowerCase(simpleName.charAt(0)) + simpleName.substring(1) + "Repository";
-    }
-
-    private Object getIdValue(Object entity) throws Exception {
-        Field idField = null;
-        Class<?> clazz = entity.getClass();
-
-        while (clazz != null) {
-            try {
-                idField = clazz.getDeclaredField("id");
-                idField.setAccessible(true);
-                return idField.get(entity);
-            } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
-    }
 }

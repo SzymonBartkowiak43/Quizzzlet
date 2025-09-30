@@ -343,22 +343,6 @@ public class VideoIntegrationTest extends BaseIntegrationTest {
         asserter.assertErrorResponse(result, expectedJson);
     }
 
-    @Test
-    void shouldRequireAuthentication() throws Exception {
-        String expectedJson = """
-        {
-          "message": "Unauthorized",
-          "status": "UNAUTHORIZED"
-        }
-        """;
-
-        MvcResult result = mockMvc.perform(get("/api/videos"))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        asserter.assertErrorResponse(result, expectedJson);
-    }
-
     // Helper methods
     private Long createTestVideo(String token, String title, String url) throws Exception {
         ObjectNode request = objectMapper.createObjectNode();

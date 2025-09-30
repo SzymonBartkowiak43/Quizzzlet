@@ -24,7 +24,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
     const isLastQuestion = session.currentQuestionIndex === session.questions.length - 1;
     const progress = ((session.currentQuestionIndex + 1) / session.questions.length) * 100;
 
-    // Timer effect
     useEffect(() => {
         if (session.settings.timeLimit) {
             const totalTime = session.settings.timeLimit * 1000;
@@ -50,7 +49,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
         }
     }, [session.startTime, session.settings.timeLimit, onComplete]);
 
-    // Reset state przy nowym pytaniu
     useEffect(() => {
         setUserAnswer('');
         setSelectedOption(null);
@@ -80,7 +78,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
 
         onAnswer(answer);
 
-        // Przejdź do następnego pytania lub zakończ
         if (isLastQuestion) {
             onComplete();
         } else {
@@ -111,7 +108,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
 
     return (
         <div className="quiz-game">
-            {/* Header z postępem i timerem */}
             <div className="quiz-header">
                 <div className="quiz-progress">
                     <div className="progress-info">
@@ -133,7 +129,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
                 )}
             </div>
 
-            {/* Pytanie */}
             <div className="quiz-question">
                 <div className="question-header">
           <span className="question-type">
@@ -144,7 +139,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
 
                 <h2 className="question-text">{currentQuestion.question}</h2>
 
-                {/* Odpowiedzi dla Multiple Choice */}
                 {currentQuestion.type === 'multiple-choice' && currentQuestion.options && (
                     <div className="quiz-options">
                         {currentQuestion.options.map((option, index) => (
@@ -160,7 +154,6 @@ const QuizGame: React.FC<QuizGameProps> = ({
                     </div>
                 )}
 
-                {/* Input dla wpisywania */}
                 {currentQuestion.type === 'typing' && (
                     <div className="quiz-input">
                         <input

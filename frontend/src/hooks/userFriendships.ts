@@ -25,7 +25,6 @@ export const useFriendships = () => {
         fetchFriendships();
     }, []);
 
-    // Przykładowe funkcje (musisz je dostosować do swojego API)
     const removeFriend = async (userId: number): Promise<void> => {
         try {
             await socialApi.removeFriend(userId);
@@ -38,7 +37,6 @@ export const useFriendships = () => {
 
     const blockUser = async (userId: number): Promise<void> => {
         try {
-            // Dodaj logikę blokowania użytkownika
             throw new Error('Block user not implemented yet');
         } catch (error) {
             console.error('Failed to block user:', error);
@@ -46,7 +44,6 @@ export const useFriendships = () => {
         }
     };
 
-    // Dodaj obsługę wysyłania/akceptowania/odrzucania zaproszeń jeśli potrzebujesz
 
     return {
         friendshipInfo,
@@ -55,6 +52,5 @@ export const useFriendships = () => {
         refetch: fetchFriendships,
         removeFriend,
         blockUser,
-        // Dodaj inne akcje jeśli trzeba
     };
 };

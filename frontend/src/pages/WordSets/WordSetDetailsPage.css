@@ -1,57 +1,88 @@
 .word-set-details-page {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+    margin: 40px auto 0 auto;
+    padding: 24px;
+    background: #f8fafc;
+    border-radius: 14px;
+    box-shadow: 0 6px 32px rgba(30,41,59,0.07);
+    min-height: 600px;
 }
 
 .page-header {
-    background: white;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 32px;
+    background: #fff;
     border: 1px solid #e1e5e9;
-    border-radius: 12px;
-    padding: 2rem;
+    border-radius: 14px;
+    padding: 2rem 2.5rem;
     margin-bottom: 2rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.page-header .btn:first-child {
-    margin-bottom: 1rem;
+.page-header .btn-secondary {
+    min-width: 110px;
+    margin-right: 10px;
 }
 
 .header-content {
-    margin: 1rem 0;
+    flex: 2;
+    min-width: 260px;
 }
 
 .header-content h1 {
     margin: 0 0 0.5rem 0;
-    color: #333;
-    font-size: 2rem;
+    color: #334155;
+    font-size: 2.2rem;
+    font-weight: 700;
 }
 
 .word-set-description {
-    color: #666;
+    color: #64748b;
     margin: 0.5rem 0 1rem 0;
-    font-size: 1.125rem;
+    font-size: 1.15rem;
     line-height: 1.5;
 }
 
 .word-set-meta {
     display: flex;
     gap: 2rem;
-    color: #666;
-    font-size: 0.875rem;
+    color: #64748b;
+    font-size: 0.97rem;
+    margin-top: 6px;
 }
 
 .header-actions {
+    flex: 1;
+    min-width: 260px;
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.header-actions .btn-large {
+    padding: 12px 28px;
+    font-size: 1.07em;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+}
+
+.header-actions .btn-secondary,
+.header-actions .btn-primary {
+    min-width: 110px;
+    margin-bottom: 0.5em;
 }
 
 .words-section {
-    background: white;
+    background: #fff;
     border: 1px solid #e1e5e9;
-    border-radius: 12px;
-    padding: 2rem;
+    border-radius: 14px;
+    padding: 2rem 2.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
 }
 
 .selection-bar {
@@ -59,9 +90,10 @@
     justify-content: space-between;
     align-items: center;
     background: #f3f4f6;
-    padding: 1rem;
-    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    border-radius: 9px;
     margin-bottom: 1rem;
+    box-shadow: 0 2px 10px rgba(37,99,235,0.05);
 }
 
 .selection-actions {
@@ -81,7 +113,7 @@
 .words-count {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #333;
+    color: #334155;
 }
 
 .bulk-actions {
@@ -91,34 +123,40 @@
 
 .words-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 22px;
 }
 
 .word-card {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
+    padding: 1rem 1.1rem;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #f9fafb;
     transition: all 0.2s ease;
+    min-height: 92px;
+    box-shadow: 0 1px 6px rgba(37,99,235,0.03);
+    position: relative;
 }
 
 .word-card:hover {
     background: #f3f4f6;
-    border-color: #d1d5db;
+    border-color: #2563eb;
+    z-index: 2;
 }
 
 .word-card.selected {
     background: #eff6ff;
-    border-color: #3b82f6;
+    border-color: #2563eb;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.09);
 }
 
 .word-checkbox input {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    accent-color: #2563eb;
 }
 
 .word-content {
@@ -127,145 +165,185 @@
 }
 
 .english-word {
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #334155;
     margin-bottom: 0.25rem;
+    font-size: 1.17em;
     word-break: break-word;
 }
 
 .polish-translation {
-    color: #666;
-    font-size: 0.875rem;
+    color: #64748b;
+    font-size: 0.97em;
+    margin-bottom: 0.2em;
     word-break: break-word;
+}
+
+.word-stats {
+    margin-top: 2px;
+    font-size: 0.96em;
+    color: #2563eb;
+}
+
+.word-points {
+    margin-right: 8px;
+}
+
+.word-star {
+    color: #fbbf24;
+    font-size: 1.1em;
 }
 
 .word-actions {
     display: flex;
     gap: 0.5rem;
     flex-shrink: 0;
+    flex-direction: column;
+}
+
+.word-actions .btn-small {
+    font-size: 0.94em;
+    padding: 4px 10px;
+    border-radius: 7px;
+}
+
+.word-actions .btn-danger {
+    background: #ef4444;
+    color: #fff;
+    border: none;
 }
 
 .empty-words {
     text-align: center;
     padding: 3rem 2rem;
     border: 2px dashed #e1e5e9;
-    border-radius: 12px;
+    border-radius: 14px;
+    margin-top: 10px;
 }
 
 .empty-words h3 {
-    color: #333;
+    color: #334155;
     margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .empty-words p {
-    color: #666;
+    color: #64748b;
     margin-bottom: 2rem;
 }
 
+.learning-hint {
+    margin-top: 1.4rem;
+    background: #f3f7fc;
+    border-radius: 8px;
+    padding: 1rem;
+    color: #334155;
+}
+
+.hint-text {
+    font-size: 1.04em;
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.learning-cta-section {
+    display: flex;
+    gap: 28px;
+    margin: 22px 0;
+}
+
+.flashcards-cta, .quiz-cta {
+    flex: 1;
+    border-radius: 14px;
+    padding: 28px 22px;
+    box-shadow: 0 4px 18px rgba(37,99,235,0.07);
+    background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+    border: 2px dashed #2563eb;
+    text-align: center;
+    min-width: 230px;
+}
+
+.quiz-cta {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffecd2 100%);
+    border-color: #ff9800;
+}
+
+.flashcards-cta h3, .quiz-cta h3 {
+    color: #2563eb;
+    font-size: 1.4em;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+}
+
+.quiz-cta h3 {
+    color: #e65100;
+}
+
+.flashcards-cta p, .quiz-cta p {
+    color: #64748b;
+    margin: 0 0 16px 0;
+    font-size: 1.08em;
+}
+
+.flashcards-cta .btn-success, .quiz-cta .btn-warning {
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.loading, .error-message {
+    margin: 40px auto;
+    text-align: center;
+    font-size: 1.125em;
+    color: #ef4444;
+}
+
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .word-set-details-page {
-        padding: 1rem;
+        padding: 12px;
     }
 
-    .page-header {
-        padding: 1.5rem;
+    .page-header, .words-section {
+        padding: 1rem 0.8rem;
     }
 
     .header-content h1 {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
-
     .header-actions {
         flex-direction: column;
+        align-items: stretch;
+        gap: 7px;
     }
-
     .word-set-meta {
         flex-direction: column;
         gap: 0.5rem;
     }
-
     .selection-bar {
         flex-direction: column;
         gap: 1rem;
     }
-
     .words-controls {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
     }
-
     .words-grid {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
-
     .word-card {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 0.7em;
     }
-
     .word-actions {
-        align-self: flex-end;
+        flex-direction: row;
+        gap: 0.5em;
+        margin-top: 8px;
     }
-}
-
-.quiz-btn {
-    background: linear-gradient(135deg, #ff9800, #f57c00) !important;
-    color: white !important;
-    border: none !important;
-    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
-    transition: all 0.3s ease;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.quiz-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
-    background: linear-gradient(135deg, #f57c00, #e65100) !important;
-}
-
-.quiz-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: #ccc !important;
-}
-
-/* 📱 Responsive - porządek przycisków na mobile */
-@media (max-width: 768px) {
-    .header-actions {
+    .learning-cta-section {
         flex-direction: column;
-        gap: 8px;
+        gap: 18px;
     }
-
-    .quiz-btn {
-        order: -2; /* Quiz drugi na mobile (po fiszkach) */
-    }
-
-    .flashcards-btn {
-        order: -1; /* Fiszki pierwsze na mobile */
-    }
-}
-
-.quiz-cta {
-    background: linear-gradient(135deg, #fff3e0, #ffcc02);
-    border: 2px dashed #ff9800;
-    border-radius: 12px;
-    padding: 24px;
-    margin: 24px 0;
-    text-align: center;
-}
-
-.quiz-cta h3 {
-    color: #e65100;
-    margin: 0 0 8px 0;
-    font-size: 1.4em;
-}
-
-.quiz-cta p {
-    color: #666;
-    margin: 0 0 16px 0;
-    font-size: 1.1em;
 }

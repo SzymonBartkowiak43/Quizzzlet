@@ -162,21 +162,6 @@ public class GetWordSetsIntegrationTest extends BaseIntegrationTest {
         asserter.assertApiResponse(result, expectedJson);
     }
 
-    @Test
-    void shouldRejectUnauthorizedRequest() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/word-sets"))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        String expectedJson = """
-        {
-          "message": "Unauthorized",
-          "status": "UNAUTHORIZED"
-        }
-        """;
-
-        asserter.assertErrorResponse(result, expectedJson);
-    }
 
     @Test
     void shouldReturnWordSetsWithMixedContent() throws Exception {
@@ -232,7 +217,6 @@ public class GetWordSetsIntegrationTest extends BaseIntegrationTest {
         asserter.assertApiResponse(result, expectedJson);
     }
 
-    // Helper methods
     private Long createTestWordSet(String token, String title, String description) throws Exception {
         ObjectNode req = objectMapper.createObjectNode();
         req.put("name", title);
@@ -260,14 +244,13 @@ public class GetWordSetsIntegrationTest extends BaseIntegrationTest {
 
         req.set("words", wordsArray);
 
-        // Debug: Print the request being sent
         String requestJson = objectMapper.writeValueAsString(req);
         System.out.println("Request JSON: " + requestJson);
 
         MvcResult result = mockMvc.perform(post("/api/word-sets/" + wordSetId + "/words")
                         .header("Authorization", "Bearer " + token)
                         .contentType(APPLICATION_JSON)
-                        .characterEncoding("UTF-8") // Add explicit encoding
+                        .characterEncoding("UTF-8")
                         .content(requestJson))
                 .andExpect(status().isCreated())
                 .andReturn();

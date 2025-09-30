@@ -70,15 +70,15 @@ const VideosPage: React.FC = () => {
     return (
         <div className="videos-page">
             <div className="videos-header">
-                <h1>Watch Videos</h1>
-                <p>Improve your skills with our educational content</p>
+                <h1>Obejrzyj filmy</h1>
+                <p>Udoskonalaj swoje umiejętności dzięki naszym materiałom edukacyjnym</p>
             </div>
 
             <div className="videos-controls">
                 <div className="search-bar">
                     <input
                         type="text"
-                        placeholder="Search videos..."
+                        placeholder="Wyszukaj filmy..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="search-input"

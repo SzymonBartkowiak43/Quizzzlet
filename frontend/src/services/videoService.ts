@@ -14,11 +14,11 @@ export const videoService = {
                     description: video.title,
                     url: video.url,
                     thumbnailUrl: generateThumbnailUrl(video.url),
-                    duration: "10:30", // Domyślnie
-                    views: Math.floor(Math.random() * 50000) + 1000, // Losowe
+                    duration: "10:30",
+                    views: Math.floor(Math.random() * 50000) + 1000,
                     rating: video.averageRating || 4.0 + Math.random(),
                     uploadDate: new Date().toISOString(),
-                    category: "education",
+                    category: "edukacja",
                     tags: ["english", "learning"]
                 }));
             }
@@ -43,7 +43,7 @@ export const videoService = {
             views: Math.floor(Math.random() * 50000) + 1000,
             rating: video.averageRating || 4.0 + Math.random(),
             uploadDate: new Date().toISOString(),
-            category: "education",
+            category: "edukacja",
             tags: ["english", "learning"]
         };
     },

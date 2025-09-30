@@ -24,9 +24,9 @@ const Flashcard: React.FC<FlashcardProps> = ({
     const backLanguage = showWordFirst ? 'pl' : 'en';
 
     const difficultyColors = {
-        easy: '#10b981',    // zielony
-        medium: '#f59e0b',  // żółty
-        hard: '#ef4444'     // czerwony
+        easy: '#10b981',
+        medium: '#f59e0b',
+        hard: '#ef4444'
     };
 
     const difficultyLabels = {
@@ -42,7 +42,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 onClick={onFlip}
             >
                 <div className="card-inner">
-                    {/* Przód karty */}
                     <div className="card-front">
                         <div className="card-header">
                             <div className="language-indicator">
@@ -113,7 +112,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 </div>
             </div>
 
-            {/* Wskaźnik przewracania */}
             {!isFlipped && (
                 <div className="flip-indicator">
                     <div className="flip-animation">

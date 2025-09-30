@@ -58,7 +58,7 @@ export interface PrivateMessage {
     recipient: User;
     content: string;
     isRead: boolean;
-    sharedWordSet?: any; // WordSet type z innej części aplikacji
+    sharedWordSet?: any;
     createdAt: string;
 }
 

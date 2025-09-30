@@ -18,13 +18,12 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
     const [loading, setLoading] = useState(false);
     const [joining, setJoining] = useState<number | null>(null);
     const [filters, setFilters] = useState({
-        type: 'all', // 'all', 'public', 'private'
-        size: 'all', // 'all', 'small', 'medium', 'large'
-        activity: 'all' // 'all', 'active', 'new'
+        type: 'all',
+        size: 'all',
+        activity: 'all'
     });
     const [showFilters, setShowFilters] = useState(false);
 
-    // Mock search results
     const mockResults: StudyGroup[] = [
         {
             id: 4,

@@ -65,7 +65,6 @@ const Header: React.FC = () => {
         { path: '/social/groups', label: 'Chaty grupowe', icon: Users },
     ];
 
-    // Mock notification count
     const notificationCount = 3;
     const messageCount = 2;
 
@@ -83,7 +82,6 @@ const Header: React.FC = () => {
                         </Link>
                     </div>
 
-                    {/* Navigation Links - Desktop */}
                     {user && (
                         <nav className="nav-desktop">
                             {navItems.map(item => {
@@ -109,7 +107,6 @@ const Header: React.FC = () => {
                         </nav>
                     )}
 
-                    {/* Right side */}
                     <div className="right-actions">
                         {user ? (
                             <div className="user-actions">
@@ -133,7 +130,6 @@ const Header: React.FC = () => {
                                         )}
                                     </button>
 
-                                    {/* Notifications Dropdown */}
                                     {showNotifications && (
                                         <div className="dropdown-menu notifications">
                                             <div className="dropdown-header">
@@ -168,7 +164,6 @@ const Header: React.FC = () => {
                                     )}
                                 </div>
 
-                                {/* User Menu */}
                                 <div className="dropdown" ref={dropdownRef}>
                                     <button
                                         className="user-button"
@@ -239,7 +234,6 @@ const Header: React.FC = () => {
                 </div>
             </div>
 
-            {/* Mobile menu */}
             {user && (
                 <div className="mobile-menu">
                     <div className="mobile-menu-content">

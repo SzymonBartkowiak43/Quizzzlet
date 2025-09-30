@@ -3,9 +3,13 @@ package com.example.quizlecikprojekt.controllers.dto.message;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class BulkFriendshipRequest {
 
     @NotBlank(message = "Operacja nie może być pusta")
@@ -16,18 +20,4 @@ public class BulkFriendshipRequest {
     @NotEmpty(message = "Lista użytkowników nie może być pusta")
     private List<Long> targetUserIds;
 
-    // Constructors
-    public BulkFriendshipRequest() {}
-
-    public BulkFriendshipRequest(String operation, List<Long> targetUserIds) {
-        this.operation = operation;
-        this.targetUserIds = targetUserIds;
-    }
-
-    // Getters and Setters
-    public String getOperation() { return operation; }
-    public void setOperation(String operation) { this.operation = operation; }
-
-    public List<Long> getTargetUserIds() { return targetUserIds; }
-    public void setTargetUserIds(List<Long> targetUserIds) { this.targetUserIds = targetUserIds; }
 }

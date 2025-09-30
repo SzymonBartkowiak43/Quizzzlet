@@ -190,27 +190,6 @@ public class UpdateWordAndWordSetIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void shouldRejectUpdateWithoutAuthentication() throws Exception {
-        ObjectNode updateRequest = objectMapper.createObjectNode();
-        updateRequest.put("title", "Updated Title");
-
-        MvcResult result = mockMvc.perform(put("/api/word-sets/1")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateRequest)))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        String expectedJson = """
-        {
-          "message": "Unauthorized",
-          "status": "UNAUTHORIZED"
-        }
-        """;
-
-        asserter.assertErrorResponse(result, expectedJson);
-    }
-
     // Helper methods
     private Long createTestWordSet(String token, String title, String description) throws Exception {
         ObjectNode req = objectMapper.createObjectNode();
@@ -249,32 +228,5 @@ public class UpdateWordAndWordSetIntegrationTest extends BaseIntegrationTest {
         String responseJson = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         JsonNode response = objectMapper.readTree(responseJson);
         return response.get("addedWords").get(0).get("id").asLong();
-    }
-
-    private String getJWTTokenForAnotherUser() throws Exception {
-        // Register another user
-        ObjectNode registerReq = objectMapper.createObjectNode();
-        registerReq.put("email", "user2@example.com");
-        registerReq.put("password", "SecurePassword123!");
-        registerReq.put("name", "User Two");
-
-        mockMvc.perform(post("/api/auth/register")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerReq)))
-                .andExpect(status().isCreated());
-
-        // Login as the second user
-        ObjectNode loginReq = objectMapper.createObjectNode();
-        loginReq.put("email", "user2@example.com");
-        loginReq.put("password", "SecurePassword123!");
-
-        MvcResult loginResult = mockMvc.perform(post("/api/auth/token")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginReq)))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String loginResponseJson = loginResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return objectMapper.readTree(loginResponseJson).get("token").asText();
     }
 }

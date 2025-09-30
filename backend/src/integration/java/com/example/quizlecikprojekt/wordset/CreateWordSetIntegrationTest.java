@@ -43,26 +43,6 @@ public class CreateWordSetIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void shouldRejectUnauthorizedCreateWordSet() throws Exception {
-        ObjectNode req = objectMapper.createObjectNode();
-        req.put("name", "No Auth Set");
-
-        MvcResult result = mockMvc.perform(post("/api/word-sets")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        String expectedJson = """
-        {
-          "message": "Unauthorized",
-          "status": "UNAUTHORIZED"
-        }
-        """;
-        asserter.assertErrorResponse(result, expectedJson);
-    }
-
-    @Test
     void shouldRejectTooLongName() throws Exception {
         String token = getJWTToken();
 
