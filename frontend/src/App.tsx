@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
+
 import Header from './components/Header/Header';
 import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Auth/LoginPage';
@@ -17,6 +18,7 @@ import EditWordSetPage from './pages/WordSets/EditWordSetPage';
 import WordSetDetailsPage from './pages/WordSets/WordSetDetailsPage';
 import FlashcardsPage from './pages/Flashcards/FlashcardsPage';
 import QuizPage from './pages/Quiz/QuizPage';
+import Footer from './components/Footer/Footer';
 
 import SocialDashboard from './components/Social/dashboard/SocialDashboard';
 import FriendsPage from './components/Social/friends/FriendsPage';
@@ -58,9 +60,9 @@ function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>
+            <Footer />
           </div>
 
-          {/* Toast notifications dla social features */}
           <ToastContainer
               position="top-right"
               autoClose={5000}
