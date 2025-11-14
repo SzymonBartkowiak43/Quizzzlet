@@ -1,8 +1,6 @@
--- ===== PODSTAWOWE ROLE (jak już masz) =====
 INSERT INTO roles (name) VALUES ('USER') ON CONFLICT (name) DO NOTHING;
 INSERT INTO roles (name) VALUES ('ADMIN') ON CONFLICT (name) DO NOTHING;
 
--- ===== UŻYTKOWNICY (jak już masz) =====
 INSERT INTO users (email, name, password)
 VALUES
     ('admin@test.pl', 'Administrator', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
@@ -10,7 +8,6 @@ VALUES
     ('piotr@test.pl', 'Piotr Nowak', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy')
 ON CONFLICT (email) DO NOTHING;
 
--- ===== PRZYPISANIE RÓL =====
 INSERT INTO user_roles (user_id, role_id)
 SELECT u.id, r.id FROM users u, roles r
 WHERE u.email = 'admin@test.pl' AND r.name = 'ADMIN'
@@ -21,7 +18,6 @@ SELECT u.id, r.id FROM users u, roles r
 WHERE u.email IN ('anna@test.pl', 'piotr@test.pl') AND r.name = 'USER'
 ON CONFLICT DO NOTHING;
 
--- ===== 🚀 WORD SETS DLA ADMIN@TEST.PL =====
 INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
 SELECT
     'Podstawowy angielski',
@@ -67,7 +63,6 @@ SELECT
 FROM users u WHERE u.email = 'admin@test.pl'
 ON CONFLICT DO NOTHING;
 
--- ===== 🎯 SŁÓWKA - PODSTAWOWY ANGIELSKI =====
 INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
 SELECT 'hello', 'cześć', ws.id, 10, true, '2025-01-11 20:00:00', '2025-01-10 10:00:00', '2025-01-11 20:00:00'
 FROM word_sets ws JOIN users u ON ws.user_id = u.id
@@ -315,7 +310,6 @@ SELECT
 FROM users u WHERE u.email = 'piotr@test.pl'
 ON CONFLICT DO NOTHING;
 
--- Parę słówek do tych zestawów
 INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
 SELECT 'dog', 'pies', ws.id, 6, true, '2025-01-11 14:00:00', '2025-01-05 11:00:00', '2025-01-11 14:00:00'
 FROM word_sets ws JOIN users u ON ws.user_id = u.id
@@ -327,8 +321,6 @@ FROM word_sets ws JOIN users u ON ws.user_id = u.id
 WHERE u.email = 'piotr@test.pl' AND ws.title = 'Kolory i kształty';
 
 
--- ===== PRZYJAŹNIE =====
--- Anna i Piotr są przyjaciółmi
 INSERT INTO friendships (requester_id, addressee_id, status, created_at)
 SELECT
     (SELECT id FROM users WHERE email = 'anna@test.pl'),
@@ -341,7 +333,6 @@ WHERE NOT EXISTS (
       AND addressee_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
 );
 
--- Admin i Anna są przyjaciółmi
 INSERT INTO friendships (requester_id, addressee_id, status, created_at)
 SELECT
     (SELECT id FROM users WHERE email = 'admin@test.pl'),
@@ -354,7 +345,6 @@ WHERE NOT EXISTS (
       AND addressee_id = (SELECT id FROM users WHERE email = 'anna@test.pl')
 );
 
--- Admin i Piotr są przyjaciółmi
 INSERT INTO friendships (requester_id, addressee_id, status, created_at)
 SELECT
     (SELECT id FROM users WHERE email = 'admin@test.pl'),
@@ -367,9 +357,6 @@ WHERE NOT EXISTS (
       AND addressee_id = (SELECT id FROM users WHERE email = 'piotr@test.pl')
 );
 
-
--- ===== PRYWATNE WIADOMOŚCI =====
--- Konwersacja między Anną a Piotrem
 INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
 SELECT
     (SELECT id FROM users WHERE email = 'anna@test.pl'),
@@ -409,7 +396,6 @@ WHERE NOT EXISTS (
       AND content LIKE 'Super! Mam już kilku członków%'
 );
 
--- Wiadomość od Admina do Anny
 INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
 SELECT
     (SELECT id FROM users WHERE email = 'admin@test.pl'),

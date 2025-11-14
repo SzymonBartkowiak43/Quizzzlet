@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 interface RatingRepository extends CrudRepository<Rating, Long> {
-  Optional<Rating> findByUserEmailAndVideoId(String userEmail, Long videoId);
 
+  Optional<Rating> findByUserEmailAndVideoId(String userEmail, Long videoId);
   List<Rating> findByVideoId(Long videoId);
+
 }

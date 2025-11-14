@@ -30,3 +30,7 @@ auth:
     expirationDays: 30
     secret: ${JWT_SECRET:ababababbbsadfweawgehrth}
     issuer: sb-reservation-system-backend
+
+app:
+  cors:
+    allowed-origin: "http://localhost:3000"

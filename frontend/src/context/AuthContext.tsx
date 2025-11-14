@@ -20,7 +20,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
-        // Sprawdź czy token jest w localStorage przy starcie aplikacji
         const savedToken = localStorage.getItem('token');
         const savedUser = localStorage.getItem('user');
 

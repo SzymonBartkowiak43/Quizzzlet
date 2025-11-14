@@ -10,7 +10,6 @@ const axiosInstance = axios.create({
     },
 });
 
-// Request interceptor - dodaje token do headerów
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -22,7 +21,6 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Response interceptor - obsługuje błędy autoryzacji
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {

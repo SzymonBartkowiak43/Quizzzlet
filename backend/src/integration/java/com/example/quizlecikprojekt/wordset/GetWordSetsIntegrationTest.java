@@ -33,8 +33,10 @@ public class GetWordSetsIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldReturnSingleWordSetWithoutWords() throws Exception {
+        //given
         String token = getJWTToken();
 
+        //when
         createTestWordSet(token, "My First Set", "Basic vocabulary");
 
         MvcResult result = mockMvc.perform(get("/api/word-sets")
@@ -56,7 +58,7 @@ public class GetWordSetsIntegrationTest extends BaseIntegrationTest {
           }
         ]
         """;
-
+        //then
         asserter.assertApiResponse(result, expectedJson);
     }
 

@@ -105,13 +105,6 @@ const LoginPage: React.FC = () => {
                 <div className="auth-footer">
                     <p>Don't have an account? <Link to="/register" className="auth-link">Sign up here</Link></p>
                 </div>
-
-                {/* Test credentials info */}
-                <div className="test-credentials">
-                    <h4>Test Credentials:</h4>
-                    <p><strong>Email:</strong> admin@test.pl</p>
-                    <p><strong>Password:</strong> password123</p>
-                </div>
             </div>
         </div>
     );
