@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BookCopy, PlaySquare, Users } from 'lucide-react';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
@@ -7,62 +8,57 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="home-page">
-            <div className="container1">
-                <h1>WYBIERZ SWOJĄ AKTYWNOŚĆ</h1>
-            </div>
+            <section className="home-hero">
+                <h1 className="home-hero-title">Wybierz swoją aktywność</h1>
+                <p className="home-hero-subtitle">
+                    Kontynuuj naukę, powtarzaj materiał lub odkryj nowe treści.
+                </p>
+            </section>
 
-            <div className="container2">
-                <div className="activity-card blue-frame">
-                    <div className="content-frame">
-                        <h2 className="title">Przejrzyj poprzednie słowka</h2>
-                        <p className="description">
-                            Tutaj możesz przejrzeć słowa, których się wcześniej nauczyłeś. Ta sekcja pozwala
-                            na powtórzenie i utrwalenie słownictwa, zapewniając lepsze zapamiętanie i zrozumienie
-                            nauczonych słów.
+            <section className="home-grid-container">
+                <div className="home-grid">
+
+                    <div className="activity-card" onClick={() => navigate('/word-sets')}>
+                        <div className="card-icon-wrapper">
+                            <BookCopy size={32} className="card-icon" />
+                        </div>
+                        <h2 className="card-title">Przeglądaj Słówka</h2>
+                        <p className="card-description">
+                            Powtórz i utrwal słownictwo, którego uczyłeś się wcześniej.
                         </p>
-                        <button
-                            className="action-button review-button"
-                            onClick={() => navigate('/word-sets')}
-                        >
-                            PRZEGLĄDAJ SŁOWA
+                        <button className="card-button">
+                            Przeglądaj słowa
                         </button>
                     </div>
-                </div>
 
-                <div className="activity-card red-frame">
-                    <div className="content-frame">
-                        <h2 className="title">Obejrzyj filmy</h2>
-                        <p className="description">
-                            Oglądaj filmy edukacyjne, aby poprawić swoje umiejętności językowe. Ta sekcja zawiera różnorodne
-                            filmy, które obejmują różne aspekty nauki języków, w tym gramatykę, słownictwo,
-                            wymowę i wiele innych.
+                    <div className="activity-card" onClick={() => navigate('/videos')}>
+                        <div className="card-icon-wrapper">
+                            <PlaySquare size={32} className="card-icon" />
+                        </div>
+                        <h2 className="card-title">Obejrzyj Filmy</h2>
+                        <p className="card-description">
+                            Popraw swoje umiejętności językowe oglądając filmy edukacyjne.
                         </p>
-                        <button
-                            className="action-button watch-button"
-                            onClick={() => navigate('/videos')}
-                        >
-                            OGLĄDAJ FILMY
+                        <button className="card-button">
+                            Oglądaj filmy
                         </button>
                     </div>
-                </div>
 
-                <div className="activity-card green-frame">
-                    <div className="content-frame">
-                        <h2 className="title">Moje zestawy</h2>
-                        <p className="description">
-                            Odkryj swoje spersonalizowane zestawy! Twórz i zarządzaj własnymi zestawami fiszek, aby ulepszyć
-                            swoje doświadczenie w nauce. Zanurz się w świecie spersonalizowanych treści, które odpowiadają Twoim potrzebom w nauce i śledź
-                            swoje postępy w miarę opanowywania nowych tematów.
+                    <div className="activity-card" onClick={() => navigate('/social/friends')}>
+                        <div className="card-icon-wrapper">
+                            <Users size={32} className="card-icon" />
+                        </div>
+                        <h2 className="card-title">Czat i Znajomi</h2>
+                        <p className="card-description">
+                            Rozmawiaj ze znajomymi, wysyłaj wiadomości i bądź częścią społeczności.
                         </p>
-                        <button
-                            className="action-button sets-button"
-                            onClick={() => navigate('/word-sets')}
-                        >
-                            PRZEJDŹ DO ZESTAWÓW
+                        <button className="card-button">
+                            Przejdź do Social
                         </button>
                     </div>
+
                 </div>
-            </div>
+            </section>
         </div>
     );
 };
