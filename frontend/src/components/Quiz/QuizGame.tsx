@@ -166,7 +166,7 @@ const QuizGame: React.FC<QuizGameProps> = ({
                             autoFocus
                         />
                         <div className="input-hint">
-                            💡 Wskazówka: Naciśnij Enter, aby potwierdzić odpowiedź
+                            💡 Naciśnij Enter, aby potwierdzić odpowiedź
                         </div>
                     </div>
                 )}
@@ -174,13 +174,13 @@ const QuizGame: React.FC<QuizGameProps> = ({
 
             <div className="quiz-actions">
                 <div className="quiz-stats">
-                    <span>Poprawne: {session.answers.filter(a => a.isCorrect).length}</span>
-                    <span>Błędne: {session.answers.filter(a => !a.isCorrect).length}</span>
+                    <span>✅ {session.answers.filter(a => a.isCorrect).length}</span>
+                    <span>❌ {session.answers.filter(a => !a.isCorrect).length}</span>
                 </div>
 
                 <button
                     onClick={handleSubmitAnswer}
-                    className="btn btn-primary btn-large"
+                    className="btn-primary-solid btn-large"
                     disabled={
                         (currentQuestion.type === 'multiple-choice' && !selectedOption) ||
                         (currentQuestion.type === 'typing' && !userAnswer.trim())

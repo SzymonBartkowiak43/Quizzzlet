@@ -1,39 +1,35 @@
 .flashcard-settings {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
     animation: fadeInUp 0.5s ease-out;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .settings-header {
     text-align: center;
     margin-bottom: 2rem;
 }
-
 .settings-header h2 {
     color: white;
     font-size: 1.75rem;
     margin: 0 0 0.5rem 0;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
 .settings-header p {
     color: rgba(255, 255, 255, 0.8);
     margin: 0;
     font-size: 1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .settings-grid {
@@ -47,6 +43,7 @@
     font-size: 1.25rem;
     margin: 0 0 1rem 0;
     font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .setting-options {
@@ -63,29 +60,23 @@
     border: 2px solid transparent;
     cursor: pointer;
     transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
 }
-
 .setting-option:hover {
     background: rgba(255, 255, 255, 0.15);
     transform: translateY(-1px);
 }
-
 .setting-option input[type="radio"] {
     margin-right: 1rem;
     width: 18px;
     height: 18px;
     cursor: pointer;
 }
-
 .setting-option input[type="radio"]:checked + .option-content {
     color: white;
 }
-
 .setting-option:has(input[type="radio"]:checked) {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 .option-content {
@@ -93,13 +84,11 @@
     color: rgba(255, 255, 255, 0.8);
     transition: color 0.2s ease;
 }
-
 .option-title {
     font-weight: 600;
     font-size: 1rem;
     margin-bottom: 0.25rem;
 }
-
 .option-desc {
     font-size: 0.875rem;
     opacity: 0.8;
@@ -113,21 +102,17 @@
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
     color: rgba(255, 255, 255, 0.8);
 }
-
 .setting-checkbox:hover {
     background: rgba(255, 255, 255, 0.15);
 }
-
 .setting-checkbox input[type="checkbox"] {
     margin-right: 1rem;
     width: 18px;
     height: 18px;
     cursor: pointer;
 }
-
 .setting-checkbox:has(input:checked) {
     background: rgba(255, 255, 255, 0.2);
     color: white;
@@ -138,26 +123,23 @@
     gap: 0.75rem;
 }
 
-/* Preview sekcja */
+/* Sekcja podglądu */
 .settings-preview {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 16px;
     padding: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
 }
-
 .settings-preview h3 {
     color: white;
     font-size: 1.125rem;
     margin: 0 0 1rem 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
-
 .preview-stats {
     display: grid;
     gap: 0.75rem;
 }
-
 .preview-stat {
     display: flex;
     justify-content: space-between;
@@ -165,16 +147,13 @@
     padding: 0.75rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .preview-stat:last-child {
     border-bottom: none;
 }
-
 .preview-label {
     color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
 }
-
 .preview-value {
     color: white;
     font-weight: 600;
@@ -187,23 +166,53 @@
     margin-top: 2rem;
 }
 
+/* Style przycisków */
+.btn-primary-solid {
+    background-color: white;
+    color: #667eea;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-primary-solid:hover {
+    background-color: #f0f4f8;
+    transform: scale(1.03);
+}
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+
 @media (max-width: 768px) {
-    .flashcard-settings {
-        padding: 1.5rem;
-    }
-
-    .settings-actions {
-        flex-direction: column-reverse;
-    }
-
-    .setting-option,
-    .setting-checkbox {
-        padding: 0.75rem;
-    }
-
-    .preview-stat {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
+    .flashcard-settings { padding: 1.5rem; }
+    .settings-actions { flex-direction: column-reverse; }
+    .setting-option, .setting-checkbox { padding: 0.75rem; }
+    .preview-stat { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
 }

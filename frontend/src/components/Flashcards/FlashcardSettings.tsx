@@ -175,10 +175,10 @@ const FlashcardSettings: React.FC<FlashcardSettingsProps> = ({ wordSet, onStart,
             </div>
 
             <div className="settings-actions">
-                <button onClick={onBack} className="btn btn-secondary">
+                <button onClick={onBack} className="btn-glass">
                     Anuluj
                 </button>
-                <button onClick={handleStart} className="btn btn-primary">
+                <button onClick={handleStart} className="btn-primary-solid">
                     🚀 Rozpocznij sesję
                 </button>
             </div>

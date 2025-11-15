@@ -42,6 +42,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Domyślny wygląd (neutralny) */
 .card-front {
     background: linear-gradient(135deg,
     rgba(255, 255, 255, 0.15) 0%,
@@ -52,10 +53,11 @@
     background: linear-gradient(135deg,
     rgba(16, 185, 129, 0.2) 0%,
     rgba(5, 150, 105, 0.15) 100%);
+    border-color: rgba(16, 185, 129, 0.3);
     transform: rotateY(180deg);
 }
 
-/* Difficulty colors */
+/* Kolory trudności */
 .flashcard.difficulty-easy .card-front {
     background: linear-gradient(135deg,
     rgba(16, 185, 129, 0.2) 0%,
@@ -85,13 +87,12 @@
 }
 
 .language-indicator {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 600;
-    backdrop-filter: blur(10px);
 }
 
 .difficulty-badge {
@@ -104,13 +105,12 @@
 }
 
 .card-stats {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
     color: white;
     padding: 0.4rem 0.8rem;
     border-radius: 15px;
     font-size: 0.75rem;
     font-weight: 600;
-    backdrop-filter: blur(10px);
 }
 
 .card-content {
@@ -124,28 +124,19 @@
 }
 
 .card-text {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: white;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     word-wrap: break-word;
     line-height: 1.2;
-    animation: textGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes textGlow {
-    from {
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-    to {
-        text-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-    }
 }
 
 .original-text {
     font-size: 1.25rem;
     color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .translation-arrow {
@@ -155,21 +146,15 @@
 }
 
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-5px);
-    }
-    60% {
-        transform: translateY(-3px);
-    }
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-3px); }
 }
 
 .translation {
-    font-size: 2.25rem !important;
-    color: #10b981 !important;
-    text-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+    font-size: 2.5rem !important;
+    color: #81c784 !important; /* Jasny zielony dla kontrastu */
+    text-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
 }
 
 .card-footer {
@@ -178,10 +163,11 @@
 
 .flip-hint {
     text-align: center;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.875rem;
     font-weight: 500;
     animation: fadeInOut 2s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes fadeInOut {
@@ -191,15 +177,14 @@
 
 .card-history {
     text-align: center;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
     padding: 0.5rem 1rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
 }
 
-/* Flip indicator */
+/* Wskaźnik odwrócenia */
 .flip-indicator {
     position: absolute;
     bottom: -50px;
@@ -207,74 +192,46 @@
     transform: translateX(-50%);
     pointer-events: none;
 }
-
 .flip-animation {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.875rem;
     animation: flipHint 2s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes flipHint {
-    0%, 100% {
-        opacity: 0.6;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.1);
-    }
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
 }
 
-/* Hover effects */
+/* Hover */
 .flashcard:hover {
     transform: scale(1.02);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
-
 .flashcard.flipped:hover {
     transform: rotateY(180deg) scale(1.02);
 }
 
-/* Mobile responsiveness */
+/* Mobile */
 @media (max-width: 768px) {
     .flashcard-container {
         height: 300px;
         max-width: 350px;
     }
-
-    .card-front,
-    .card-back {
+    .card-front, .card-back {
         padding: 1.5rem;
     }
-
     .card-text {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
-
     .translation {
-        font-size: 1.75rem !important;
+        font-size: 2rem !important;
     }
-
     .original-text {
         font-size: 1rem;
     }
-
     .card-header {
         margin-bottom: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .flashcard-container {
-        height: 250px;
-        max-width: 300px;
-    }
-
-    .card-text {
-        font-size: 1.25rem;
-    }
-
-    .translation {
-        font-size: 1.5rem !important;
     }
 }

@@ -1,35 +1,50 @@
+/* --- Stan pusty --- */
 .friendslist-empty {
     text-align: center;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.8);
     margin-top: 32px;
     font-size: 1.1rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.friendslist-empty b {
+    color: white;
 }
 
+/* --- Siatka kart --- */
 .friendslist-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
 }
 
+/* --- Karta "Glass" --- */
 .friendslist-card {
-    background: #f1f5f9;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(30,41,59,0.07);
-    padding: 24px 18px 18px 18px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    transition: box-shadow 0.2s, transform 0.2s;
+    transition: all 0.3s ease;
 }
 .friendslist-card:hover {
-    box-shadow: 0 4px 24px rgba(30,41,59,0.13);
-    transform: translateY(-2px) scale(1.03);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .friendslist-avatar {
-    background: #2563eb;
-    color: #fff;
+    background: #a5b4fc; /* Jasny niebieski */
+    color: #3730a3; /* Ciemny niebieski */
     font-weight: 700;
     font-size: 2.4rem;
     width: 60px;
@@ -39,58 +54,81 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.09);
 }
 
 .friendslist-info {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 1.5rem;
 }
 .friendslist-name {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    color: #334155;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 .friendslist-email {
     font-size: 0.95rem;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.8);
     margin-top: 2px;
 }
 
 .friendslist-actions {
     display: flex;
-    gap: 14px;
-    margin-top: 8px;
+    gap: 0.75rem;
+    margin-top: auto; /* Wypycha przyciski na dół */
+    width: 100%;
 }
 
-.friendslist-btn {
-    padding: 7px 18px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
+.friendslist-actions .btn-glass,
+.friendslist-actions .btn-glass-danger {
+    flex: 1; /* Przyciski zajmują równą szerokość */
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+}
+
+
+/* --- Style przycisków (globalne, jeśli ich nie masz) --- */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
-    font-weight: 500;
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 6px rgba(30,41,59,0.05);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
-
-.friendslist-btn.remove {
-    background: #f87171;
-    color: #fff;
+.btn-glass:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
 }
-.friendslist-btn.remove:hover {
-    background: #ef4444;
+.btn-glass-danger {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
-
-.friendslist-btn.block {
-    background: #facc15;
-    color: #334155;
+.btn-glass-danger:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.4);
+    border-color: rgba(239, 68, 68, 0.6);
 }
-.friendslist-btn.block:hover {
-    background: #eab308;
-}
-
-.friendslist-btn[disabled] {
+.btn-glass:disabled,
+.btn-glass-danger:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }

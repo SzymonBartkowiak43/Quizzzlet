@@ -3,6 +3,7 @@ import { FlashcardSession, FlashcardResult, FlashcardDifficulty } from '../../ty
 import Flashcard from './Flashcard';
 import FlashcardProgress from './FlashcardProgress';
 import './FlashcardGame.css';
+import { RotateCcw } from 'lucide-react';
 
 interface FlashcardGameProps {
     session: FlashcardSession;
@@ -32,6 +33,8 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
     };
 
     const handleAnswer = (isCorrect: boolean) => {
+        if (showResult) return; // Zapobiegaj podwójnemu kliknięciu
+
         const responseTime = new Date().getTime() - cardStartTime.getTime();
 
         const result: FlashcardResult = {
@@ -46,7 +49,7 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
             timesCorrect: isCorrect ? currentCard.timesCorrect + 1 : currentCard.timesCorrect,
             timesIncorrect: !isCorrect ? currentCard.timesIncorrect + 1 : currentCard.timesIncorrect,
             lastShown: new Date(),
-            difficulty: calculateDifficulty(currentCard, isCorrect) // 🔥 POPRAWKA - explicit typing
+            difficulty: calculateDifficulty(currentCard, isCorrect)
         };
 
         const updatedCards = session.cards.map(card =>
@@ -72,7 +75,7 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
 
         setTimeout(() => {
             nextCard(updatedSession, newReviewQueue);
-        }, 1500);
+        }, 1200); // Wydłużamy czas, aby zobaczyć feedback
     };
 
     const calculateDifficulty = (card: any, isCorrect: boolean): FlashcardDifficulty => {
@@ -110,7 +113,32 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
     };
 
     const handleSkipCard = () => {
-        handleAnswer(false);
+        // Pomijanie liczymy jako błędną odpowiedź, ale nie dodajemy do kolejki powtórek
+        const responseTime = new Date().getTime() - cardStartTime.getTime();
+
+        const updatedCard = {
+            ...currentCard,
+            timesShown: currentCard.timesShown + 1,
+            timesIncorrect: currentCard.timesIncorrect + 1,
+            lastShown: new Date(),
+            difficulty: calculateDifficulty(currentCard, false)
+        };
+        const updatedCards = session.cards.map(card =>
+            card.id === currentCard.id ? updatedCard : card
+        );
+        const updatedSession: FlashcardSession = {
+            ...session,
+            cards: updatedCards,
+            completedCards: session.completedCards + 1,
+            incorrectAnswers: session.incorrectAnswers + 1
+        };
+
+        onSessionUpdate(updatedSession);
+        setShowResult(true); // Pokaż krótki feedback "pominięto"
+
+        setTimeout(() => {
+            nextCard(updatedSession, reviewQueue);
+        }, 1200);
     };
 
     const totalCards = session.cards.length + (session.settings.reviewIncorrect ? reviewQueue.length : 0);
@@ -148,13 +176,13 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
                         <div className="flip-controls">
                             <button
                                 onClick={handleCardFlip}
-                                className="btn btn-primary btn-large flip-btn"
+                                className="btn-primary-solid flip-btn"
                             >
                                 📖 Pokaż tłumaczenie
                             </button>
                             <button
                                 onClick={handleSkipCard}
-                                className="btn btn-secondary btn-small"
+                                className="btn-glass btn-small"
                             >
                                 Pomiń
                             </button>
@@ -175,13 +203,19 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
                                 <>
                                     <button
                                         onClick={() => handleAnswer(false)}
-                                        className="btn btn-danger btn-large answer-btn"
+                                        className="btn-glass-danger answer-btn"
                                     >
                                         ❌ Nie znam
                                     </button>
                                     <button
+                                        onClick={() => setIsCardFlipped(false)}
+                                        className="btn-glass answer-btn"
+                                    >
+                                        <RotateCcw size={16} /> Odwróć
+                                    </button>
+                                    <button
                                         onClick={() => handleAnswer(true)}
-                                        className="btn btn-success btn-large answer-btn"
+                                        className="btn-glass-success answer-btn"
                                     >
                                         ✅ Znam
                                     </button>
@@ -191,7 +225,7 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
                     )}
                 </div>
 
-                {isLastCard && (
+                {isLastCard && !showResult && (
                     <div className="final-card-indicator">
                         🏁 Ostatnia karta!
                     </div>

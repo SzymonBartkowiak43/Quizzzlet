@@ -1,63 +1,143 @@
-.create-word-set-page {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 2rem;
+/* --- Style przycisków --- */
+.btn-primary-solid {
+    background-color: white;
+    color: #667eea;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-primary-solid:hover {
+    background-color: #f0f4f8;
+    transform: scale(1.03);
+}
+.btn-primary-solid:disabled {
+    background-color: #ccc;
+    color: #777;
+    cursor: not-allowed;
+    transform: none;
+}
+.btn-glass, .btn-glass-icon {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-glass:hover, .btn-glass-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.btn-glass-icon {
+    padding: 0.6rem 0.8rem;
+}
+.btn-glass:disabled {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
 }
 
+/* --- Główna strona --- */
+.create-word-set-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    flex: 1;
+    margin-top: -4rem;
+    color: white;
+
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 6rem 1.5rem 4rem 1.5rem;
+}
+
+/* --- Nagłówek --- */
 .page-header {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
 }
-
 .page-header h1 {
     margin: 0;
-    color: #333;
-    font-size: 1.75rem;
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+/* --- Formularz (Glass) --- */
 .create-word-set-form {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 2.5rem;
 }
 
+/* --- Pola formularza --- */
 .form-group {
     margin-bottom: 1.5rem;
 }
-
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     font-weight: 600;
-    color: #333;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
+    padding: 0.9rem;
     border-radius: 8px;
     font-size: 1rem;
-    transition: border-color 0.2s ease;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: none;
 }
 
 .form-group textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 100px;
 }
 
+/* --- Akcje --- */
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -65,16 +145,25 @@
     margin-top: 2rem;
 }
 
+.error-message {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* --- Responsywność --- */
 @media (max-width: 768px) {
     .create-word-set-page {
-        padding: 1rem;
+        padding: 5rem 1rem 2rem 1rem;
     }
-
     .page-header {
         flex-direction: column;
         align-items: flex-start;
     }
-
     .form-actions {
         flex-direction: column-reverse;
     }

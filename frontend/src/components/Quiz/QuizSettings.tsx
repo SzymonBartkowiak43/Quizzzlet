@@ -39,7 +39,7 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
     return (
         <div className="quiz-settings">
             <div className="settings-header">
-                <h2>🧠 Ustawienia testu</h2>
+                <h2>⚙️ Ustawienia testu</h2>
                 <p>Skonfiguruj swój test wiedzy</p>
             </div>
 
@@ -85,7 +85,7 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                                 onChange={() => handleSettingChange('showWordFirst', true)}
                             />
                             <div className="option-content">
-                                <div className="option-title">🇬🇧 → 🇵🇱</div>
+                                <div className="option-title">en → pl</div>
                                 <div className="option-desc">Angielski → Polski</div>
                             </div>
                         </label>
@@ -97,7 +97,7 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                                 onChange={() => handleSettingChange('showWordFirst', false)}
                             />
                             <div className="option-content">
-                                <div className="option-title">🇵🇱 → 🇬🇧</div>
+                                <div className="option-title">pl → en</div>
                                 <div className="option-desc">Polski → Angielski</div>
                             </div>
                         </label>
@@ -147,7 +147,7 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
                             <label className="setting-option">
                                 <input
                                     type="radio"
-                                    name="questionLimit"
+                                    name="sessionLimit"
                                     checked={settings.questionCount === 50}
                                     onChange={() => handleSettingChange('questionCount', 50)}
                                 />
@@ -274,12 +274,12 @@ const QuizSettings: React.FC<QuizSettingsProps> = ({ wordSet, onStart, onBack })
             </div>
 
             <div className="settings-actions">
-                <button onClick={onBack} className="btn btn-secondary">
+                <button onClick={onBack} className="btn-glass">
                     Anuluj
                 </button>
                 <button
                     onClick={handleStart}
-                    className="btn btn-primary"
+                    className="btn-primary-solid"
                     disabled={!hasSelectedQuestionType}
                 >
                     🚀 Rozpocznij test

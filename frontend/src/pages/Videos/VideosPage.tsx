@@ -47,7 +47,6 @@ const VideosPage: React.FC = () => {
     };
 
     const formatDuration = (duration: string) => {
-        // Assuming duration is in format "HH:MM:SS" or "MM:SS"
         return duration;
     };
 
@@ -142,8 +141,8 @@ const VideosPage: React.FC = () => {
 
             {filteredVideos.length === 0 && (
                 <div className="no-videos">
-                    <h2>No videos found</h2>
-                    <p>Try adjusting your search or filter criteria.</p>
+                    <h2>Nie znaleziono filmów</h2>
+                    <p>Spróbuj zmienić filtry lub wyszukiwaną frazę.</p>
                 </div>
             )}
         </div>

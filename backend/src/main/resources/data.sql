@@ -408,3 +408,295 @@ WHERE NOT EXISTS (
     WHERE sender_id = (SELECT id FROM users WHERE email = 'admin@test.pl')
       AND content LIKE 'Witaj Anna! Widziałem%'
 );
+
+
+
+
+-- ===== SKRYPT DODAJĄCY DANE DLA UŻYTKOWNIKA 'PROMOTOR' =====
+-- Ten skrypt dodaje 8 nowych użytkowników (w tym 'promotor@test.pl')
+-- oraz generuje dla 'promotor@test.pl' dużą ilość danych:
+-- 1. Nowe zestawy słówek (5 zestawów)
+-- 2. Słówka do każdego nowego zestawu (ok. 5-7 na zestaw)
+-- 3. Znajomych (7)
+-- 4. Prywatne wiadomości
+-- 5. Dodatkowe materiały wideo
+
+-- ===== 1. DODANIE 8 NOWYCH UŻYTKOWNIKÓW =====
+INSERT INTO users (email, name, password)
+VALUES
+    ('promotor@test.pl', 'Jan Promotor', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'), -- Ten jest najważniejszy
+    ('marek@test.pl', 'Marek Wiśniewski', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
+    ('ewa@test.pl', 'Ewa Dąbrowska', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
+    ('tomasz@test.pl', 'Tomasz Zieliński', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
+    ('kasia@test.pl', 'Katarzyna Szymańska', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
+    ('kamil@test.pl', 'Kamil Woźniak', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
+    ('monika@test.pl', 'Monika Jankowska', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
+    ('pawel@test.pl', 'Paweł Lewandowski', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy')
+ON CONFLICT (email) DO NOTHING;
+
+-- ===== 2. PRZYPISANIE RÓL NOWYM UŻYTKOWNIKOM =====
+INSERT INTO user_roles (user_id, role_id)
+SELECT u.id, r.id FROM users u, roles r
+WHERE u.email IN (
+                  'promotor@test.pl', 'marek@test.pl', 'ewa@test.pl', 'tomasz@test.pl',
+                  'kasia@test.pl', 'kamil@test.pl', 'monika@test.pl', 'pawel@test.pl'
+    ) AND r.name = 'USER'
+ON CONFLICT DO NOTHING;
+
+-- ===== 3. DODANIE 5+ ZNAJOMYCH DLA 'promotor@test.pl' =====
+-- Dodanie 5 nowych znajomych
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    (SELECT id FROM users WHERE email = 'marek@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '10 days'
+ON CONFLICT (requester_id, addressee_id) DO NOTHING;
+
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'ewa@test.pl'), -- Zmiana kolejności dla realizmu
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '9 days'
+ON CONFLICT (requester_id, addressee_id) DO NOTHING;
+
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    (SELECT id FROM users WHERE email = 'tomasz@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '8 days'
+ON CONFLICT (requester_id, addressee_id) DO NOTHING;
+
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'kasia@test.pl'),
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '7 days'
+ON CONFLICT (requester_id, addressee_id) DO NOTHING;
+
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    (SELECT id FROM users WHERE email = 'kamil@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '6 days'
+ON CONFLICT (requester_id, addressee_id) DO NOTHING;
+
+-- Dodanie istniejących użytkowników jako znajomych (dla większej ilości danych)
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    (SELECT id FROM users WHERE email = 'anna@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '5 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM friendships
+    WHERE (requester_id = (SELECT id FROM users WHERE email = 'promotor@test.pl') AND addressee_id = (SELECT id FROM users WHERE email = 'anna@test.pl'))
+       OR (requester_id = (SELECT id FROM users WHERE email = 'anna@test.pl') AND addressee_id = (SELECT id FROM users WHERE email = 'promotor@test.pl'))
+);
+
+INSERT INTO friendships (requester_id, addressee_id, status, created_at)
+SELECT
+    (SELECT id FROM users WHERE email = 'piotr@test.pl'),
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    'ACCEPTED', CURRENT_TIMESTAMP - INTERVAL '4 days'
+WHERE NOT EXISTS (
+    SELECT 1 FROM friendships
+    WHERE (requester_id = (SELECT id FROM users WHERE email = 'piotr@test.pl') AND addressee_id = (SELECT id FROM users WHERE email = 'promotor@test.pl'))
+       OR (requester_id = (SELECT id FROM users WHERE email = 'promotor@test.pl') AND addressee_id = (SELECT id FROM users WHERE email = 'piotr@test.pl'))
+);
+
+
+-- ===== 4. DODANIE "DUŻEJ ILOŚCI" ZESTAWÓW SŁÓWEK DLA 'promotor@test.pl' =====
+INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
+SELECT
+    'Technologie i IT', 'Słownictwo związane z komputerami i internetem', 'en', 'pl',
+    u.id, '2025-02-01 10:00:00', '2025-02-10 12:00:00'
+FROM users u WHERE u.email = 'promotor@test.pl' ON CONFLICT DO NOTHING;
+
+INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
+SELECT
+    'Dom i mieszkanie', 'Przedmioty codziennego użytku w domu', 'en', 'pl',
+    u.id, '2025-02-02 11:00:00', '2025-02-10 13:00:00'
+FROM users u WHERE u.email = 'promotor@test.pl' ON CONFLICT DO NOTHING;
+
+INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
+SELECT
+    'Rodzina i przyjaciele', 'Opisywanie relacji międzyludzkich', 'en', 'pl',
+    u.id, '2025-02-03 12:00:00', '2025-02-10 14:00:00'
+FROM users u WHERE u.email = 'promotor@test.pl' ON CONFLICT DO NOTHING;
+
+INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
+SELECT
+    'Sport i rekreacja', 'Popularne dyscypliny i aktywności', 'en', 'pl',
+    u.id, '2025-02-04 13:00:00', '2025-02-10 15:00:00'
+FROM users u WHERE u.email = 'promotor@test.pl' ON CONFLICT DO NOTHING;
+
+INSERT INTO word_sets (title, description, language, translation_language, user_id, created_at, updated_at)
+SELECT
+    'Zdrowie i medycyna', 'Podstawowe pojęcia medyczne', 'en', 'pl',
+    u.id, '2025-02-05 14:00:00', '2025-02-10 16:00:00'
+FROM users u WHERE u.email = 'promotor@test.pl' ON CONFLICT DO NOTHING;
+
+-- ===== 5. DODANIE SŁÓWEK DO NOWYCH ZESTAWÓW 'promotor@test.pl' =====
+
+-- Zestaw: Technologie i IT (6 słówek)
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'computer', 'komputer', ws.id, 10, true, '2025-02-10 10:00:00', '2025-02-01 10:00:00', '2025-02-10 10:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Technologie i IT';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'keyboard', 'klawiatura', ws.id, 8, true, '2025-02-09 10:00:00', '2025-02-01 10:00:00', '2025-02-09 10:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Technologie i IT';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'software', 'oprogramowanie', ws.id, 5, false, '2025-02-08 10:00:00', '2025-02-01 10:00:00', '2025-02-08 10:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Technologie i IT';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'database', 'baza danych', ws.id, 9, true, '2025-02-10 11:00:00', '2025-02-01 10:00:00', '2025-02-10 11:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Technologie i IT';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'internet', 'internet', ws.id, 10, true, '2025-02-10 12:00:00', '2025-02-01 10:00:00', '2025-02-10 12:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Technologie i IT';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'developer', 'programista', ws.id, 3, false, NULL, '2025-02-01 10:00:00', '2025-02-01 10:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Technologie i IT';
+
+-- Zestaw: Dom i mieszkanie (6 słówek)
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'house', 'dom', ws.id, 8, true, '2025-02-10 11:00:00', '2025-02-02 11:00:00', '2025-02-10 11:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Dom i mieszkanie';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'kitchen', 'kuchnia', ws.id, 9, true, '2025-02-10 09:00:00', '2025-02-02 11:00:00', '2025-02-10 09:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Dom i mieszkanie';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'bedroom', 'sypialnia', ws.id, 7, false, '2025-02-09 11:00:00', '2025-02-02 11:00:00', '2025-02-09 11:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Dom i mieszkanie';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'table', 'stół', ws.id, 10, true, '2025-02-10 13:00:00', '2025-02-02 11:00:00', '2025-02-10 13:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Dom i mieszkanie';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'chair', 'krzesło', ws.id, 10, true, '2025-02-10 13:05:00', '2025-02-02 11:00:00', '2025-02-10 13:05:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Dom i mieszkanie';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'window', 'okno', ws.id, 4, false, NULL, '2025-02-02 11:00:00', '2025-02-02 11:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Dom i mieszkanie';
+
+-- Zestaw: Rodzina i przyjaciele (5 słówek)
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'mother', 'matka', ws.id, 9, false, '2025-02-09 12:00:00', '2025-02-03 12:00:00', '2025-02-09 12:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Rodzina i przyjaciele';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'father', 'ojciec', ws.id, 8, false, '2025-02-09 12:05:00', '2025-02-03 12:00:00', '2025-02-09 12:05:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Rodzina i przyjaciele';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'sister', 'siostra', ws.id, 7, true, '2025-02-10 14:00:00', '2025-02-03 12:00:00', '2025-02-10 14:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Rodzina i przyjaciele';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'brother', 'brat', ws.id, 7, true, '2025-02-10 14:05:00', '2025-02-03 12:00:00', '2025-02-10 14:05:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Rodzina i przyjaciele';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'friend', 'przyjaciel', ws.id, 10, true, '2025-02-10 14:10:00', '2025-02-03 12:00:00', '2025-02-10 14:10:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Rodzina i przyjaciele';
+
+-- Zestaw: Sport i rekreacja (5 słówek)
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'football', 'piłka nożna', ws.id, 7, true, '2025-02-10 13:00:00', '2025-02-04 13:00:00', '2025-02-10 13:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Sport i rekreacja';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'basketball', 'koszykówka', ws.id, 6, false, '2025-02-08 13:00:00', '2025-02-04 13:00:00', '2025-02-08 13:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Sport i rekreacja';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'running', 'bieganie', ws.id, 8, true, '2025-02-10 15:00:00', '2025-02-04 13:00:00', '2025-02-10 15:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Sport i rekreacja';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'swimming', 'pływanie', ws.id, 5, false, NULL, '2025-02-04 13:00:00', '2025-02-04 13:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Sport i rekreacja';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'bicycle', 'rower', ws.id, 9, true, '2025-02-10 15:05:00', '2025-02-04 13:00:00', '2025-02-10 15:05:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Sport i rekreacja';
+
+-- Zestaw: Zdrowie i medycyna (5 słówek)
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'doctor', 'lekarz', ws.id, 5, false, NULL, '2025-02-05 14:00:00', '2025-02-05 14:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Zdrowie i medycyna';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'hospital', 'szpital', ws.id, 6, false, '2025-02-07 14:00:00', '2025-02-05 14:00:00', '2025-02-07 14:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Zdrowie i medycyna';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'health', 'zdrowie', ws.id, 8, true, '2025-02-10 16:00:00', '2025-02-05 14:00:00', '2025-02-10 16:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Zdrowie i medycyna';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'medicine', 'lekarstwo', ws.id, 7, true, '2025-02-09 16:00:00', '2025-02-05 14:00:00', '2025-02-09 16:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Zdrowie i medycyna';
+INSERT INTO words (word, translation, word_set_id, points, star, last_practiced, created_at, updated_at)
+SELECT 'headache', 'ból głowy', ws.id, 4, false, '2025-02-08 16:00:00', '2025-02-05 14:00:00', '2025-02-08 16:00:00'
+FROM word_sets ws JOIN users u ON ws.user_id = u.id WHERE u.email = 'promotor@test.pl' AND ws.title = 'Zdrowie i medycyna';
+
+
+-- ===== 6. DODANIE AKTYWNOŚCI (WIADOMOŚCI, VIDEO) DLA 'promotor@test.pl' =====
+
+-- Kilka wiadomości prywatnych
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    (SELECT id FROM users WHERE email = 'marek@test.pl'),
+    'Cześć Marek, dzięki za dodanie do znajomych! Widzę, że też się uczysz.',
+    CURRENT_TIMESTAMP - INTERVAL '9 days',
+    true
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'promotor@test.pl')
+      AND content LIKE 'Cześć Marek, dzięki za dodanie%'
+);
+
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'marek@test.pl'),
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    'Hej Jan! Zgadza się, staram się codziennie. Twój zestaw o IT jest świetny!',
+    CURRENT_TIMESTAMP - INTERVAL '9 days' + INTERVAL '1 hour',
+    true
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'marek@test.pl')
+      AND content LIKE 'Hej Jan! Zgadza się%'
+);
+
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    (SELECT id FROM users WHERE email = 'ewa@test.pl'),
+    'Cześć Ewa, polecasz jakieś materiały do nauki? Zrobiłem nowy zestaw o sporcie, zerknij jak chcesz.',
+    CURRENT_TIMESTAMP - INTERVAL '8 days',
+    false -- Ta wiadomość jest nieprzeczytana przez Ewę
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'promotor@test.pl')
+      AND content LIKE 'Cześć Ewa, polecasz jakieś materiały%'
+);
+
+INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
+SELECT
+    (SELECT id FROM users WHERE email = 'kasia@test.pl'),
+    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
+    'Hej, widziałam Twój zestaw o zdrowiu. Dodałam kilka słówek od siebie, co myślisz?',
+    CURRENT_TIMESTAMP - INTERVAL '7 days',
+    true
+WHERE NOT EXISTS (
+    SELECT 1 FROM private_messages
+    WHERE sender_id = (SELECT id FROM users WHERE email = 'kasia@test.pl')
+      AND content LIKE 'Hej, widziałam Twój zestaw o zdrowiu%'
+);
+
+-- Kilka filmów dodanych przez promotora
+INSERT INTO videos (title, url, user_id, created_at, updated_at)
+SELECT
+    'Przydatne zwroty w IT - Mój zbiór',
+    'https://www.youtube.com/watch?v=1nCqR_cKq5s',
+    id, '2025-02-06 09:00:00', '2025-02-06 09:00:00'
+FROM users WHERE email = 'promotor@test.pl'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO videos (title, url, user_id, created_at, updated_at)
+SELECT
+    'Jak mówić o sporcie po angielsku',
+    'https://www.youtube.com/watch?v=O1_Uxn-I0iI',
+    id, '2025-02-07 15:00:00', '2025-02-07 15:00:00'
+FROM users WHERE email = 'promotor@test.pl'
+ON CONFLICT DO NOTHING;

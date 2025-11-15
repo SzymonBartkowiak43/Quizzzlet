@@ -1,60 +1,51 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
+import './StatsCard.css';
 
 interface StatsCardProps {
     title: string;
     value: number;
     icon: LucideIcon;
-    color: 'blue' | 'green' | 'orange' | 'purple';
     trend?: string;
 }
 
-const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon: Icon, color, trend }) => {
-    const colorClasses = {
-        blue: {
-            bg: 'bg-blue-50',
-            icon: 'text-blue-600',
-            text: 'text-blue-900',
-            accent: 'border-blue-200'
-        },
-        green: {
-            bg: 'bg-green-50',
-            icon: 'text-green-600',
-            text: 'text-green-900',
-            accent: 'border-green-200'
-        },
-        orange: {
-            bg: 'bg-orange-50',
-            icon: 'text-orange-600',
-            text: 'text-orange-900',
-            accent: 'border-orange-200'
-        },
-        purple: {
-            bg: 'bg-purple-50',
-            icon: 'text-purple-600',
-            text: 'text-purple-900',
-            accent: 'border-purple-200'
-        }
-    };
-
-    const styles = colorClasses[color];
+const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon: Icon, trend }) => {
 
     return (
-        <div className={`${styles.bg} ${styles.accent} border rounded-lg p-6 transition-all duration-200 hover:shadow-md`}>
+        <div className="glass-box stat-card">
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-                    <p className={`text-3xl font-bold ${styles.text}`}>{value}</p>
+                    <p className="text-sm font-medium text-gray-300 mb-1">{title}</p>
+                    <p className="text-3xl font-bold text-white">{value}</p>
                     {trend && (
-                        <p className="text-xs text-gray-500 mt-1">{trend}</p>
+                        <p className="text-xs text-gray-400 mt-1">{trend}</p>
                     )}
                 </div>
-                <div className={`${styles.icon} bg-white p-3 rounded-lg shadow-sm`}>
-                    <Icon className="h-6 w-6" />
+                <div className="bg-white/20 p-3 rounded-lg">
+                    <Icon className="h-6 w-6 text-white" />
                 </div>
             </div>
         </div>
     );
 };
+
+// --- DODAJ TE STYLE DO CSS ---
+/*
+.glass-box {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+}
+.stat-card {
+    transition: all 0.2s ease;
+}
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+*/
 
 export default StatsCard;

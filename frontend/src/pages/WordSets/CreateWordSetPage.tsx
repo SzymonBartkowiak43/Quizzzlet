@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { wordSetService } from '../../services/wordSetService';
 import { CreateWordSetRequest } from '../../types/wordSet';
+import { ArrowLeft } from 'lucide-react';
 import './CreateWordSetPage.css';
 
 const CreateWordSetPage: React.FC = () => {
@@ -52,16 +53,16 @@ const CreateWordSetPage: React.FC = () => {
             <div className="page-header">
                 <button
                     onClick={() => navigate('/word-sets')}
-                    className="btn btn-secondary"
+                    className="btn-glass-icon"
                 >
-                    ← Powrót do zestawów
+                    <ArrowLeft size={18} /> Powrót do zestawów
                 </button>
                 <h1>Nowy zestaw słówek</h1>
             </div>
 
             <form onSubmit={handleSubmit} className="create-word-set-form">
                 <div className="form-group">
-                    <label htmlFor="title">Nazwa zestawu *</label> {/* ← POPRAWKA */}
+                    <label htmlFor="title">Nazwa zestawu *</label>
                     <input
                         type="text"
                         id="title"
@@ -97,14 +98,14 @@ const CreateWordSetPage: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => navigate('/word-sets')}
-                        className="btn btn-secondary"
+                        className="btn-glass"
                         disabled={loading}
                     >
                         Anuluj
                     </button>
                     <button
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn-primary-solid"
                         disabled={loading || !formData.title.trim()}
                     >
                         {loading ? 'Tworzę...' : 'Utwórz zestaw'}

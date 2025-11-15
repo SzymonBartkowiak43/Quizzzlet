@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import socialApi from '../../../services/socialApi';
 import { toast } from 'react-toastify';
 import './CommunityPage.css';
+import LoadingSpinner from '../../Shared/LoadingSpinner'; // Zakładam, że masz ten komponent
+import { UserPlus, Check, X } from 'lucide-react';
 
 interface User {
     id: number;
@@ -109,76 +111,88 @@ const CommunityPage: React.FC = () => {
     };
 
     return (
-        <div className="community-page community-layout">
-            <div className="community-left">
-                <h2>Wszyscy użytkownicy</h2>
-                <input
-                    type="text"
-                    placeholder="Szukaj..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    className="community-search"
-                />
-                {loading ? (
-                    <div className="community-loader">Ładuję...</div>
-                ) : filtered.length === 0 ? (
-                    <div className="community-empty">Brak użytkowników</div>
-                ) : (
-                    <div className="community-list">
-                        {filtered.map(u => (
-                            <div key={u.id} className="community-user">
-                                <div className="community-avatar">{u.name.charAt(0).toUpperCase()}</div>
-                                <div>
-                                    <div className="community-name">{u.name}</div>
-                                    <div className="community-email">{u.email}</div>
+        <div className="community-page">
+            <div className="community-layout">
+                {/* Lewa kolumna */}
+                <div className="community-left glass-box">
+                    <h2 className="box-title">Wszyscy użytkownicy</h2>
+                    <input
+                        type="text"
+                        placeholder="Szukaj..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="search-input"
+                    />
+                    {loading ? (
+                        <div className="loading-container">
+                            <LoadingSpinner color="white" />
+                        </div>
+                    ) : filtered.length === 0 ? (
+                        <div className="empty-state">Brak użytkowników</div>
+                    ) : (
+                        <div className="community-list">
+                            {filtered.map(u => (
+                                <div key={u.id} className="community-user">
+                                    <div className="community-avatar">{u.name.charAt(0).toUpperCase()}</div>
+                                    <div>
+                                        <div className="community-name">{u.name}</div>
+                                        <div className="community-email">{u.email}</div>
+                                    </div>
+                                    {u.id !== currentUserId && (
+                                        <button
+                                            className="btn-glass"
+                                            onClick={() => handleSendRequest(u.id)}
+                                            disabled={sendingId === u.id}
+                                        >
+                                            <UserPlus size={16} />
+                                            {sendingId === u.id ? 'Wysyłanie...' : 'Dodaj'}
+                                        </button>
+                                    )}
                                 </div>
-                                {u.id !== currentUserId && (
-                                    <button
-                                        className="community-btn"
-                                        onClick={() => handleSendRequest(u.id)}
-                                        disabled={sendingId === u.id}
-                                    >
-                                        Wyślij zaproszenie
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-            <div className="community-right">
-                <h3>Zaproszenia do przyjaźni</h3>
-                {requestsLoading ? (
-                    <div className="community-loader">Ładuję zaproszenia...</div>
-                ) : pendingRequests.length === 0 ? (
-                    <div className="community-empty">Brak nowych zaproszeń</div>
-                ) : (
-                    <div className="pending-list">
-                        {pendingRequests.map(req => (
-                            <div className="pending-item">
-                                <div className="community-avatar">{req.requesterName.charAt(0).toUpperCase()}</div>
-                                <div className="pending-info">
-                                    <span className="pending-name">{req.requesterName}</span>
-                                    <span className="pending-email">{req.requesterEmail}</span>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Prawa kolumna */}
+                <div className="community-right glass-box">
+                    <h3 className="box-title">Zaproszenia do przyjaźni</h3>
+                    {requestsLoading ? (
+                        <div className="loading-container">
+                            <LoadingSpinner color="white" />
+                        </div>
+                    ) : pendingRequests.length === 0 ? (
+                        <div className="empty-state">Brak nowych zaproszeń</div>
+                    ) : (
+                        <div className="pending-list">
+                            {pendingRequests.map(req => (
+                                <div className="pending-item" key={req.id}>
+                                    <div className="community-avatar">{req.requesterName.charAt(0).toUpperCase()}</div>
+                                    <div className="pending-info">
+                                        <span className="pending-name">{req.requesterName}</span>
+                                        <span className="pending-email">{req.requesterEmail}</span>
+                                    </div>
+                                    <div className="pending-actions">
+                                        <button
+                                            onClick={() => handleAccept(req.id)}
+                                            disabled={actionId === req.id}
+                                            className="btn-icon btn-accept"
+                                        >
+                                            <Check size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDecline(req.id)}
+                                            disabled={actionId === req.id}
+                                            className="btn-icon btn-decline"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
                                 </div>
-                                <button
-                                    onClick={() => handleAccept(req.id)}
-                                    disabled={actionId === req.id}
-                                    className="pending-btn accept"
-                                >
-                                    Akceptuj
-                                </button>
-                                <button
-                                    onClick={() => handleDecline(req.id)}
-                                    disabled={actionId === req.id}
-                                    className="pending-btn decline"
-                                >
-                                    Odrzuć
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

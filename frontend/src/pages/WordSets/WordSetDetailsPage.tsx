@@ -4,6 +4,7 @@ import { wordSetService } from '../../services/wordSetService';
 import { WordSet, Word, AddWordRequest } from '../../types/wordSet';
 import AddWordModal from '../../components/WordSets/AddWordModal';
 import EditWordModal from '../../components/WordSets/EditWordModal';
+import { ArrowLeft, Edit2, Trash2 } from 'lucide-react';
 import './WordSetDetailsPage.css';
 
 const WordSetDetailsPage: React.FC = () => {
@@ -86,7 +87,6 @@ const WordSetDetailsPage: React.FC = () => {
 
     const handleDeleteSelectedWords = async () => {
         if (!wordSet || selectedWords.size === 0) return;
-
         if (!window.confirm(`Czy na pewno chcesz usunąć ${selectedWords.size} słówek?`)) return;
 
         try {
@@ -121,26 +121,21 @@ const WordSetDetailsPage: React.FC = () => {
         setSelectedWords(new Set());
     };
 
-    // 🚀 NOWE FUNKCJE - start fiszek i quiz
     const handleStartFlashcards = () => {
         if (!wordSet) return;
-
         if (wordSet.words.length === 0) {
-            alert('Ten zestaw nie zawiera żadnych słówek. Dodaj najpierw słówka, aby rozpocząć naukę fiszkami.');
+            alert('Ten zestaw nie zawiera żadnych słówek.');
             return;
         }
-
         navigate(`/flashcards/${wordSet.id}`);
     };
 
     const handleStartQuiz = () => {
         if (!wordSet) return;
-
         if (wordSet.words.length === 0) {
-            alert('Ten zestaw nie zawiera żadnych słówek. Dodaj najpierw słówka, aby rozpocząć quiz.');
+            alert('Ten zestaw nie zawiera żadnych słówek.');
             return;
         }
-
         navigate(`/quiz/${wordSet.id}`);
     };
 
@@ -156,7 +151,7 @@ const WordSetDetailsPage: React.FC = () => {
         return (
             <div className="word-set-details-page">
                 <div className="error-message">{error || 'Nie znaleziono zestawu'}</div>
-                <button onClick={() => navigate('/word-sets')} className="btn btn-primary">
+                <button onClick={() => navigate('/word-sets')} className="btn btn-primary-solid">
                     Powrót do zestawów
                 </button>
             </div>
@@ -165,184 +160,158 @@ const WordSetDetailsPage: React.FC = () => {
 
     return (
         <div className="word-set-details-page">
-            <div className="page-header">
-                <button
-                    onClick={() => navigate('/word-sets')}
-                    className="btn btn-secondary"
-                >
-                    ← Powrót
-                </button>
-                <div className="header-content">
-                    <h1>{wordSet.title}</h1>
-                    {wordSet.description && (
-                        <p className="word-set-description">{wordSet.description}</p>
-                    )}
-                    <div className="word-set-meta">
-                        <span>{wordSet.words.length} słówek</span>
-                        <span>Utworzono: {new Date(wordSet.createdAt).toLocaleDateString('pl-PL')}</span>
-                    </div>
-                </div>
-                <div className="header-actions">
-                    {/* 🧠 PRZYCISK QUIZ */}
+            <div className="word-set-details-container">
+                <div className="page-header">
                     <button
-                        onClick={handleStartQuiz}
-                        className="btn btn-warning btn-large quiz-btn"
-                        disabled={wordSet.words.length === 0}
+                        onClick={() => navigate('/word-sets')}
+                        className="btn btn-glass-icon"
                     >
-                        🧠 Rozpocznij quiz
+                        <ArrowLeft size={18} /> Powrót
                     </button>
-
-                    {/* 🎴 PRZYCISK FISZEK */}
-                    <button
-                        onClick={handleStartFlashcards}
-                        className="btn btn-success btn-large flashcards-btn"
-                        disabled={wordSet.words.length === 0}
-                    >
-                        🎴 Rozpocznij fiszki
-                    </button>
-
-                    <button
-                        onClick={() => navigate(`/word-sets/${wordSet.id}/edit`)}
-                        className="btn btn-secondary"
-                    >
-                        Edytuj zestaw
-                    </button>
-                    <button
-                        onClick={() => setShowAddModal(true)}
-                        className="btn btn-primary"
-                    >
-                        + Dodaj słówka
-                    </button>
-                </div>
-            </div>
-
-            <div className="words-section">
-                {selectedWords.size > 0 && (
-                    <div className="selection-bar">
-                        <span>Wybrano {selectedWords.size} słówek</span>
-                        <div className="selection-actions">
-                            <button onClick={clearSelection} className="btn btn-small">
-                                Odznacz wszystko
-                            </button>
-                            <button
-                                onClick={handleDeleteSelectedWords}
-                                className="btn btn-small btn-danger"
-                            >
-                                Usuń wybrane
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                <div className="words-controls">
-                    <div className="words-count">
-                        Słówka ({wordSet.words.length})
-                    </div>
-                    <div className="bulk-actions">
+                    <div className="header-actions">
                         <button
-                            onClick={selectAllWords}
-                            className="btn btn-small"
+                            onClick={handleStartQuiz}
+                            className="btn btn-primary-solid btn-quiz"
                             disabled={wordSet.words.length === 0}
                         >
-                            Zaznacz wszystko
+                            🧠 Rozpocznij quiz
                         </button>
+                        <button
+                            onClick={handleStartFlashcards}
+                            className="btn btn-primary-solid btn-flashcards"
+                            disabled={wordSet.words.length === 0}
+                        >
+                            🎴 Rozpocznij fiszki
+                        </button>
+                        <div className="header-actions-secondary">
+                            <button
+                                onClick={() => navigate(`/word-sets/${wordSet.id}/edit`)}
+                                className="btn btn-glass"
+                            >
+                                Edytuj zestaw
+                            </button>
+                            <button
+                                onClick={() => setShowAddModal(true)}
+                                className="btn btn-primary-solid"
+                            >
+                                + Dodaj słówka
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {wordSet.words.length === 0 ? (
-                    <div className="empty-words">
-                        <h3>Brak słówek w zestawie</h3>
-                        <p>Dodaj pierwsze słówka, aby rozpocząć naukę!</p>
-                        <button
-                            onClick={() => setShowAddModal(true)}
-                            className="btn btn-primary"
-                        >
-                            Dodaj słówka
-                        </button>
+                <div className="words-section">
+                    {selectedWords.size > 0 && (
+                        <div className="selection-bar">
+                            <span>Wybrano {selectedWords.size} słówek</span>
+                            <div className="selection-actions">
+                                <button onClick={clearSelection} className="btn btn-glass">
+                                    Odznacz wszystko
+                                </button>
+                                <button
+                                    onClick={handleDeleteSelectedWords}
+                                    className="btn btn-glass-danger"
+                                >
+                                    Usuń wybrane
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
-                        {/* 💡 HINT O FISZKACH I QUIZACH */}
-                        <div className="learning-hint">
-                            <p className="hint-text">
-                                💡 <strong>Wskazówka:</strong> Po dodaniu słówek będziesz mógł rozpocząć naukę z fiszkami i quizami!
-                            </p>
+                    <div className="words-controls">
+                        <div className="words-count">
+                            Słówka ({wordSet.words.length})
+                        </div>
+                        <div className="bulk-actions">
+                            <button
+                                onClick={selectAllWords}
+                                className="btn btn-glass"
+                                disabled={wordSet.words.length === 0}
+                            >
+                                Zaznacz wszystko
+                            </button>
                         </div>
                     </div>
-                ) : (
-                    <>
-                        {/* 🚀 CTA SEKCJA NAUKI */}
-                        <div className="learning-cta-section">
-                            {/* Fiszki CTA */}
-                            <div className="flashcards-cta">
-                                <div className="cta-content">
-                                    <h3>🎴 Gotowy na fiszki?</h3>
-                                    <p>Przetestuj swoją wiedzę za pomocą interaktywnych fiszek!</p>
-                                    <button
-                                        onClick={handleStartFlashcards}
-                                        className="btn btn-success btn-large"
-                                    >
-                                        Rozpocznij naukę z fiszkami ({wordSet.words.length} słówek)
-                                    </button>
-                                </div>
-                            </div>
 
-                            {/* Quiz CTA */}
-                            <div className="quiz-cta">
-                                <div className="cta-content">
-                                    <h3>🧠 Sprawdź swoją wiedzę!</h3>
-                                    <p>Przetestuj się różnymi typami pytań - od wyboru odpowiedzi po wpisywanie!</p>
-                                    <button
-                                        onClick={handleStartQuiz}
-                                        className="btn btn-warning btn-large"
-                                    >
-                                        Rozpocznij quiz ({wordSet.words.length} pytań)
-                                    </button>
-                                </div>
-                            </div>
+                    {wordSet.words.length === 0 ? (
+                        <div className="empty-words">
+                            <h3>Brak słówek w zestawie</h3>
+                            <p>Dodaj pierwsze słówka, aby rozpocząć naukę!</p>
+                            <button
+                                onClick={() => setShowAddModal(true)}
+                                className="btn btn-primary-solid"
+                            >
+                                Dodaj słówka
+                            </button>
                         </div>
-
-                        <div className="words-grid">
-                            {wordSet.words.map(word => (
-                                <div
-                                    key={word.id}
-                                    className={`word-card ${selectedWords.has(word.id) ? 'selected' : ''}`}
-                                >
-                                    <div className="word-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedWords.has(word.id)}
-                                            onChange={() => toggleWordSelection(word.id)}
-                                        />
-                                    </div>
-                                    <div className="word-content">
-                                        <div className="english-word">{word.word}</div>
-                                        <div className="polish-translation">{word.translation}</div>
-                                        {/* Dodatkowe info o słowie */}
-                                        {word.points && word.points > 0 && (
-                                            <div className="word-stats">
-                                                <span className="word-points">📊 {word.points} pkt</span>
-                                                {word.star && <span className="word-star">⭐</span>}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="word-actions">
+                    ) : (
+                        <>
+                            <div className="learning-cta-section">
+                                <div className="flashcards-cta">
+                                    <div className="cta-content">
+                                        <h3>🎴 Gotowy na fiszki?</h3>
+                                        <p>Przetestuj swoją wiedzę za pomocą interaktywnych fiszek!</p>
                                         <button
-                                            onClick={() => setEditingWord(word)}
-                                            className="btn btn-small"
+                                            onClick={handleStartFlashcards}
+                                            className="btn btn-primary-solid btn-flashcards"
                                         >
-                                            Edytuj
-                                        </button>
-                                        <button
-                                            onClick={() => handleDeleteWord(word.id)}
-                                            className="btn btn-small btn-danger"
-                                        >
-                                            Usuń
+                                            Start ({wordSet.words.length} słówek)
                                         </button>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </>
-                )}
+                                <div className="quiz-cta">
+                                    <div className="cta-content">
+                                        <h3>🧠 Sprawdź swoją wiedzę!</h3>
+                                        <p>Przetestuj się różnymi typami pytań!</p>
+                                        <button
+                                            onClick={handleStartQuiz}
+                                            className="btn btn-primary-solid btn-quiz"
+                                        >
+                                            Start ({wordSet.words.length} pytań)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="words-grid">
+                                {wordSet.words.map(word => (
+                                    <div
+                                        key={word.id}
+                                        className={`word-card ${selectedWords.has(word.id) ? 'selected' : ''}`}
+                                    >
+                                        <div className="word-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedWords.has(word.id)}
+                                                onChange={() => toggleWordSelection(word.id)}
+                                            />
+                                        </div>
+                                        <div className="word-content">
+                                            <div className="english-word">{word.word}</div>
+                                            <div className="polish-translation">{word.translation}</div>
+                                        </div>
+                                        <div className="word-actions">
+                                            <button
+                                                onClick={() => setEditingWord(word)}
+                                                className="btn-icon-action"
+                                                aria-label="Edytuj"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteWord(word.id)}
+                                                className="btn-icon-action btn-danger"
+                                                aria-label="Usuń"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
 
             {showAddModal && (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { wordSetService } from '../../services/wordSetService';
 import { WordSet, Word } from '../../types/wordSet';
+import { ArrowLeft, RefreshCcw, ChevronsLeft, ChevronsRight, RotateCcw } from 'lucide-react';
 import './FlashcardsPage.css';
 
 interface FlashcardSession {
@@ -85,7 +86,6 @@ const FlashcardsPage: React.FC = () => {
         setIsAnimating(true);
         setIsFlipped(!isFlipped);
 
-        // Reset animation po 300ms
         setTimeout(() => {
             setIsAnimating(false);
         }, 300);
@@ -115,19 +115,29 @@ const FlashcardsPage: React.FC = () => {
 
         setTimeout(() => {
             goToNextCard();
-        }, 500);
+        }, 300);
     };
 
     const goToNextCard = () => {
         if (!session) return;
 
         if (session.currentIndex >= session.words.length - 1) {
+            // Oznacz ostatnią kartę jako ukończoną, jeśli jeszcze nie jest
+            const currentWord = session.words[session.currentIndex];
+            if (!session.completedWords.has(currentWord.id)) {
+                setSession(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        completedWords: new Set(Array.from(prev.completedWords).concat(currentWord.id))
+                    };
+                });
+            }
             return;
         }
 
         setSession(prev => {
             if (!prev) return prev;
-
             return {
                 ...prev,
                 currentIndex: prev.currentIndex + 1
@@ -142,7 +152,6 @@ const FlashcardsPage: React.FC = () => {
 
         setSession(prev => {
             if (!prev) return prev;
-
             return {
                 ...prev,
                 currentIndex: prev.currentIndex - 1
@@ -204,7 +213,7 @@ const FlashcardsPage: React.FC = () => {
             <div className="flashcards-page">
                 <div className="error-container">
                     <div className="error-message">{error}</div>
-                    <button onClick={() => navigate('/word-sets')} className="btn btn-primary">
+                    <button onClick={() => navigate('/word-sets')} className="btn-primary-solid">
                         Powrót do zestawów
                     </button>
                 </div>
@@ -224,6 +233,11 @@ const FlashcardsPage: React.FC = () => {
     const progress = ((session.currentIndex + 1) / session.words.length) * 100;
     const isSessionComplete = session.currentIndex >= session.words.length - 1 && session.completedWords.has(currentWord.id);
 
+    // Oblicz skuteczność, unikając dzielenia przez zero
+    const totalAnswered = session.correctCount + session.incorrectCount;
+    const accuracy = totalAnswered > 0 ? Math.round((session.correctCount / totalAnswered) * 100) : 0;
+
+
     if (isSessionComplete) {
         return (
             <div className="flashcards-page">
@@ -239,17 +253,15 @@ const FlashcardsPage: React.FC = () => {
                             <span className="stat-label">Błędne</span>
                         </div>
                         <div className="stat-item">
-              <span className="stat-value">
-                {Math.round((session.correctCount / (session.correctCount + session.incorrectCount)) * 100)}%
-              </span>
+                            <span className="stat-value">{accuracy}%</span>
                             <span className="stat-label">Skuteczność</span>
                         </div>
                     </div>
                     <div className="session-actions">
-                        <button onClick={restartSession} className="btn btn-primary">
-                            🔄 Powtórz sesję
+                        <button onClick={restartSession} className="btn-primary-solid">
+                            <RefreshCcw size={16} /> Powtórz sesję
                         </button>
-                        <button onClick={() => navigate(`/word-sets/${id}`)} className="btn btn-secondary">
+                        <button onClick={() => navigate(`/word-sets/${id}`)} className="btn-glass">
                             Powrót do zestawu
                         </button>
                     </div>
@@ -267,16 +279,16 @@ const FlashcardsPage: React.FC = () => {
             <div className="flashcards-header">
                 <button
                     onClick={() => navigate(`/word-sets/${id}`)}
-                    className="btn btn-secondary btn-small"
+                    className="btn-glass-icon"
                 >
-                    ← Zakończ
+                    <ArrowLeft size={16} /> Zakończ
                 </button>
 
                 <div className="progress-info">
                     <span className="set-title">{wordSet.title}</span>
                     <span className="progress-text">
-            {session.currentIndex + 1} / {session.words.length}
-          </span>
+                        {session.currentIndex + 1} / {session.words.length}
+                    </span>
                 </div>
 
                 <div className="session-stats">
@@ -341,19 +353,19 @@ const FlashcardsPage: React.FC = () => {
                     <div className="answer-actions">
                         <button
                             onClick={() => handleAnswer(false)}
-                            className="btn btn-danger btn-large"
+                            className="btn-glass-danger"
                         >
                             ❌ Nie wiedziałem
                         </button>
                         <button
                             onClick={handleFlipCard}
-                            className="btn btn-secondary btn-large"
+                            className="btn-glass"
                         >
-                            🔄 Odwróć kartę
+                            <RotateCcw size={16} /> Odwróć kartę
                         </button>
                         <button
                             onClick={() => handleAnswer(true)}
-                            className="btn btn-success btn-large"
+                            className="btn-glass-success"
                         >
                             ✅ Wiedziałem
                         </button>
@@ -365,21 +377,21 @@ const FlashcardsPage: React.FC = () => {
                 <button
                     onClick={goToPrevCard}
                     disabled={session.currentIndex <= 0}
-                    className="btn btn-secondary"
+                    className="btn-glass"
                 >
-                    ← Poprzednia
+                    <ChevronsLeft size={16} /> Poprzednia
                 </button>
 
                 <div className="keyboard-hints">
-                    <kbd>←</kbd> Poprzednia | <kbd>Spacja</kbd> Pokaż/Odwróć | <kbd>1</kbd> Tak | <kbd>2</kbd> Nie
+                    <kbd>←</kbd> | <kbd>Spacja</kbd> | <kbd>1</kbd> | <kbd>2</kbd> | <kbd>→</kbd>
                 </div>
 
                 <button
                     onClick={goToNextCard}
                     disabled={!showAnswer}
-                    className="btn btn-secondary"
+                    className="btn-glass"
                 >
-                    Następna →
+                    Następna <ChevronsRight size={16} />
                 </button>
             </div>
         </div>

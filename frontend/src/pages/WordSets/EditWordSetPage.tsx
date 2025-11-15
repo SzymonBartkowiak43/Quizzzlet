@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { wordSetService } from '../../services/wordSetService';
 import { WordSet, UpdateWordSetRequest } from '../../types/wordSet';
+import { ArrowLeft } from 'lucide-react';
 import './EditWordSetPage.css';
 
 const EditWordSetPage: React.FC = () => {
@@ -75,7 +76,6 @@ const EditWordSetPage: React.FC = () => {
                 description: formData.description?.trim() || undefined
             });
 
-            // Przekieruj do szczegółów zestawu
             navigate(`/word-sets/${wordSet.id}`);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Nie udało się zaktualizować zestawu');
@@ -115,7 +115,7 @@ const EditWordSetPage: React.FC = () => {
         return (
             <div className="edit-word-set-page">
                 <div className="error-message">{error}</div>
-                <button onClick={() => navigate('/word-sets')} className="btn btn-primary">
+                <button onClick={() => navigate('/word-sets')} className="btn-primary-solid">
                     Powrót do zestawów
                 </button>
             </div>
@@ -126,7 +126,7 @@ const EditWordSetPage: React.FC = () => {
         return (
             <div className="edit-word-set-page">
                 <div className="error-message">Nie znaleziono zestawu</div>
-                <button onClick={() => navigate('/word-sets')} className="btn btn-primary">
+                <button onClick={() => navigate('/word-sets')} className="btn-primary-solid">
                     Powrót do zestawów
                 </button>
             </div>
@@ -138,9 +138,9 @@ const EditWordSetPage: React.FC = () => {
             <div className="page-header">
                 <button
                     onClick={() => navigate(`/word-sets/${wordSet.id}`)}
-                    className="btn btn-secondary"
+                    className="btn-glass-icon"
                 >
-                    ← Powrót do zestawu
+                    <ArrowLeft size={18} /> Powrót do zestawu
                 </button>
                 <h1>Edytuj zestaw słówek</h1>
             </div>
@@ -149,11 +149,11 @@ const EditWordSetPage: React.FC = () => {
                 <div className="edit-form-section">
                     <form onSubmit={handleSubmit} className="edit-word-set-form">
                         <div className="form-group">
-                            <label htmlFor="name">Nazwa zestawu *</label>
+                            <label htmlFor="title">Nazwa zestawu *</label>
                             <input
                                 type="text"
-                                id="name"
-                                name="name"
+                                id="title"
+                                name="title"
                                 value={formData.title}
                                 onChange={handleInputChange}
                                 placeholder="np. Słówka z angielskiego - poziom podstawowy"
@@ -185,14 +185,14 @@ const EditWordSetPage: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => navigate(`/word-sets/${wordSet.id}`)}
-                                className="btn btn-secondary"
+                                className="btn-glass"
                                 disabled={saving}
                             >
                                 Anuluj
                             </button>
                             <button
                                 type="submit"
-                                className="btn btn-primary"
+                                className="btn-primary-solid"
                                 disabled={saving || !formData.title.trim()}
                             >
                                 {saving ? 'Zapisuję...' : 'Zapisz zmiany'}
@@ -214,9 +214,7 @@ const EditWordSetPage: React.FC = () => {
                 {new Date(wordSet.createdAt).toLocaleDateString('pl-PL', {
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
+                    day: 'numeric'
                 })}
               </span>
                         </div>
@@ -226,9 +224,7 @@ const EditWordSetPage: React.FC = () => {
                 {new Date(wordSet.updatedAt).toLocaleDateString('pl-PL', {
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
+                    day: 'numeric'
                 })}
               </span>
                         </div>
@@ -239,7 +235,7 @@ const EditWordSetPage: React.FC = () => {
                         <p>Usuń ten zestaw na stałe. Ta akcja jest nieodwracalna.</p>
                         <button
                             onClick={handleDelete}
-                            className="btn btn-danger"
+                            className="btn-glass-danger"
                             disabled={saving}
                         >
                             {saving ? 'Usuwam...' : 'Usuń zestaw'}

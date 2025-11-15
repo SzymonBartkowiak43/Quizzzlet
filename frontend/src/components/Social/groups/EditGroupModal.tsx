@@ -22,23 +22,20 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
+    // ... (Logika walidacji i obsługi bez zmian) ...
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
-
         if (!formData.name?.trim()) {
             newErrors.name = 'Nazwa grupy jest wymagana';
         } else if (formData.name.length < 3) {
             newErrors.name = 'Nazwa musi mieć co najmniej 3 znaki';
         }
-
         if (!formData.description?.trim()) {
             newErrors.description = 'Opis grupy jest wymagany';
         }
-
         if (formData.maxMembers && (formData.maxMembers < 2 || formData.maxMembers > 100)) {
             newErrors.maxMembers = 'Liczba członków musi być między 2 a 100';
         }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -46,7 +43,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
-
         setSaving(true);
         try {
             await onUpdate(group.id, formData);
@@ -61,8 +57,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
             ...prev,
             [field]: value
         }));
-
-        // Clear error for this field
         if (errors[field]) {
             setErrors(prev => ({
                 ...prev,
@@ -70,26 +64,27 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
             }));
         }
     };
+    // ... (Koniec logiki) ...
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="glass-box-flat w-full max-w-lg max-h-[90vh] flex flex-col">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-semibold text-gray-900">Edytuj grupę</h2>
+                <div className="flex items-center justify-between p-6 border-b border-white/20">
+                    <h2 className="text-xl font-semibold text-white">Edytuj grupę</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="text-gray-300 hover:text-white transition-colors"
                     >
                         <X className="h-6 w-6" />
                     </button>
                 </div>
 
                 {/* Content */}
-                <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                    {/* Group Name */}
+                <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
+                    {/* Nazwa grupy */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-200 mb-2">
                             Nazwa grupy *
                         </label>
                         <input
@@ -97,19 +92,19 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                             value={formData.name || ''}
                             onChange={(e) => handleInputChange('name', e.target.value)}
                             placeholder="np. Angielski dla początkujących"
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                errors.name ? 'border-red-500' : 'border-gray-300'
+                            className={`input-glass ${
+                                errors.name ? 'border-red-500/50' : 'border-white/30'
                             }`}
                             maxLength={100}
                         />
                         {errors.name && (
-                            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                            <p className="text-red-400 text-sm mt-1">{errors.name}</p>
                         )}
                     </div>
 
-                    {/* Description */}
+                    {/* Opis */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-200 mb-2">
                             Opis grupy *
                         </label>
                         <textarea
@@ -117,55 +112,55 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                             onChange={(e) => handleInputChange('description', e.target.value)}
                             placeholder="Opisz czego dotyczy ta grupa..."
                             rows={4}
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
-                                errors.description ? 'border-red-500' : 'border-gray-300'
+                            className={`input-glass resize-none ${
+                                errors.description ? 'border-red-500/50' : 'border-white/30'
                             }`}
                             maxLength={500}
                         />
                         {errors.description && (
-                            <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+                            <p className="text-red-400 text-sm mt-1">{errors.description}</p>
                         )}
                     </div>
 
-                    {/* Privacy Settings */}
+                    {/* Ustawienia prywatności */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-3">
+                        <label className="block text-sm font-medium text-gray-200 mb-3">
                             Ustawienia prywatności
                         </label>
                         <div className="space-y-3">
-                            <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                            <label className={`setting-option ${!formData.isPrivate ? 'selected' : ''}`}>
                                 <input
                                     type="radio"
                                     name="privacy"
                                     checked={!formData.isPrivate}
                                     onChange={() => handleInputChange('isPrivate', false)}
-                                    className="text-blue-600 focus:ring-blue-500"
+                                    className="form-radio"
                                 />
                                 <div className="ml-3 flex-1">
                                     <div className="flex items-center gap-2">
-                                        <Globe className="h-5 w-5 text-green-600" />
-                                        <span className="font-medium text-gray-900">Grupa publiczna</span>
+                                        <Globe className="h-5 w-5 text-green-300" />
+                                        <span className="font-medium text-white">Grupa publiczna</span>
                                     </div>
-                                    <p className="text-sm text-gray-600 mt-1">
+                                    <p className="text-sm text-gray-300 mt-1">
                                         Każdy może znaleźć i dołączyć do tej grupy
                                     </p>
                                 </div>
                             </label>
 
-                            <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                            <label className={`setting-option ${formData.isPrivate ? 'selected' : ''}`}>
                                 <input
                                     type="radio"
                                     name="privacy"
-                                    checked={formData.isPrivate}
+                                    checked={!!formData.isPrivate}
                                     onChange={() => handleInputChange('isPrivate', true)}
-                                    className="text-blue-600 focus:ring-blue-500"
+                                    className="form-radio"
                                 />
                                 <div className="ml-3 flex-1">
                                     <div className="flex items-center gap-2">
-                                        <Lock className="h-5 w-5 text-orange-600" />
-                                        <span className="font-medium text-gray-900">Grupa prywatna</span>
+                                        <Lock className="h-5 w-5 text-orange-300" />
+                                        <span className="font-medium text-white">Grupa prywatna</span>
                                     </div>
-                                    <p className="text-sm text-gray-600 mt-1">
+                                    <p className="text-sm text-gray-300 mt-1">
                                         Tylko osoby z kodem zaproszenia mogą dołączyć
                                     </p>
                                 </div>
@@ -175,7 +170,7 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
 
                     {/* Max Members */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-200 mb-2">
                             Maksymalna liczba członków
                         </label>
                         <div className="relative">
@@ -186,23 +181,23 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                                 onChange={(e) => handleInputChange('maxMembers', parseInt(e.target.value) || 25)}
                                 min="2"
                                 max="100"
-                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                    errors.maxMembers ? 'border-red-500' : 'border-gray-300'
+                                className={`input-glass pl-10 ${
+                                    errors.maxMembers ? 'border-red-500/50' : 'border-white/30'
                                 }`}
                             />
                         </div>
                         {errors.maxMembers && (
-                            <p className="text-red-500 text-sm mt-1">{errors.maxMembers}</p>
+                            <p className="text-red-400 text-sm mt-1">{errors.maxMembers}</p>
                         )}
                     </div>
                 </form>
 
                 {/* Footer */}
-                <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
+                <div className="flex justify-end gap-3 p-6 border-t border-white/20">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="btn-glass"
                     >
                         Anuluj
                     </button>
@@ -210,11 +205,11 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                         type="submit"
                         onClick={handleSubmit}
                         disabled={saving || !formData.name?.trim() || !formData.description?.trim()}
-                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="btn-primary-solid flex items-center gap-2"
                     >
                         {saving ? (
                             <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                                 Zapisywanie...
                             </>
                         ) : (
@@ -229,5 +224,62 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
         </div>
     );
 };
+
+// --- DODAJ TE STYLE DO GLOBALNEGO CSS (jeśli jeszcze ich nie masz) ---
+/*
+.glass-box-flat {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 0;
+    overflow: hidden;
+}
+.input-glass {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    transition: all 0.2s ease;
+}
+.input-glass::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.input-glass:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
+}
+.form-radio {
+    width: 18px;
+    height: 18px;
+    accent-color: white;
+    cursor: pointer;
+}
+.setting-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.setting-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.setting-option.selected {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.btn-primary-solid { ... }
+.btn-glass { ... }
+*/
 
 export default EditGroupModal;

@@ -1,77 +1,87 @@
+/* --- Główny kontener ustawień (Glass) --- */
 .quiz-settings {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 24px;
+
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.5s ease-out;
 }
 
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Nagłówek */
 .settings-header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 2rem;
 }
-
 .settings-header h2 {
-    color: #1976d2;
-    margin: 0 0 8px 0;
-    font-size: 2em;
+    color: white;
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
 .settings-header p {
-    color: #666;
-    font-size: 1.1em;
+    color: rgba(255, 255, 255, 0.8);
     margin: 0;
+    font-size: 1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .settings-grid {
     display: grid;
-    gap: 32px;
-    margin-bottom: 32px;
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
 .setting-group {
-    background: #f8f9fa;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 24px;
-    border: 1px solid #e0e0e0;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .setting-group h3 {
-    margin: 0 0 16px 0;
-    color: #333;
+    margin: 0 0 1rem 0;
+    color: white;
     font-size: 1.3em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-/* Checkboxes */
+/* Checkboxy */
 .setting-checkboxes {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
 .setting-checkbox {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     cursor: pointer;
-    padding: 12px;
+    padding: 1rem;
     border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: background-color 0.2s;
 }
-
 .setting-checkbox:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .setting-checkbox input[type="checkbox"] {
     display: none;
 }
-
 .checkmark {
     width: 20px;
     height: 20px;
-    border: 2px solid #ddd;
+    border: 2px solid rgba(255, 255, 255, 0.4);
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -79,35 +89,30 @@
     flex-shrink: 0;
     transition: all 0.2s;
 }
-
 .setting-checkbox input[type="checkbox"]:checked + .checkmark {
-    background-color: #1976d2;
-    border-color: #1976d2;
+    background-color: white;
+    border-color: white;
 }
-
 .setting-checkbox input[type="checkbox"]:checked + .checkmark::after {
     content: '✓';
-    color: white;
+    color: #667eea;
     font-weight: bold;
     font-size: 12px;
 }
-
 .checkbox-content {
     flex: 1;
 }
-
 .checkbox-title {
     font-weight: 600;
-    color: #333;
+    color: white;
     margin-bottom: 4px;
 }
-
 .checkbox-desc {
-    color: #666;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.9em;
 }
 
-/* Radio options */
+/* Opcje Radio */
 .setting-options,
 .question-limit,
 .time-limit {
@@ -115,129 +120,154 @@
     flex-direction: column;
     gap: 8px;
 }
-
 .setting-option {
     display: flex;
     align-items: center;
     gap: 12px;
     cursor: pointer;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
+    padding: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
     transition: all 0.2s;
 }
-
 .setting-option:hover {
-    border-color: #1976d2;
-    background-color: #f3f8ff;
+    border-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.1);
 }
-
-.setting-option input[type="radio"]:checked {
-    accent-color: #1976d2;
+.setting-option input[type="radio"] {
+    accent-color: white;
+    width: 18px;
+    height: 18px;
 }
-
+.setting-option:has(input[type="radio"]:checked) {
+    border-color: white;
+    background-color: rgba(255, 255, 255, 0.15);
+}
 .setting-option input[type="radio"]:checked + .option-content {
-    color: #1976d2;
+    color: white;
 }
 
 .option-content {
     flex: 1;
 }
-
 .option-title {
     font-weight: 600;
+    color: white;
     margin-bottom: 2px;
 }
-
 .option-desc {
     font-size: 0.9em;
-    color: #666;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-/* Preview section */
+/* Podgląd */
 .settings-preview {
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 32px;
-    border: 1px solid #2196f3;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 .settings-preview h3 {
-    color: #1976d2;
-    margin: 0 0 16px 0;
-    font-size: 1.4em;
+    color: white;
+    font-size: 1.125rem;
+    margin: 0 0 1rem 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
-
 .preview-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
 }
-
 .preview-stat {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
-    border-bottom: 1px solid rgba(25, 118, 210, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .preview-label {
     font-weight: 500;
-    color: #333;
+    color: rgba(255, 255, 255, 0.8);
 }
-
 .preview-value {
     font-weight: 600;
-    color: #1976d2;
+    color: white;
 }
 
-/* Actions */
+/* Akcje */
 .settings-actions {
     display: flex;
-    justify-content: space-between;
-    gap: 16px;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
-.settings-actions .btn {
-    min-width: 140px;
-}
-
-/* Error message */
+/* Błędy */
 .error-message {
-    background: #ffebee;
-    color: #c62828;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-top: 16px;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
     text-align: center;
-    border: 1px solid #ffcdd2;
+}
+
+/* Style przycisków */
+.btn-primary-solid {
+    background-color: white;
+    color: #667eea;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-primary-solid:hover {
+    background-color: #f0f4f8;
+    transform: scale(1.03);
+}
+.btn-primary-solid:disabled {
+    background-color: #ccc;
+    color: #777;
+    cursor: not-allowed;
+    transform: none;
+}
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .quiz-settings {
-        padding: 16px;
-    }
-
-    .settings-grid {
-        gap: 24px;
-    }
-
-    .setting-group {
-        padding: 16px;
-    }
-
-    .preview-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .settings-actions {
-        flex-direction: column;
-    }
-
-    .settings-actions .btn {
-        width: 100%;
-    }
+    .quiz-settings { padding: 16px; }
+    .settings-grid { gap: 24px; }
+    .setting-group { padding: 16px; }
+    .preview-stats { grid-template-columns: 1fr; }
+    .settings-actions { flex-direction: column-reverse; }
 }

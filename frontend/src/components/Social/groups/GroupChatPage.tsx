@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import socialApi from '../../../services/socialApi';
 import { toast } from 'react-toastify';
 import './GroupChatPage.css';
+import { MessageCircle, Send, Users, Check } from 'lucide-react';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 interface Group {
     id: number;
@@ -31,6 +33,9 @@ const GroupChatPage: React.FC = () => {
     const [friends, setFriends] = useState<Friend[]>([]);
     const [selectedFriends, setSelectedFriends] = useState<number[]>([]);
     const [loadingGroups, setLoadingGroups] = useState(true);
+    const [loadingMessages, setLoadingMessages] = useState(false);
+    const [sendingMessage, setSendingMessage] = useState(false);
+    const [creatingGroup, setCreatingGroup] = useState(false);
 
     useEffect(() => {
         fetchGroups();
@@ -55,17 +60,31 @@ const GroupChatPage: React.FC = () => {
     };
 
     const loadMessages = async (groupId: number) => {
-        const data = await socialApi.getGroupMessages(groupId);
-        setMessages(data.messages);
         const grp = groups.find(g => g.id === groupId) || null;
         setSelectedGroup(grp);
+        setLoadingMessages(true);
+        try {
+            const data = await socialApi.getGroupMessages(groupId);
+            setMessages(data.messages);
+        } catch {
+            toast.error("Nie udało się załadować wiadomości");
+        } finally {
+            setLoadingMessages(false);
+        }
     };
 
     const sendMessage = async () => {
         if (!selectedGroup || !newMsg.trim()) return;
-        await socialApi.sendGroupMessage(selectedGroup.id, newMsg);
-        setNewMsg('');
-        loadMessages(selectedGroup.id);
+        setSendingMessage(true);
+        try {
+            await socialApi.sendGroupMessage(selectedGroup.id, newMsg);
+            setNewMsg('');
+            loadMessages(selectedGroup.id);
+        } catch {
+            toast.error("Błąd wysyłania wiadomości");
+        } finally {
+            setSendingMessage(false);
+        }
     };
 
     const handleCreateGroup = async () => {
@@ -73,6 +92,7 @@ const GroupChatPage: React.FC = () => {
             toast.error('Podaj nazwę grupy i wybierz członków!');
             return;
         }
+        setCreatingGroup(true);
         try {
             const data = await socialApi.createGroup(groupName, selectedFriends);
             toast.success('Grupa utworzona!');
@@ -82,24 +102,26 @@ const GroupChatPage: React.FC = () => {
             fetchGroups();
         } catch {
             toast.error('Błąd przy tworzeniu grupy');
+        } finally {
+            setCreatingGroup(false);
         }
     };
 
     return (
-        <div className="group-chat-page" style={{display: 'flex', gap: 32}}>
+        <div className="group-chat-page">
             {/* Lewa kolumna: grupy i tworzenie */}
-            <aside style={{flex: 1, minWidth: 260}}>
-                <h3>Moje grupy</h3>
-                {loadingGroups ? <div>Ładuję grupy...</div> : (
-                    <ul>
+            <aside className="glass-box">
+                <h3 className="box-title">Moje grupy</h3>
+                {loadingGroups ? (
+                    <div className="flex justify-center items-center h-32">
+                        <LoadingSpinner color="white" />
+                    </div>
+                ) : (
+                    <ul className="group-list">
                         {groups.map(g => (
                             <li key={g.id}>
                                 <button
-                                    style={{
-                                        background: selectedGroup?.id === g.id ? '#2563eb' : '#e2e8f0',
-                                        color: selectedGroup?.id === g.id ? '#fff' : '#334155',
-                                        borderRadius: 7, marginBottom: 6, padding: '7px 14px', border: 'none', cursor: 'pointer'
-                                    }}
+                                    className={`group-btn ${selectedGroup?.id === g.id ? 'active' : ''}`}
                                     onClick={() => loadMessages(g.id)}
                                 >
                                     {g.name}
@@ -109,25 +131,25 @@ const GroupChatPage: React.FC = () => {
                     </ul>
                 )}
                 <button
-                    style={{marginTop: 18, padding: '8px 18px', background: '#2563eb', color: '#fff', borderRadius: 8, border: 'none', cursor: 'pointer'}}
+                    className="btn-primary-solid w-full mt-4"
                     onClick={() => setShowCreate(v => !v)}
                 >
-                    {showCreate ? 'Anuluj' : 'Stwórz nową grupę'}
+                    {showCreate ? 'Anuluj tworzenie' : 'Stwórz nową grupę'}
                 </button>
                 {showCreate && (
-                    <div style={{marginTop: 16, padding: 10, border: '1px solid #e5e7eb', borderRadius: 8, background: '#f8fafc'}}>
-                        <h4>Tworzenie grupy</h4>
+                    <div className="create-group-panel">
+                        <h4 className="box-subtitle">Tworzenie grupy</h4>
                         <input
                             placeholder="Nazwa grupy"
                             value={groupName}
                             onChange={e => setGroupName(e.target.value)}
-                            style={{marginBottom: 12, width: '100%', padding: 6, borderRadius: 6, border: '1px solid #cbd5e1'}}
+                            className="input-glass"
                         />
                         <div>
-                            <span>Dodaj znajomych:</span>
-                            <div style={{maxHeight: 100, overflowY: 'auto', marginTop: 8}}>
+                            <span className="text-gray-300 text-sm">Dodaj znajomych:</span>
+                            <div className="friend-list">
                                 {friends.map(f => (
-                                    <label key={f.id} style={{display: 'block', marginBottom: 6}}>
+                                    <label key={f.id} className="friend-label">
                                         <input
                                             type="checkbox"
                                             checked={selectedFriends.includes(f.id)}
@@ -137,56 +159,82 @@ const GroupChatPage: React.FC = () => {
                                                     : sf.filter(id => id !== f.id)
                                                 );
                                             }}
-                                        /> {f.name} ({f.email})
+                                            className="form-checkbox"
+                                        /> {f.name}
                                     </label>
                                 ))}
                             </div>
                         </div>
                         <button
-                            style={{marginTop: 12, padding: '7px 16px', background: '#2563eb', color: '#fff', borderRadius: 7, border: 'none'}}
+                            className="btn-primary-solid mt-3"
                             onClick={handleCreateGroup}
+                            disabled={creatingGroup}
                         >
-                            Utwórz grupę
+                            {creatingGroup ? 'Tworzę...' : 'Utwórz grupę'}
                         </button>
                     </div>
                 )}
             </aside>
+
             {/* Prawa kolumna: czat */}
-            <section style={{flex: 2, minWidth: 320, background: '#fff', borderRadius: 14, padding: 28}}>
+            <section className="glass-box-flat flex flex-col">
                 {selectedGroup ? (
                     <>
-                        <h4>Czat grupy: <span style={{color: '#2563eb'}}>{selectedGroup.name}</span></h4>
-                        <div style={{marginBottom: 10, color: '#64748b', fontSize: '0.98em'}}>
-                            Członkowie: {selectedGroup.memberNames.join(', ')}
+                        {/* Nagłówek czatu */}
+                        <div className="p-4 border-b border-white/20">
+                            <h4 className="box-title mb-1">{selectedGroup.name}</h4>
+                            <div className="chat-members">
+                                <Users size={14} />
+                                {selectedGroup.memberNames.join(', ')}
+                            </div>
                         </div>
-                        <div style={{height: 250, overflowY: 'auto', background: '#f3f7fc', borderRadius: 7, padding: 12, marginBottom: 16}}>
-                            {messages.length === 0 ? (
-                                <div style={{color: '#64748b'}}>Brak wiadomości</div>
+
+                        {/* Wiadomości */}
+                        <div className="chat-messages">
+                            {loadingMessages ? (
+                                <div className="empty-chat">
+                                    <LoadingSpinner color="white" />
+                                </div>
+                            ) : messages.length === 0 ? (
+                                <div className="empty-chat">Brak wiadomości</div>
                             ) : messages.map(m => (
-                                <div key={m.id} style={{marginBottom: 7}}>
-                                    <strong style={{color: '#2563eb'}}>{m.senderName}</strong>: {m.content}
-                                    <span style={{float: 'right', color: '#94a3b8', fontSize: '0.88em'}}>{new Date(m.createdAt).toLocaleString()}</span>
+                                <div key={m.id} className="chat-message">
+                                    <div>
+                                        <strong className="sender">{m.senderName}</strong>: {m.content}
+                                    </div>
+                                    <span className="timestamp">{new Date(m.createdAt).toLocaleString()}</span>
                                 </div>
                             ))}
                         </div>
-                        <div style={{display: 'flex', gap: 7}}>
+
+                        {/* Input */}
+                        <div className="chat-input-row">
                             <input
                                 value={newMsg}
                                 onChange={e => setNewMsg(e.target.value)}
                                 placeholder="Napisz wiadomość..."
-                                style={{flex: 1, padding: 7, borderRadius: 7, border: '1px solid #cbd5e1'}}
+                                className="input-glass flex-1"
                                 onKeyDown={e => { if (e.key === 'Enter') sendMessage(); }}
                             />
                             <button
                                 onClick={sendMessage}
-                                style={{padding: '8px 17px', background: '#2563eb', color: '#fff', borderRadius: 7, border: 'none'}}
+                                className="btn-primary-solid"
+                                disabled={sendingMessage}
                             >
-                                Wyślij
+                                {sendingMessage ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                                ) : (
+                                    <Send size={16} />
+                                )}
                             </button>
                         </div>
                     </>
                 ) : (
-                    <div style={{color: '#64748b'}}>Wybierz grupę, aby zobaczyć czat!</div>
+                    <div className="empty-chat-prompt">
+                        <MessageCircle size={48} className="text-gray-400 mb-4" />
+                        <h3 className="box-title">Wybierz grupę</h3>
+                        <p className="text-gray-300">Wybierz grupę z listy po lewej, aby rozpocząć czat.</p>
+                    </div>
                 )}
             </section>
         </div>

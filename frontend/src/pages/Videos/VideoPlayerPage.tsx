@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { videoService } from '../../services/videoService';
 import { Video, VideoComment } from '../../types/video';
+import { ArrowLeft } from 'lucide-react';
 import './VideoPlayerPage.css';
 
 const VideoPlayerPage: React.FC = () => {
@@ -32,7 +33,6 @@ const VideoPlayerPage: React.FC = () => {
             setVideo(videoData);
             setComments(commentsData);
 
-            // Increment views
             await videoService.incrementViews(videoId);
         } catch (err) {
             setError('Failed to load video');
@@ -48,7 +48,6 @@ const VideoPlayerPage: React.FC = () => {
         try {
             await videoService.rateVideo(video.id, rating);
             setUserRating(rating);
-            // Refresh video data to get updated rating
             const updatedVideo = await videoService.getVideoById(video.id);
             setVideo(updatedVideo);
         } catch (err) {
@@ -80,7 +79,6 @@ const VideoPlayerPage: React.FC = () => {
     };
 
     const getVideoEmbedUrl = (url: string) => {
-        // Convert YouTube URL to embed format
         if (url.includes('youtube.com/watch?v=')) {
             const videoId = url.split('v=')[1].split('&')[0];
             return `https://www.youtube.com/embed/${videoId}`;
@@ -92,14 +90,16 @@ const VideoPlayerPage: React.FC = () => {
     };
 
     if (loading) {
-        return <div className="video-player-page loading">Loading video...</div>;
+        return <div className="video-player-page loading">Ładowanie wideo...</div>;
     }
 
     if (error || !video) {
         return (
             <div className="video-player-page error">
-                <h2>Video not found</h2>
-                <Link to="/videos" className="back-link">← Back to videos</Link>
+                <div className="error-message">Nie znaleziono wideo</div>
+                <Link to="/videos" className="btn-glass">
+                    <ArrowLeft size={16} /> Powrót do listy
+                </Link>
             </div>
         );
     }
@@ -147,7 +147,7 @@ const VideoPlayerPage: React.FC = () => {
                     </div>
 
                     <div className="video-description">
-                        <h3>Description</h3>
+                        <h3>Opis</h3>
                         <p>{video.description}</p>
 
                         <div className="video-tags">
@@ -176,14 +176,14 @@ const VideoPlayerPage: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => setNewComment('')}
-                                    className="cancel-btn"
+                                    className="btn-glass"
                                 >
-                                    Rezygnuj
+                                    Anuluj
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={!newComment.trim()}
-                                    className="submit-btn"
+                                    className="btn-primary-solid"
                                 >
                                     Skomentuj
                                 </button>
@@ -192,7 +192,7 @@ const VideoPlayerPage: React.FC = () => {
                     </form>
                 ) : (
                     <div className="login-prompt">
-                        <Link to="/login">Sign in</Link> to leave a comment
+                        <Link to="/login">Zaloguj się</Link>, aby dodać komentarz
                     </div>
                 )}
 
@@ -217,7 +217,9 @@ const VideoPlayerPage: React.FC = () => {
             </div>
 
             <div className="back-to-videos">
-                <Link to="/videos" className="back-link">← Cofnij się do poprzednich video</Link>
+                <Link to="/videos" className="btn-glass">
+                    <ArrowLeft size={16} /> Powrót do listy wideo
+                </Link>
             </div>
         </div>
     );

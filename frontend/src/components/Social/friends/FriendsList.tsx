@@ -1,6 +1,7 @@
 import React from 'react';
 import { DisplayUser } from '../../../types/social';
 import './FriendsList.css';
+import { MessageCircle, Trash2, XCircle } from 'lucide-react';
 
 interface FriendsListProps {
     friends: DisplayUser[];
@@ -42,25 +43,28 @@ const FriendsList: React.FC<FriendsListProps> = ({
                     </div>
                     <div className="friendslist-actions">
                         <button
-                            className="friendslist-btn chat"
+                            className="btn-glass"
                             onClick={() => onOpenChat(friend)}
                         >
+                            <MessageCircle size={16} />
                             Chat
                         </button>
                         <button
-                            className="friendslist-btn remove"
+                            className="btn-glass-danger"
                             onClick={() => onRemoveFriend(friend.id)}
                             disabled={processingId === friend.id}
                         >
+                            <Trash2 size={16} />
                             Usuń
                         </button>
-                        <button
-                            className="friendslist-btn block"
+                        {/* <button
+                            className="btn-glass-danger"
                             onClick={() => onBlockUser(friend.id)}
                             disabled={processingId === friend.id}
                         >
+                            <XCircle size={16} />
                             Zablokuj
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             ))}

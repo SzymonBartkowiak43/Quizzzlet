@@ -31,23 +31,23 @@ const RegisterPage: React.FC = () => {
 
     const validateForm = (): boolean => {
         if (!formData.email || !formData.name || !formData.password) {
-            setError('All fields are required');
+            setError('Wszystkie pola są wymagane');
             return false;
         }
 
         if (formData.password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError('Hasła nie są zgodne');
             return false;
         }
 
         if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long');
+            setError('Hasło musi mieć co najmniej 6 znaków');
             return false;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
-            setError('Please enter a valid email address');
+            setError('Proszę podać poprawny adres email');
             return false;
         }
 
@@ -71,7 +71,7 @@ const RegisterPage: React.FC = () => {
                 navigate('/login');
             }, 2000);
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            setError(err.response?.data?.message || 'Rejestracja nie powiodła się. Spróbuj ponownie.');
         } finally {
             setLoading(false);
         }
@@ -82,8 +82,8 @@ const RegisterPage: React.FC = () => {
             <div className="auth-container">
                 <div className="auth-card">
                     <div className="success-message">
-                        <h2>Registration Successful!</h2>
-                        <p>Your account has been created successfully. You will be redirected to the login page shortly.</p>
+                        <h2>Rejestracja udana!</h2>
+                        <p>Twoje konto zostało pomyślnie utworzone. Za chwilę zostaniesz przekierowany na stronę logowania.</p>
                     </div>
                 </div>
             </div>
@@ -94,8 +94,8 @@ const RegisterPage: React.FC = () => {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h2>Create Account</h2>
-                    <p>Please fill in the information below</p>
+                    <h2>Utwórz konto</h2>
+                    <p>Wypełnij poniższe informacje</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -106,7 +106,7 @@ const RegisterPage: React.FC = () => {
                     )}
 
                     <div className="form-group">
-                        <label htmlFor="name">Full Name</label>
+                        <label htmlFor="name">Nazwa użytkownika</label>
                         <input
                             type="text"
                             id="name"
@@ -114,13 +114,13 @@ const RegisterPage: React.FC = () => {
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            placeholder="Enter your full name"
+                            placeholder="Wprowadź swoją nazwę"
                             className="form-input"
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
+                        <label htmlFor="email">Adres Email</label>
                         <input
                             type="email"
                             id="email"
@@ -128,13 +128,13 @@ const RegisterPage: React.FC = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            placeholder="Enter your email"
+                            placeholder="Wprowadź swój email"
                             className="form-input"
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Hasło</label>
                         <input
                             type="password"
                             id="password"
@@ -142,13 +142,13 @@ const RegisterPage: React.FC = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            placeholder="Enter your password (min. 6 characters)"
+                            placeholder="Wpisz hasło (min. 6 znaków)"
                             className="form-input"
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
+                        <label htmlFor="confirmPassword">Potwierdź hasło</label>
                         <input
                             type="password"
                             id="confirmPassword"
@@ -156,7 +156,7 @@ const RegisterPage: React.FC = () => {
                             value={confirmPassword}
                             onChange={handleChange}
                             required
-                            placeholder="Confirm your password"
+                            placeholder="Potwierdź swoje hasło"
                             className="form-input"
                         />
                     </div>
@@ -166,12 +166,12 @@ const RegisterPage: React.FC = () => {
                         className="auth-button register-button"
                         disabled={loading}
                     >
-                        {loading ? 'Creating Account...' : 'Create Account'}
+                        {loading ? 'Tworzenie konta...' : 'Utwórz konto'}
                     </button>
                 </form>
 
                 <div className="auth-footer">
-                    <p>Already have an account? <Link to="/login" className="auth-link">Sign in here</Link></p>
+                    <p>Masz już konto? <Link to="/login" className="auth-link">Zaloguj się tutaj</Link></p>
                 </div>
             </div>
         </div>

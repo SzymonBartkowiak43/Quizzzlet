@@ -5,6 +5,7 @@ import { WordSet } from '../../types/wordSet';
 import { QuizSession, QuizSettings as QuizSettingsType, QuizQuestion, QuizAnswer, QuizResult, QuestionType } from '../../types/quiz';
 import QuizSettings from '../../components/Quiz/QuizSettings';
 import QuizGame from '../../components/Quiz/QuizGame';
+import { ArrowLeft, RefreshCcw } from 'lucide-react';
 import './QuizPage.css';
 
 type PageState = 'loading' | 'settings' | 'playing' | 'results';
@@ -202,7 +203,7 @@ const QuizPage: React.FC = () => {
             <div className="quiz-page">
                 <div className="error-container">
                     <div className="error-message">{error}</div>
-                    <button onClick={() => navigate('/word-sets')} className="btn btn-primary">
+                    <button onClick={() => navigate('/word-sets')} className="btn-primary-solid">
                         Powrót do zestawów
                     </button>
                 </div>
@@ -221,8 +222,8 @@ const QuizPage: React.FC = () => {
     return (
         <div className="quiz-page">
             <div className="page-header">
-                <button onClick={handleBackToWordSet} className="btn btn-secondary">
-                    ← Powrót do zestawu
+                <button onClick={handleBackToWordSet} className="btn-glass-icon">
+                    <ArrowLeft size={18} /> Powrót do zestawu
                 </button>
                 <h1>🧠 Quiz: {wordSet.title}</h1>
             </div>
@@ -343,10 +344,10 @@ const QuizPage: React.FC = () => {
                     </div>
 
                     <div className="results-actions">
-                        <button onClick={handleRestart} className="btn btn-primary">
-                            🔄 Powtórz quiz
+                        <button onClick={handleRestart} className="btn-primary-solid">
+                            <RefreshCcw size={16} /> Powtórz quiz
                         </button>
-                        <button onClick={handleBackToWordSet} className="btn btn-secondary">
+                        <button onClick={handleBackToWordSet} className="btn-glass">
                             Powrót do zestawu
                         </button>
                     </div>

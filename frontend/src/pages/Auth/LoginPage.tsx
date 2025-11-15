@@ -33,18 +33,17 @@ const LoginPage: React.FC = () => {
             const authResponse = await authService.login(formData);
 
             // Utworzenie obiektu użytkownika na podstawie odpowiedzi
-            // (możesz rozszerzyć to jeśli API zwraca więcej danych o użytkowniku)
             const user = {
                 id: 0, // Będzie zaktualizowane gdy API zwróci pełne dane użytkownika
                 email: authResponse.email,
-                userName: authResponse.email.split('@')[0], // Tymczasowo użyj części przed @
-                roles: ['USER'] // Domyślnie, będzie zaktualizowane
+                userName: authResponse.email.split('@')[0], // Tymczasowo
+                roles: ['USER'] // Domyślnie
             };
 
             login(authResponse.token, user);
             navigate('/');
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+            setError(err.response?.data?.message || 'Logowanie nieudane. Sprawdź swoje dane.');
         } finally {
             setLoading(false);
         }
@@ -54,8 +53,8 @@ const LoginPage: React.FC = () => {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h2>Welcome Back!</h2>
-                    <p>Please sign in to your account</p>
+                    <h2>Witaj z powrotem!</h2>
+                    <p>Zaloguj się na swoje konto</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -66,7 +65,7 @@ const LoginPage: React.FC = () => {
                     )}
 
                     <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
+                        <label htmlFor="email">Adres Email</label>
                         <input
                             type="email"
                             id="email"
@@ -74,13 +73,13 @@ const LoginPage: React.FC = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            placeholder="Enter your email"
+                            placeholder="Wprowadź swój email"
                             className="form-input"
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Hasło</label>
                         <input
                             type="password"
                             id="password"
@@ -88,7 +87,7 @@ const LoginPage: React.FC = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            placeholder="Enter your password"
+                            placeholder="Wprowadź swoje hasło"
                             className="form-input"
                         />
                     </div>
@@ -98,12 +97,12 @@ const LoginPage: React.FC = () => {
                         className="auth-button login-button"
                         disabled={loading}
                     >
-                        {loading ? 'Signing In...' : 'Sign In'}
+                        {loading ? 'Logowanie...' : 'Zaloguj się'}
                     </button>
                 </form>
 
                 <div className="auth-footer">
-                    <p>Don't have an account? <Link to="/register" className="auth-link">Sign up here</Link></p>
+                    <p>Nie masz konta? <Link to="/register" className="auth-link">Zarejestruj się tutaj</Link></p>
                 </div>
             </div>
         </div>

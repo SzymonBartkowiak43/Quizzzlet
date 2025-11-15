@@ -1,200 +1,246 @@
+
 .group-chat-page {
     display: flex;
-    gap: 32px;
-    max-width: 900px;
-    margin: 40px auto 0 auto;
-    background: #f8fafc;
-    border-radius: 14px;
-    box-shadow: 0 6px 34px rgba(30,41,59,0.08);
-    padding: 38px 32px 32px 32px;
-    min-height: 540px;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    /* --- DODANE STYLE --- */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    flex: 1;
+    /* --- KONIEC DODANYCH STYLI --- */
+
+    color: white;
+    padding: 6rem 1.5rem 4rem 1.5rem;
+    margin-top: -4rem;
 }
 
+/* --- Globalne style "Glass" (jeśli ich nie masz) --- */
+.glass-box {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+}
+.glass-box-flat {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 0;
+    overflow: hidden;
+}
+.box-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.box-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+}
+.input-glass {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    transition: all 0.2s ease;
+}
+.input-glass::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.input-glass:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Lewa kolumna --- */
 .group-chat-page aside {
     flex: 1;
     min-width: 260px;
-    padding-right: 8px;
+    max-width: 350px;
 }
 
-.group-chat-page aside h3 {
-    font-size: 1.18em;
-    color: #2563eb;
-    margin-bottom: 10px;
-}
-
-.group-chat-page aside ul {
+.group-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 14px 0;
+    margin: 0 0 1rem 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
-.group-chat-page aside li {
-    margin-bottom: 7px;
-}
-
-.group-chat-page aside button {
-    background: #e2e8f0;
-    color: #334155;
-    border: none;
-    border-radius: 7px;
-    padding: 7px 14px;
+.group-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1rem;
     font-weight: 500;
-    transition: background 0.15s, color 0.15s;
-}
-
-.group-chat-page aside button.active,
-.group-chat-page aside button:focus {
-    background: #2563eb;
-    color: #fff;
-}
-
-.group-chat-page aside .create-btn {
-    margin-top: 18px;
-    padding: 8px 18px;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-}
-
-.group-chat-page .create-group-panel {
-    margin-top: 16px;
-    padding: 12px 10px 10px 10px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background: #f8fafc;
-}
-
-.group-chat-page .create-group-panel input[type="text"] {
-    margin-bottom: 12px;
+    transition: all 0.2s ease;
     width: 100%;
-    padding: 7px;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    font-size: 1em;
+    text-align: left;
+    margin-bottom: 0.5rem;
+}
+.group-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.group-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-color: white;
 }
 
-.group-chat-page .create-group-panel .friend-list {
+.create-group-panel {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+.create-group-panel input[type="text"] {
+    margin-bottom: 0.75rem;
+}
+
+.friend-list {
     max-height: 110px;
     overflow-y: auto;
     margin-top: 8px;
     margin-bottom: 6px;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    border-radius: 6px;
 }
-
-.group-chat-page .create-group-panel label {
+.friend-label {
     display: block;
     margin-bottom: 6px;
     font-size: 0.98em;
-    color: #475569;
-}
-
-.group-chat-page .create-group-panel .create-btn {
-    margin-top: 12px;
-    padding: 7px 16px;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 7px;
-    border: none;
+    color: rgba(255, 255, 255, 0.9);
     cursor: pointer;
 }
+.form-checkbox {
+    margin-right: 0.5rem;
+    accent-color: #667eea;
+}
 
+/* --- Prawa kolumna --- */
 .group-chat-page section {
     flex: 2;
     min-width: 320px;
-    background: #fff;
-    border-radius: 14px;
-    padding: 28px;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+}
+
+.chat-members {
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-messages {
+    height: 400px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
 }
 
-.group-chat-page section h4 {
-    margin-bottom: 10px;
-    color: #2563eb;
-    font-size: 1.15em;
+.chat-message {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.group-chat-page section .chat-members {
-    margin-bottom: 10px;
-    color: #64748b;
-    font-size: 0.98em;
-}
-
-.group-chat-page section .chat-messages {
-    height: 250px;
-    overflow-y: auto;
-    background: #f3f7fc;
-    border-radius: 7px;
-    padding: 12px;
-    margin-bottom: 16px;
-    font-size: 1.02em;
-}
-
-.group-chat-page section .chat-message {
-    margin-bottom: 7px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.group-chat-page section .chat-message:last-child {
+.chat-message:last-child {
     border-bottom: none;
 }
-
-.group-chat-page section .chat-message .sender {
+.chat-message .sender {
     font-weight: 600;
-    color: #2563eb;
+    color: #a5b4fc; /* Jasny niebieski dla kontrastu */
 }
-
-.group-chat-page section .chat-message .timestamp {
+.chat-message .timestamp {
     float: right;
-    color: #94a3b8;
-    font-size: 0.88em;
-    margin-left: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8em;
+    margin-left: 1rem;
 }
 
-.group-chat-page section .chat-input-row {
+.chat-input-row {
     display: flex;
-    gap: 7px;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.group-chat-page section input[type="text"] {
-    flex: 1;
-    padding: 7px;
-    border-radius: 7px;
-    border: 1px solid #cbd5e1;
-    font-size: 1em;
-}
-
-.group-chat-page section .send-btn {
-    padding: 8px 17px;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 7px;
-    border: none;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 500;
-}
-
-.group-chat-page section .empty-msg {
-    color: #64748b;
-    font-style: italic;
-    margin-top: 80px;
+.empty-chat-prompt {
+    color: rgba(255, 255, 255, 0.7);
     text-align: center;
+    margin: auto;
+    padding: 2rem;
 }
 
+.empty-chat {
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin: auto;
+    padding: 2rem;
+}
+
+/* --- Przyciski (globalne) --- */
+.btn-primary-solid {
+    background-color: white;
+    color: #667eea;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-primary-solid:hover:not(:disabled) {
+    background-color: #f0f4f8;
+    transform: scale(1.03);
+}
+.btn-primary-solid:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Responsive */
 @media (max-width: 900px) {
     .group-chat-page {
         flex-direction: column;
-        padding: 18px 8px;
-        gap: 16px;
+        padding: 5rem 1rem 2rem 1rem;
+        gap: 1rem;
     }
-    .group-chat-page section {
-        padding: 16px 8px;
+    .group-chat-page aside {
+        max-width: 100%;
     }
 }

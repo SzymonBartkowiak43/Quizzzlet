@@ -1,12 +1,36 @@
+/* --- Główna strona --- */
+.community-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    flex: 1;
+    margin-top: -4rem;
+    color: white;
+    padding: 6rem 1.5rem 4rem 1.5rem;
+}
+
+/* --- Globalne style "Glass" (jeśli ich nie masz) --- */
+.glass-box {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+}
+.box-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* --- Layout --- */
 .community-layout {
     display: flex;
-    gap: 32px;
+    gap: 1.5rem;
     max-width: 1100px;
-    margin: 38px auto 0 auto;
-    background: #f8fafc;
-    border-radius: 14px;
-    box-shadow: 0 6px 32px rgba(30,41,59,0.07);
-    padding: 38px 32px 32px 32px;
+    margin: 0 auto;
 }
 
 .community-left {
@@ -18,64 +42,57 @@
 
 .community-right {
     flex: 1;
-    background: #fff;
-    border-radius: 11px;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
-    padding: 16px 18px;
     min-width: 300px;
     max-width: 360px;
     height: fit-content;
-    margin-top: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
 }
 
-.community-page h2 {
-    margin-bottom: 18px;
-    color: #2563eb;
-    font-size: 1.35rem;
-}
-
-.community-search {
-    padding: 9px 16px;
-    border-radius: 8px;
-    border: 1.5px solid #e2e8f0;
+/* Wyszukiwarka */
+.search-input {
     width: 100%;
-    max-width: 320px;
+    padding: 0.9rem 1.25rem;
+    border-radius: 50px;
     font-size: 1rem;
-    margin-bottom: 24px;
-    background: #fff;
-    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    transition: all 0.2s ease;
+    margin-bottom: 1.5rem;
+}
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.search-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
 }
 
+/* Lista użytkowników */
 .community-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0.75rem;
 }
 
 .community-user {
     display: flex;
     align-items: center;
-    gap: 14px;
-    background: #fff;
-    border-radius: 11px;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
-    padding: 14px 18px;
-    transition: box-shadow 0.2s;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.2s ease;
 }
-
 .community-user:hover {
-    box-shadow: 0 4px 20px rgba(37,99,235,0.10);
-    background: #f3f7fc;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .community-avatar {
-    background: #2563eb;
-    color: #fff;
+    background: #a5b4fc; /* Jasny niebieski */
+    color: #3730a3; /* Ciemny niebieski */
     font-weight: 700;
-    font-size: 1.6rem;
+    font-size: 1.25rem;
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -87,57 +104,34 @@
 
 .community-name {
     font-weight: 600;
-    color: #334155;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .community-email {
-    font-size: 0.97rem;
-    color: #64748b;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.community-btn {
-    padding: 7px 18px;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
+.community-user .btn-glass {
     margin-left: auto;
-    transition: background 0.15s;
+    padding: 0.6rem 1rem; /* Mniejszy przycisk */
 }
 
-.community-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.community-loader, .community-empty {
-    color: #64748b;
-    text-align: center;
-    margin-top: 30px;
-}
-
-.community-right h3 {
-    margin-bottom: 18px;
-    color: #2563eb;
-    font-size: 1.1rem;
-}
-
+/* Lista zaproszeń */
 .pending-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 0.75rem;
 }
 
 .pending-item {
     display: flex;
     align-items: center;
-    gap: 16px;
-    background: #f3f7fc;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 9px;
-    padding: 12px;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.04);
+    padding: 1rem;
 }
 
 .pending-info {
@@ -146,68 +140,116 @@
     display: flex;
     flex-direction: column;
 }
-
 .pending-name {
     font-weight: 600;
-    color: #334155;
-    margin-bottom: 2px;
+    color: white;
 }
-
 .pending-email {
-    font-size: 0.94rem;
-    color: #64748b;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
 }
-
-.pending-btn {
-    padding: 7px 18px;
-    border-radius: 7px;
+.pending-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.btn-icon {
     border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    margin-left: 6px;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: background 0.15s;
+    transition: all 0.2s ease;
+}
+.btn-icon.btn-accept {
+    background: rgba(76, 175, 80, 0.3);
+    color: white;
+}
+.btn-icon.btn-accept:hover {
+    background: rgba(76, 175, 80, 0.6);
+}
+.btn-icon.btn-decline {
+    background: rgba(239, 68, 68, 0.3);
+    color: white;
+}
+.btn-icon.btn-decline:hover {
+    background: rgba(239, 68, 68, 0.6);
+}
+.btn-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.pending-btn.accept {
-    background: #2563eb;
-    color: #fff;
+
+/* Stany pomocnicze */
+.loading-container,
+.empty-state {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 2rem 0;
 }
 
-.pending-btn.decline {
-    background: #e2e8f0;
-    color: #334155;
+/* Przyciski (globalne) */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-glass:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.btn-glass:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
+/* Responsive */
 @media (max-width: 900px) {
     .community-layout {
         flex-direction: column;
-        padding: 16px 6px;
-        gap: 18px;
+        padding: 5rem 1rem 2rem 1rem;
+        gap: 1.5rem;
     }
     .community-left, .community-right {
         min-width: 0;
         max-width: 100%;
     }
     .community-right {
-        margin-top: 24px;
-        padding: 12px 8px;
+        margin-top: 0;
     }
-    .community-search {
+    .search-input {
         max-width: 100%;
-        width: 100%;
     }
-    .pending-list, .community-list {
-        gap: 10px;
-    }
-    .community-user, .pending-item {
+    .community-user {
         flex-direction: column;
         align-items: flex-start;
-        gap: 7px;
-        padding: 11px 10px;
+        gap: 0.75rem;
     }
-    .pending-btn, .community-btn {
+    .community-user .btn-glass {
         width: 100%;
         margin-left: 0;
+    }
+    .pending-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .pending-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 }

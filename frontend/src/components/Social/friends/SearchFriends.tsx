@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User } from '../../../types/social';
-import { X, Search, UserPlus, Mail, Calendar, MapPin, Users, Filter } from 'lucide-react';
+import { X, Search, UserPlus, Mail, Calendar, MapPin, Users, Filter, Check } from 'lucide-react';
 import { searchSocial, sendFriendRequest } from '../../../services/socialApi';
 
 interface SearchFriendsProps {
@@ -84,27 +84,27 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="glass-box-flat w-full max-w-4xl max-h-[90vh] flex flex-col">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between p-6 border-b border-white/20">
                     <div className="flex items-center gap-3">
-                        <Search className="h-6 w-6 text-blue-600" />
+                        <Search className="h-6 w-6 text-blue-300" />
                         <div>
-                            <h2 className="text-xl font-semibold text-gray-900">Wyszukaj przyjaciół</h2>
-                            <p className="text-sm text-gray-600">Znajdź nowych przyjaciół do nauki języka</p>
+                            <h2 className="text-xl font-semibold text-white">Wyszukaj przyjaciół</h2>
+                            <p className="text-sm text-gray-300">Znajdź nowych przyjaciół do nauki języka</p>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="text-gray-300 hover:text-white transition-colors"
                     >
                         <X className="h-6 w-6" />
                     </button>
                 </div>
 
                 {/* Search */}
-                <div className="p-6 border-b border-gray-200">
+                <div className="p-6 border-b border-white/20">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                         <input
@@ -112,14 +112,14 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Wyszukaj po imieniu lub emailu..."
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="input-glass w-full pl-10 pr-4 py-3"
                         />
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
-            <span className="text-sm text-gray-500">
-              {totalResults > 0 ? `Znaleziono: ${totalResults} użytkowników` : ''}
-            </span>
+                        <span className="text-sm text-gray-300">
+                          {totalResults > 0 ? `Znaleziono: ${totalResults} użytkowników` : ''}
+                        </span>
                     </div>
                 </div>
 
@@ -127,16 +127,16 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
                 <div className="flex-1 overflow-y-auto p-6">
                     {loading && searchResults.length === 0 ? (
                         <div className="text-center py-12">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                            <p className="text-gray-500">Wyszukiwanie użytkowników...</p>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+                            <p className="text-gray-300">Wyszukiwanie użytkowników...</p>
                         </div>
                     ) : searchResults.length === 0 ? (
                         <div className="text-center py-12">
-                            <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-white mb-2">
                                 {searchTerm ? 'Brak wyników' : 'Rozpocznij wyszukiwanie'}
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-gray-300">
                                 {searchTerm
                                     ? `Nie znaleziono użytkowników pasujących do "${searchTerm}"`
                                     : 'Wprowadź frazę, aby wyszukać nowych przyjaciół'
@@ -153,20 +153,20 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
                                     return (
                                         <div
                                             key={user.id}
-                                            className="bg-white border border-gray-200 rounded-lg p-5 hover:border-blue-300 hover:shadow-md transition-all duration-200"
+                                            className="bg-white/10 border border-white/20 rounded-lg p-5 hover:border-white/40 hover:bg-white/20 transition-all duration-200"
                                         >
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                            <span className="text-xl font-semibold text-white">
-                              {user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()}
-                            </span>
+                                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500/50 to-purple-600/50 rounded-full flex items-center justify-center">
+                                                        <span className="text-xl font-semibold text-white">
+                                                          {user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()}
+                                                        </span>
                                                     </div>
                                                     <div>
-                                                        <h3 className="font-semibold text-gray-900 mb-1">
+                                                        <h3 className="font-semibold text-white mb-1">
                                                             {user.name || user.email.split('@')[0]}
                                                         </h3>
-                                                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                                                        <div className="flex items-center gap-1 text-sm text-gray-300">
                                                             <Mail className="h-3 w-3" />
                                                             <span>{user.email}</span>
                                                         </div>
@@ -176,8 +176,7 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
 
                                             {/* User Details */}
                                             <div className="space-y-3 mb-4">
-                                                {/* Join Date */}
-                                                <div className="flex items-center gap-1 text-xs text-gray-500">
+                                                <div className="flex items-center gap-1 text-xs text-gray-400">
                                                     <Calendar className="h-3 w-3" />
                                                     <span>{formatDate(user.createdAt)}</span>
                                                 </div>
@@ -186,8 +185,8 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
                                             {/* Action Button */}
                                             <div className="flex justify-end">
                                                 {isRequestSent ? (
-                                                    <div className="bg-green-100 text-green-700 px-4 py-2 rounded-md text-sm font-medium">
-                                                        ✓ Zaproszenie wysłane
+                                                    <div className="bg-green-500/30 text-green-200 px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2">
+                                                        <Check className="h-4 w-4" /> Zaproszenie wysłane
                                                     </div>
                                                 ) : (
                                                     <button
@@ -220,7 +219,7 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
                                     <button
                                         onClick={loadMore}
                                         disabled={loading}
-                                        className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                                        className="btn-glass"
                                     >
                                         {loading ? 'Ładowanie...' : 'Pokaż więcej'}
                                     </button>
@@ -231,14 +230,14 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="p-6 border-t border-white/20 bg-black/20">
                     <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-300">
                             💡 Wskazówka: Wyszukuj według imienia lub adresu email
                         </div>
                         <button
                             onClick={onClose}
-                            className="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                            className="btn-glass"
                         >
                             Zamknij
                         </button>
@@ -248,5 +247,52 @@ const SearchFriends: React.FC<SearchFriendsProps> = ({ onClose }) => {
         </div>
     );
 };
+
+// --- DODAJ TE STYLE DO GLOBALNEGO CSS (jeśli jeszcze ich nie masz) ---
+/*
+.glass-box-flat {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 0;
+    overflow: hidden;
+}
+.input-glass {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    transition: all 0.2s ease;
+}
+.input-glass::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.input-glass:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
+}
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+*/
 
 export default SearchFriends;

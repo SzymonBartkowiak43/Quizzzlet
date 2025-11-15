@@ -1,82 +1,98 @@
+/* --- Główny kontener --- */
 .auth-container {
-    min-height: calc(100vh - 80px);
+    /* Ustawiamy tło gradientowe */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Upewniamy się, że wypełnia całą wysokość */
+    flex: 1;
+    margin-top: -4rem; /* Anuluje padding-top z App.css */
+    padding-top: 4rem; /* Przywraca padding dla treści */
+
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem;
 }
 
+/* --- Karta "Glassmorphism" --- */
 .auth-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
     padding: 3rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 450px;
-    backdrop-filter: blur(10px);
+    color: white; /* Cały tekst domyślnie biały */
 }
 
+/* Nagłówek */
 .auth-header {
     text-align: center;
     margin-bottom: 2rem;
 }
-
 .auth-header h2 {
-    color: #333;
+    color: white;
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
-
 .auth-header p {
-    color: #666;
+    color: rgba(255, 255, 255, 0.85);
     font-size: 1rem;
     margin: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
+/* Formularz */
 .auth-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
-
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
-
 .form-group label {
     font-weight: 600;
-    color: #333;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
 }
 
+/* --- ZMIANA: Pola formularza (Glass) --- */
 .form-input {
     padding: 1rem;
-    border: 2px solid #e1e5e9;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background-color: #f8f9fa;
-}
 
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
 .form-input:focus {
     outline: none;
-    border-color: #667eea;
-    background-color: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
 }
-
 .form-input:hover {
-    border-color: #c4c8cc;
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
+
+/* --- ZMIANA: Przyciski --- */
 .auth-button {
     padding: 1rem 2rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 50px; /* Zaokrąglamy */
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
@@ -86,26 +102,26 @@
     margin-top: 1rem;
 }
 
+/* Przycisk logowania (biały, solidny) */
 .login-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background-color: white;
+    color: #667eea;
 }
-
 .login-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    background-color: #f0f4f8;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* Przycisk rejestracji (dla RegisterPage) */
 .register-button {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-    color: white;
+    background-color: white;
+    color: #667eea;
 }
-
 .register-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    background-color: #f0f4f8;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .auth-button:disabled {
@@ -114,14 +130,16 @@
     transform: none;
 }
 
+/* --- ZMIANA: Komunikaty o błędach --- */
 .error-message {
-    background: #fef2f2;
-    color: #dc2626;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: white;
     padding: 1rem;
-    border-radius: 8px;
-    border-left: 4px solid #dc2626;
+    border-radius: 12px;
     font-weight: 500;
-    margin-bottom: 1rem;
+    margin-bottom: 0; /* Usunięte, bo mamy gap */
+    text-align: center;
 }
 
 .success-message {
@@ -143,23 +161,20 @@
     text-align: center;
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 1px solid #e1e5e9;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 .auth-footer p {
-    color: #666;
+    color: rgba(255, 255, 255, 0.8);
     margin: 0;
 }
-
 .auth-link {
-    color: #667eea;
+    color: white;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
-
 .auth-link:hover {
-    color: #764ba2;
+    color: #a5b4fc;
     text-decoration: underline;
 }
 
@@ -186,12 +201,12 @@
 @media (max-width: 768px) {
     .auth-container {
         padding: 1rem;
+        align-items: flex-start;
+        padding-top: 6rem;
     }
-
     .auth-card {
         padding: 2rem;
     }
-
     .auth-header h2 {
         font-size: 2rem;
     }
