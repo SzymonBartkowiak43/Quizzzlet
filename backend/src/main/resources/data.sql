@@ -645,45 +645,6 @@ WHERE NOT EXISTS (
       AND content LIKE 'Cześć Marek, dzięki za dodanie%'
 );
 
-INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
-SELECT
-    (SELECT id FROM users WHERE email = 'marek@test.pl'),
-    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
-    'Hej Jan! Zgadza się, staram się codziennie. Twój zestaw o IT jest świetny!',
-    CURRENT_TIMESTAMP - INTERVAL '9 days' + INTERVAL '1 hour',
-    true
-WHERE NOT EXISTS (
-    SELECT 1 FROM private_messages
-    WHERE sender_id = (SELECT id FROM users WHERE email = 'marek@test.pl')
-      AND content LIKE 'Hej Jan! Zgadza się%'
-);
-
-INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
-SELECT
-    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
-    (SELECT id FROM users WHERE email = 'ewa@test.pl'),
-    'Cześć Ewa, polecasz jakieś materiały do nauki? Zrobiłem nowy zestaw o sporcie, zerknij jak chcesz.',
-    CURRENT_TIMESTAMP - INTERVAL '8 days',
-    false -- Ta wiadomość jest nieprzeczytana przez Ewę
-WHERE NOT EXISTS (
-    SELECT 1 FROM private_messages
-    WHERE sender_id = (SELECT id FROM users WHERE email = 'promotor@test.pl')
-      AND content LIKE 'Cześć Ewa, polecasz jakieś materiały%'
-);
-
-INSERT INTO private_messages (sender_id, recipient_id, content, created_at, is_read)
-SELECT
-    (SELECT id FROM users WHERE email = 'kasia@test.pl'),
-    (SELECT id FROM users WHERE email = 'promotor@test.pl'),
-    'Hej, widziałam Twój zestaw o zdrowiu. Dodałam kilka słówek od siebie, co myślisz?',
-    CURRENT_TIMESTAMP - INTERVAL '7 days',
-    true
-WHERE NOT EXISTS (
-    SELECT 1 FROM private_messages
-    WHERE sender_id = (SELECT id FROM users WHERE email = 'kasia@test.pl')
-      AND content LIKE 'Hej, widziałam Twój zestaw o zdrowiu%'
-);
-
 -- Kilka filmów dodanych przez promotora
 INSERT INTO videos (title, url, user_id, created_at, updated_at)
 SELECT

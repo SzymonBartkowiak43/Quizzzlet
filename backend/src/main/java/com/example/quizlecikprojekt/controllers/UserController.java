@@ -24,4 +24,6 @@ public class UserController {
         List<UserDto> users = userFacade.getAllUsers();
         return ResponseEntity.ok(users);
     }
+
+
 }
