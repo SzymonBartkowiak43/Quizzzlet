@@ -73,7 +73,7 @@ export const videoService = {
     },
 
     async incrementViews(videoId: number): Promise<void> {
-        // Implementuj później jeśli potrzebujesz
+
     }
 };
 

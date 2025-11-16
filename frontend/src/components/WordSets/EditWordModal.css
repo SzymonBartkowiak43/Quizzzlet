@@ -1,4 +1,4 @@
-/* --- Tło Modala --- */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -14,7 +14,6 @@
     z-index: 1000;
 }
 
-/* --- Zawartość Modala (Glass) --- */
 .modal-content.edit-word-modal {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -29,7 +28,6 @@
     overflow: hidden;
 }
 
-/* --- Nagłówek Modala --- */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -56,7 +54,6 @@
     opacity: 1;
 }
 
-/* --- Formularz w Modalu --- */
 .edit-word-form {
     padding: 2rem;
 }
@@ -89,7 +86,6 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* --- Błędy --- */
 .edit-word-modal .error-message {
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.4);
@@ -100,7 +96,6 @@
     text-align: center;
 }
 
-/* --- Akcje Modala --- */
 .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -108,7 +103,6 @@
     margin-top: 2rem;
 }
 
-/* Kopiujemy definicje przycisków, których modal używa */
 .modal-actions .btn-secondary {
     /* btn-glass */
     background: rgba(255, 255, 255, 0.1);
@@ -126,7 +120,6 @@
     border-color: rgba(255, 255, 255, 0.4);
 }
 .modal-actions .btn-primary {
-    /* btn-primary-solid */
     background-color: white;
     color: #667eea;
     border: none;

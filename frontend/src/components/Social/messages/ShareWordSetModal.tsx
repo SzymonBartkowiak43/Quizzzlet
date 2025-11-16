@@ -229,7 +229,6 @@ const ShareWordSetModal: React.FC<ShareWordSetModalProps> = ({
                         )}
                     </div>
 
-                    {/* Wiadomość */}
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-2">
                             Wiadomość
@@ -245,7 +244,6 @@ const ShareWordSetModal: React.FC<ShareWordSetModalProps> = ({
                         <p className="text-sm text-gray-400 mt-1">{message.length}/500 znaków</p>
                     </div>
 
-                    {/* Podgląd */}
                     {selectedWordSet && selectedId && message && (
                         <div className="bg-black/20 rounded-lg p-4">
                             <h4 className="font-medium text-white mb-2">Podgląd wiadomości</h4>

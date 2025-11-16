@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .community-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -7,7 +7,6 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* --- Globalne style "Glass" (jeśli ich nie masz) --- */
 .glass-box {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -25,7 +24,6 @@
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-/* --- Layout --- */
 .community-layout {
     display: flex;
     gap: 1.5rem;
@@ -47,7 +45,6 @@
     height: fit-content;
 }
 
-/* Wyszukiwarka */
 .search-input {
     width: 100%;
     padding: 0.9rem 1.25rem;
@@ -68,7 +65,6 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* Lista użytkowników */
 .community-list {
     display: flex;
     flex-direction: column;
@@ -89,8 +85,8 @@
 }
 
 .community-avatar {
-    background: #a5b4fc; /* Jasny niebieski */
-    color: #3730a3; /* Ciemny niebieski */
+    background: #a5b4fc;
+    color: #3730a3;
     font-weight: 700;
     font-size: 1.25rem;
     width: 42px;
@@ -115,10 +111,9 @@
 
 .community-user .btn-glass {
     margin-left: auto;
-    padding: 0.6rem 1rem; /* Mniejszy przycisk */
+    padding: 0.6rem 1rem;
 }
 
-/* Lista zaproszeń */
 .pending-list {
     display: flex;
     flex-direction: column;
@@ -182,8 +177,6 @@
     cursor: not-allowed;
 }
 
-
-/* Stany pomocnicze */
 .loading-container,
 .empty-state {
     color: rgba(255, 255, 255, 0.8);
@@ -191,7 +184,6 @@
     padding: 2rem 0;
 }
 
-/* Przyciski (globalne) */
 .btn-glass {
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -217,7 +209,6 @@
     cursor: not-allowed;
 }
 
-/* Responsive */
 @media (max-width: 900px) {
     .community-layout {
         flex-direction: column;

@@ -30,7 +30,7 @@ const WordSetsPage: React.FC = () => {
     };
 
     const handleDeleteSet = async (e: React.MouseEvent, setId: number) => {
-        e.stopPropagation(); // Zapobiegamy kliknięciu na całą kartę
+        e.stopPropagation();
         if (!window.confirm('Czy na pewno chcesz usunąć ten zestaw?')) return;
 
         try {
@@ -47,7 +47,7 @@ const WordSetsPage: React.FC = () => {
     };
 
     const handleEditClick = (e: React.MouseEvent, setId: number) => {
-        e.stopPropagation(); // Zapobiegamy kliknięciu na całą kartę
+        e.stopPropagation();
         navigate(`/word-sets/${setId}/edit`);
     };
 

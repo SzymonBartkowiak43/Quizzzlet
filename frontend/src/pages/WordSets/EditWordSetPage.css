@@ -1,4 +1,4 @@
-/* --- Style przycisków --- */
+
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -77,8 +77,6 @@
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-
-/* --- Główna strona --- */
 .edit-word-set-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -91,7 +89,6 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* --- Nagłówek --- */
 .page-header {
     display: flex;
     align-items: center;
@@ -106,14 +103,12 @@
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* --- Layout --- */
 .edit-content {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
 }
 
-/* --- Formularz (Glass) --- */
 .edit-form-section {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -174,7 +169,6 @@
     margin-top: 2rem;
 }
 
-/* --- Pasek boczny --- */
 .word-set-info {
     display: flex;
     flex-direction: column;
@@ -226,7 +220,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* Strefa niebezpieczna */
 .danger-zone {
     border-color: rgba(239, 68, 68, 0.4);
     background: rgba(239, 68, 68, 0.1);
@@ -247,7 +240,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* --- Stany --- */
 .loading {
     text-align: center;
     padding: 8rem 3rem;
@@ -264,7 +256,6 @@
     text-align: center;
 }
 
-/* --- Responsywność --- */
 @media (max-width: 900px) {
     .edit-content {
         grid-template-columns: 1fr;

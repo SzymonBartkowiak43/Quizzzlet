@@ -1,4 +1,4 @@
-/* --- Tło Modala --- */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -14,7 +14,6 @@
     z-index: 1000;
 }
 
-/* --- Zawartość Modala (Glass) --- */
 .modal-content.add-word-modal {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -27,13 +26,10 @@
     color: white;
     padding: 0;
     overflow: hidden;
-    /* Ustawiamy max wysokość i scroll */
     max-height: 90vh;
     display: flex;
     flex-direction: column;
 }
-
-/* --- Nagłówek Modala --- */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -61,14 +57,12 @@
     opacity: 1;
 }
 
-/* --- Formularz w Modalu --- */
 .add-word-form {
     padding: 0 2rem 2rem 2rem;
     overflow-y: auto;
     flex-grow: 1;
 }
 
-/* Sekcja importu */
 .bulk-import-section {
     margin-top: 1.5rem;
     background: rgba(0, 0, 0, 0.1);
@@ -101,7 +95,6 @@
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Lista słówek */
 .words-list {
     margin-top: 1.5rem;
     display: flex;
@@ -109,7 +102,7 @@
     gap: 1rem;
     max-height: 300px;
     overflow-y: auto;
-    padding-right: 0.5rem; /* Miejsce na scrollbar */
+    padding-right: 0.5rem;
 }
 .word-pair {
     display: flex;
@@ -158,10 +151,9 @@
     background: rgba(239, 68, 68, 0.4);
 }
 
-/* Przycisk "Dodaj kolejną" */
+
 .add-another-btn {
     margin-top: 1rem;
-    /* btn-glass */
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -177,8 +169,6 @@
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-
-/* --- Błędy --- */
 .add-word-modal .error-message {
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.4);
@@ -189,7 +179,7 @@
     text-align: center;
 }
 
-/* --- Akcje Modala --- */
+
 .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -200,9 +190,8 @@
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Kopiujemy definicje przycisków, których modal używa */
+
 .modal-actions .btn-secondary {
-    /* btn-glass */
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -218,7 +207,6 @@
     border-color: rgba(255, 255, 255, 0.4);
 }
 .modal-actions .btn-primary {
-    /* btn-primary-solid */
     background-color: white;
     color: #667eea;
     border: none;
@@ -243,7 +231,6 @@
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .modal-content.add-word-modal {
         max-width: 95vw;

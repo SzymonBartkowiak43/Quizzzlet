@@ -1,4 +1,4 @@
-/* --- Tło Modala --- */
+
 .chatpanel-overlay {
     position: fixed;
     left: 0; top: 0; right: 0; bottom: 0;
@@ -12,7 +12,7 @@
     padding: 1rem;
 }
 
-/* --- Okno (Glass) --- */
+
 .chatpanel-window {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -32,7 +32,7 @@
     color: white;
 }
 
-/* Nagłówek */
+
 .chatpanel-header {
     display: flex;
     justify-content: space-between;
@@ -43,7 +43,7 @@
     font-weight: 600;
 }
 .chatpanel-header b {
-    color: #a5b4fc; /* Jasny fiolet */
+    color: #a5b4fc;
 }
 .chatpanel-close {
     background: transparent;
@@ -57,7 +57,6 @@
     color: white;
 }
 
-/* Wiadomości */
 .chatpanel-messages {
     flex: 1;
     overflow-y: auto;
@@ -114,7 +113,6 @@
 }
 
 
-/* Input */
 .chatpanel-inputs {
     display: flex;
     gap: 0.75rem;

@@ -4,7 +4,6 @@
     padding: 0 1rem;
 }
 
-/* --- Nagłówek gry --- */
 .quiz-header {
     display: flex;
     justify-content: space-between;
@@ -65,7 +64,6 @@
     50% { transform: scale(1.05); }
 }
 
-/* --- Karta Pytania (Glass) --- */
 .quiz-question {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -114,7 +112,6 @@
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-/* --- Opcje Multiple Choice --- */
 .quiz-options {
     display: grid;
     gap: 12px;
@@ -170,7 +167,6 @@
     flex: 1;
 }
 
-/* --- Opcja wpisywania --- */
 .quiz-input {
     margin-top: 2rem;
     text-align: center;
@@ -203,7 +199,6 @@
     font-size: 0.9em;
 }
 
-/* --- Akcje --- */
 .quiz-actions {
     display: flex;
     justify-content: space-between;
@@ -231,7 +226,6 @@
     min-width: 200px;
 }
 
-/* Błąd */
 .quiz-error {
     text-align: center;
     padding: 40px;
@@ -239,7 +233,6 @@
     font-size: 1.2em;
 }
 
-/* Przyciski */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -269,7 +262,6 @@
     transform: none;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .quiz-game {
         padding: 0;

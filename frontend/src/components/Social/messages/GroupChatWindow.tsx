@@ -29,7 +29,6 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
     const [sending, setSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // Mock messages data
     const mockMessages = [
         {
             id: 1,
@@ -84,7 +83,6 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
 
     return (
         <div className="glass-box-flat h-[600px] flex flex-col">
-            {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-white/20">
                 <div className="flex items-center gap-3">
                     <button
@@ -123,9 +121,7 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
                 </div>
             </div>
 
-            {/* Wiadomości */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {/* Powitanie */}
                 <div className="text-center py-4">
                     <div className="w-16 h-16 bg-green-500/30 rounded-full flex items-center justify-center mx-auto mb-3">
                         <Hash className="h-8 w-8 text-green-200" />
@@ -136,7 +132,6 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
                     </p>
                 </div>
 
-                {/* Wiadomości */}
                 {mockMessages.map((msg, index) => {
                     const showAvatar = index === 0 || mockMessages[index - 1].sender.id !== msg.sender.id;
 

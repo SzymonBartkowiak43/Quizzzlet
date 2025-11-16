@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .quiz-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -26,7 +26,6 @@
     text-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
 
-/* --- Stany ładowania i błędów --- */
 .loading,
 .error-container {
     display: flex;
@@ -55,7 +54,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* --- Wyniki Quizu (Glass) --- */
 .quiz-results {
     max-width: 1000px;
     margin: 0 auto;
@@ -69,7 +67,6 @@
     overflow: hidden;
 }
 
-/* Zachowujemy zielony nagłówek dla pozytywnego feedbacku */
 .results-header {
     background: linear-gradient(135deg, #4caf50, #45a049);
     color: white;
@@ -114,7 +111,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-/* --- Szczegóły Wyników --- */
 .results-details {
     padding: 32px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -154,10 +150,10 @@
     font-weight: 600;
 }
 
-/* --- Przegląd odpowiedzi --- */
+
 .results-breakdown {
     padding: 32px;
-    background: rgba(0, 0, 0, 0.05); /* Lekko ciemniejsze tło dla kontrastu */
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .results-breakdown h3 {
@@ -276,7 +272,6 @@
     text-decoration: line-through;
 }
 
-/* --- Akcje Wyników --- */
 .results-actions {
     padding: 32px;
     display: flex;
@@ -286,7 +281,6 @@
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* --- Style przycisków --- */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -343,7 +337,6 @@
     cursor: not-allowed;
 }
 
-/* --- Responsywność --- */
 @media (max-width: 768px) {
     .quiz-page {
         padding: 0 1rem 2rem 1rem;

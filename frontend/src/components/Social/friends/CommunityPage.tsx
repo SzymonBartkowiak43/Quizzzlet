@@ -3,9 +3,8 @@ import socialApi from '../../../services/socialApi';
 import { toast } from 'react-toastify';
 import './CommunityPage.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
-import { UserPlus, Check, X } from 'lucide-react'; // Usunięto MessageSquare
+import { UserPlus, Check, X } from 'lucide-react';
 
-// Usunięto import 'useNavigate'
 
 interface User {
     id: number;
@@ -37,7 +36,6 @@ const CommunityPage: React.FC = () => {
     const [requestsLoading, setRequestsLoading] = useState(true);
     const [actionId, setActionId] = useState<number | null>(null);
 
-    // <<< 1. STAN ZNAJOMYCH (POZOSTAJE)
     const [friends, setFriends] = useState<User[]>([]);
 
     const currentUserId = getCurrentUserId();
@@ -64,7 +62,6 @@ const CommunityPage: React.FC = () => {
                 const data = await socialApi.getMyFriendships();
                 setPendingRequests(data.pendingRequests || []);
 
-                // <<< 2. AKTUALIZACJA STANU ZNAJOMYCH (UŻYWAMY POPRAWNEGO KLUCZA 'friends')
                 setFriends(data.friends || []);
 
             } catch (e) {
@@ -77,23 +74,17 @@ const CommunityPage: React.FC = () => {
         fetchRequests();
     }, []);
 
-    // <<< 3. TWORZYMY ZBIÓR ID ZNAJOMYCH (POZOSTAJE)
     const friendIds = new Set(friends.map(f => f.id));
 
-    // <<< 4. LOGIKA FILTROWANIA (WRACAMY DO STAREJ WERSJI)
     const filtered = users.filter(u =>
-        // Warunek 1: Musi pasować do wyszukiwania
         (u.name.toLowerCase().includes(search.toLowerCase()) ||
             u.email.toLowerCase().includes(search.toLowerCase())) &&
 
-        // Warunek 2: Nie może to być zalogowany użytkownik
         u.id !== currentUserId &&
 
-        // Warunek 3: Nie może być już na liście znajomych
         !friendIds.has(u.id)
     );
 
-    // Usunięto funkcję 'handleSendMessage'
 
     const handleSendRequest = async (userId: number) => {
         setSendingId(userId);
@@ -115,8 +106,6 @@ const CommunityPage: React.FC = () => {
             toast.success('Zaproszenie zaakceptowane!');
             setPendingRequests(prev => prev.filter(req => req.id !== friendshipId));
 
-            // <<< 5. WAŻNE: Dodajemy znajomego do stanu (POZOSTAJE)
-            // To sprawi, że zniknie on z listy 'filtered' natychmiast po akceptacji.
             if (acceptedRequest) {
                 setFriends(prev => [...prev, {
                     id: acceptedRequest.requesterId,
@@ -187,7 +176,6 @@ const CommunityPage: React.FC = () => {
                     )}
                 </div>
 
-                {/* Prawa kolumna (bez zmian) */}
                 <div className="community-right glass-box">
                     <h3 className="box-title">Zaproszenia do przyjaźni</h3>
                     {requestsLoading ? (

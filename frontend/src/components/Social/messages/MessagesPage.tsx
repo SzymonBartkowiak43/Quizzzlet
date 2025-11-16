@@ -14,8 +14,8 @@ import {
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import ChatWindow from './ChatWindow';
 import GroupChatWindow from './GroupChatWindow';
-import ConversationsList from './ConversationsList'; // Importujemy ConversationsList
-import './MessagesPage.css'; // Dodajemy plik CSS
+import ConversationsList from './ConversationsList';
+import './MessagesPage.css';
 
 type ChatType = 'private' | 'group';
 type ViewMode = 'conversations' | 'chat';
@@ -39,7 +39,7 @@ const MessagesPage: React.FC = () => {
         refreshMessages
     } = useMessages();
 
-    // Ten hook jest teraz potrzebny tylko do mocka, potem go pewnie usuniesz
+
     const { friendshipInfo } = useFriendships();
 
     const [viewMode, setViewMode] = useState<ViewMode>('conversations');
@@ -47,8 +47,6 @@ const MessagesPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
-    // Mock dane (jeśli friendshipInfo jest puste)
-    // UWAGA: mockFriendshipInfo nie jest już przekazywany do ConversationsList
     const mockGroupInfo = messagingInfo?.activeGroups || [];
 
 
@@ -130,7 +128,6 @@ const MessagesPage: React.FC = () => {
 
                         <div className="flex gap-3">
                             <button
-                                // onClick={() => setShowNewMessage(true)}
                                 className="btn-primary-solid"
                             >
                                 <Plus className="h-4 w-4" />

@@ -61,7 +61,7 @@
 .game-controls {
     width: 100%;
     max-width: 500px;
-    min-height: 100px; /* Rezerwujemy miejsce na przyciski */
+    min-height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -142,7 +142,6 @@
     50% { box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5); }
 }
 
-/* --- Statystyki na żywo --- */
 .live-stats {
     display: flex;
     justify-content: center;
@@ -173,7 +172,6 @@
     margin-top: 0.25rem;
 }
 
-/* --- Style przycisków --- */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -241,8 +239,6 @@
     font-size: 0.8rem;
 }
 
-
-/* Responsive */
 @media (max-width: 768px) {
     .answer-controls {
         grid-template-columns: 1fr;

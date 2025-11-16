@@ -190,7 +190,6 @@ const NewMessageModal: React.FC<NewMessageModalProps> = ({
                         )}
                     </div>
 
-                    {/* Input wiadomości */}
                     {selectedRecipient && (
                         <form onSubmit={handleSend} className="p-4 border-t border-white/20">
                             <div className="mb-3">

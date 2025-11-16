@@ -18,7 +18,6 @@ const api = axios.create({
     },
 });
 
-// Add auth token to requests
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -27,7 +26,6 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Response interceptor for error handling
 api.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -40,14 +38,11 @@ api.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-// Social Dashboard API
 export const getSocialDashboard = async (): Promise<SocialDashboard> => {
     const response = await api.get('/api/social/dashboard');
     return response.data;
 };
 
-// Friendship API
 export const getMyFriendships = async (): Promise<FriendshipInfo> => {
     const response = await api.get('/api/friendships/my');
     return response.data;
@@ -57,7 +52,6 @@ export const removeFriend = async (friendshipId: number): Promise<void> => {
     await api.delete(`/api/friendships/${friendshipId}`);
 };
 
-// Social Search API
 export const searchSocial = async (searchTerm: string, page: number = 0, size: number = 20): Promise<{
     content: User[];
     totalElements: number;
@@ -75,10 +69,6 @@ export const searchSocial = async (searchTerm: string, page: number = 0, size: n
     return response.data;
 };
 
-// Groups API - mock implementations (dodaj gdy backend będzie miał groups)
-
-
-// Stats API (dodatkowy endpoint)
 export const getSocialStats = async (): Promise<any> => {
     const response = await api.get('/api/social/stats');
     return response.data;
@@ -104,19 +94,16 @@ export const sendFriendRequest = async (addresseeId: number) => {
     return response.data;
 };
 
-// Akceptowanie zaproszenia
 export const acceptFriendRequest = async (friendshipId: number) => {
     const response = await api.post(`/api/friendships/${friendshipId}/accept`);
     return response.data;
 };
 
-// Odrzucanie zaproszenia
 export const declineFriendRequest = async (friendshipId: number) => {
     const response = await api.post(`/api/friendships/${friendshipId}/decline`);
     return response.data;
 };
 
-// Sprawdzanie statusu znajomości (np. czy już wysłałeś zaproszenie, czy już jesteście znajomymi)
 export const checkFriendshipStatus = async (userId: number) => {
     const response = await api.get(`/api/friendships/status/${userId}`);
     return response.data;

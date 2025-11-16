@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .videos-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -7,7 +7,6 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* --- Nagłówek --- */
 .videos-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -25,7 +24,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-/* --- Kontrolki (wyszukiwarka, filtry) --- */
 .videos-controls {
     display: flex;
     justify-content: space-between;
@@ -42,7 +40,6 @@
     max-width: 500px;
 }
 
-/* Styl "Glass" dla inputów */
 .search-input,
 .category-select {
     width: 100%;
@@ -67,15 +64,13 @@
 }
 
 .category-select {
-    border-radius: 8px; /* Selecty wyglądają lepiej z mniejszym zaokrągleniem */
+    border-radius: 8px;
 }
 .category-select option {
     background: #333;
     color: white;
 }
 
-
-/* --- Siatka wideo (Glass) --- */
 .videos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -103,7 +98,6 @@
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Miniaturka */
 .video-thumbnail {
     position: relative;
     width: 100%;
@@ -131,7 +125,6 @@
     font-weight: 600;
 }
 
-/* Info o filmie */
 .video-info {
     padding: 1.5rem;
 }
@@ -175,7 +168,6 @@
     font-size: 0.9rem;
 }
 
-/* Stany pomocnicze */
 .loading, .error-message, .no-videos {
     text-align: center;
     padding: 3rem;

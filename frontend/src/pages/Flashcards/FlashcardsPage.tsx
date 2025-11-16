@@ -122,7 +122,6 @@ const FlashcardsPage: React.FC = () => {
         if (!session) return;
 
         if (session.currentIndex >= session.words.length - 1) {
-            // Oznacz ostatnią kartę jako ukończoną, jeśli jeszcze nie jest
             const currentWord = session.words[session.currentIndex];
             if (!session.completedWords.has(currentWord.id)) {
                 setSession(prev => {
@@ -233,7 +232,6 @@ const FlashcardsPage: React.FC = () => {
     const progress = ((session.currentIndex + 1) / session.words.length) * 100;
     const isSessionComplete = session.currentIndex >= session.words.length - 1 && session.completedWords.has(currentWord.id);
 
-    // Oblicz skuteczność, unikając dzielenia przez zero
     const totalAnswered = session.correctCount + session.incorrectCount;
     const accuracy = totalAnswered > 0 ? Math.round((session.correctCount / totalAnswered) * 100) : 0;
 

@@ -52,12 +52,10 @@ const QuizPage: React.FC = () => {
     const generateQuestions = (wordSet: WordSet, settings: QuizSettingsType): QuizQuestion[] => {
         let words = [...wordSet.words];
 
-        // Ogranicz liczbę słów
         if (settings.questionCount && settings.questionCount < words.length) {
             words = words.slice(0, settings.questionCount);
         }
 
-        // Pomieszaj słowa jeśli ustawione
         if (settings.shuffleQuestions) {
             words.sort(() => Math.random() - 0.5);
         }
@@ -65,21 +63,17 @@ const QuizPage: React.FC = () => {
         const questions: QuizQuestion[] = [];
 
         words.forEach((word, index) => {
-            // Określ typy pytań do wygenerowania
             const questionTypes: QuestionType[] = [];
             if (settings.includeMultipleChoice) questionTypes.push('multiple-choice');
             if (settings.includeTyping) questionTypes.push('typing');
 
-            // Losuj typ pytania jeśli włączone oba
             const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
 
-            // Przygotuj pytanie i odpowiedź
             const question = settings.showWordFirst ? word.word : word.translation;
             const correctAnswer = settings.showWordFirst ? word.translation : word.word;
 
             let options: string[] | undefined;
 
-            // Generuj opcje dla multiple choice
             if (questionType === 'multiple-choice') {
                 const otherWords = wordSet.words.filter(w => w.id !== word.id);
                 const wrongAnswers = otherWords
@@ -90,7 +84,6 @@ const QuizPage: React.FC = () => {
 
                 options = [correctAnswer, ...wrongAnswers];
 
-                // Pomieszaj opcje jeśli ustawione
                 if (settings.shuffleOptions) {
                     options.sort(() => Math.random() - 0.5);
                 }
@@ -103,7 +96,7 @@ const QuizPage: React.FC = () => {
                 correctAnswer,
                 options,
                 type: questionType,
-                points: 1 // Każde pytanie 1 punkt
+                points: 1
             });
         });
 

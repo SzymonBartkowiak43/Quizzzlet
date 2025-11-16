@@ -27,7 +27,6 @@ const SocialDashboard: React.FC = () => {
         setRefreshing(false);
     };
 
-    // Style przycisków
     const btnGlass = "btn-glass";
     const btnPrimary = "btn-primary-solid";
     const btnGlassDanger = "btn-glass-danger";
@@ -108,14 +107,12 @@ const SocialDashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Karty statystyk */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
                     <StatsCard key={index} {...stat} />
                 ))}
             </div>
 
-            {/* Powiadomienie "Wymagają uwagi" */}
             {(dashboard.quickActions.hasPendingRequests ||
                 dashboard.quickActions.hasUnreadMessages ||
                 dashboard.stats.pendingFriendRequests > 0) && (
@@ -135,7 +132,6 @@ const SocialDashboard: React.FC = () => {
                 </div>
             )}
 
-            {/* Główna siatka (Akcje + Grupy) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <QuickActions

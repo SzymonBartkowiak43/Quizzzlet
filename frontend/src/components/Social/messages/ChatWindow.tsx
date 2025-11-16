@@ -55,7 +55,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         }
     };
 
-    // ... (formatTime i formatDate bez zmian) ...
     const formatTime = (dateString: string) => {
         return new Date(dateString).toLocaleTimeString('pl-PL', {
             hour: '2-digit',
@@ -83,7 +82,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         groups[date].push(message);
         return groups;
     }, {} as Record<string, PrivateMessage[]>);
-    // ... (koniec logiki) ...
 
     return (
         <div className="glass-box-flat h-[600px] flex flex-col">
@@ -125,18 +123,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                 </div>
             </div>
 
-            {/* Wiadomości */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {Object.entries(groupedMessages).map(([date, dayMessages]) => (
                     <div key={date}>
-                        {/* Separator daty */}
                         <div className="flex items-center justify-center my-4">
                             <div className="bg-black/20 text-gray-300 text-xs px-3 py-1 rounded-full">
                                 {date}
                             </div>
                         </div>
 
-                        {/* Wiadomości z dnia */}
                         {dayMessages.map((message, index) => {
                             const isOwnMessage = message.sender.name === currentUser;
                             const showAvatar = index === 0 || dayMessages[index - 1].sender.id !== message.sender.id;
@@ -146,7 +141,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                                     key={message.id}
                                     className={`flex items-end gap-2 ${isOwnMessage ? 'flex-row-reverse' : ''}`}
                                 >
-                                    {/* Avatar */}
+
                                     <div className={`w-8 h-8 ${showAvatar ? 'opacity-100' : 'opacity-0'}`}>
                                         {!isOwnMessage && (
                                             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -155,7 +150,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                                         )}
                                     </div>
 
-                                    {/* Dymek */}
+
                                     <div
                                         className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
                                             isOwnMessage

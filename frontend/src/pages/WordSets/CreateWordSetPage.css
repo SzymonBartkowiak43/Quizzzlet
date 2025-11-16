@@ -1,4 +1,4 @@
-/* --- Style przycisków --- */
+
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -55,7 +55,6 @@
     cursor: not-allowed;
 }
 
-/* --- Główna strona --- */
 .create-word-set-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -68,7 +67,6 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* --- Nagłówek --- */
 .page-header {
     display: flex;
     align-items: center;
@@ -83,7 +81,6 @@
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* --- Formularz (Glass) --- */
 .create-word-set-form {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -94,7 +91,6 @@
     padding: 2.5rem;
 }
 
-/* --- Pola formularza --- */
 .form-group {
     margin-bottom: 1.5rem;
 }

@@ -33,7 +33,7 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
     };
 
     const handleAnswer = (isCorrect: boolean) => {
-        if (showResult) return; // Zapobiegaj podwójnemu kliknięciu
+        if (showResult) return;
 
         const responseTime = new Date().getTime() - cardStartTime.getTime();
 
@@ -75,7 +75,7 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
 
         setTimeout(() => {
             nextCard(updatedSession, newReviewQueue);
-        }, 1200); // Wydłużamy czas, aby zobaczyć feedback
+        }, 1200);
     };
 
     const calculateDifficulty = (card: any, isCorrect: boolean): FlashcardDifficulty => {
@@ -113,7 +113,6 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
     };
 
     const handleSkipCard = () => {
-        // Pomijanie liczymy jako błędną odpowiedź, ale nie dodajemy do kolejki powtórek
         const responseTime = new Date().getTime() - cardStartTime.getTime();
 
         const updatedCard = {
@@ -134,7 +133,7 @@ const FlashcardGame: React.FC<FlashcardGameProps> = ({
         };
 
         onSessionUpdate(updatedSession);
-        setShowResult(true); // Pokaż krótki feedback "pominięto"
+        setShowResult(true);
 
         setTimeout(() => {
             nextCard(updatedSession, reviewQueue);

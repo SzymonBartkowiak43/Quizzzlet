@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import EditGroupModal from './EditGroupModal';
 import InviteMembersModal from './InviteMembersModal';
-import './GroupDetails.css'; // Dodajemy plik CSS
+import './GroupDetails.css';
 
 interface GroupDetailsProps {
     group: StudyGroup;
@@ -193,7 +193,6 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({
                     </div>
                 </div>
 
-                {/* Przyciski akcji */}
                 <div className="flex gap-2">
                     {canManage && (
                         <>
@@ -276,7 +275,6 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({
                 </div>
 
                 <div className="p-6">
-                    {/* Zakładka: Przegląd */}
                     {activeTab === 'overview' && (
                         <div className="space-y-6">
                             <div>

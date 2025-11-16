@@ -24,7 +24,6 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
     });
     const [showFilters, setShowFilters] = useState(false);
 
-    // ... (Mockowe dane bez zmian) ...
     const mockResults: StudyGroup[] = [
         {
             id: 4,
@@ -98,7 +97,6 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
         }
     };
 
-    // ... (Logika filtrowania bez zmian) ...
     const applyFilters = (groups: StudyGroup[]) => {
         return groups.filter(group => {
             if (filters.type === 'public' && group.isPrivate) return false;
@@ -118,7 +116,6 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
         if (maxMembers <= 50) return 'Średnia';
         return 'Duża';
     };
-    // ... (Koniec logiki) ...
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -134,9 +131,7 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
                     </button>
                 </div>
 
-                {/* Wyszukiwarka i Filtry */}
                 <div className="p-6 border-b border-white/20 space-y-4">
-                    {/* Input */}
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                         <input
@@ -148,7 +143,6 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
                         />
                     </div>
 
-                    {/* Przełącznik filtrów */}
                     <div className="flex items-center justify-between">
                         <button
                             onClick={() => setShowFilters(!showFilters)}
@@ -163,10 +157,8 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
                         </div>
                     </div>
 
-                    {/* Filtry */}
                     {showFilters && (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-black/20 rounded-lg">
-                            {/* Filtr Typu */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-200 mb-2">Typ grupy</label>
                                 <select
@@ -195,7 +187,6 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
                                 </select>
                             </div>
 
-                            {/* Filtr Aktywności */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-200 mb-2">Aktywność</label>
                                 <select
@@ -212,7 +203,6 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
                     )}
                 </div>
 
-                {/* Wyniki */}
                 <div className="flex-1 overflow-y-auto p-6">
                     {loading ? (
                         <div className="text-center py-8">
@@ -329,52 +319,5 @@ const GroupSearch: React.FC<GroupSearchProps> = ({
     );
 };
 
-// --- DODAJ TE STYLE DO GLOBALNEGO CSS (jeśli jeszcze ich nie masz) ---
-/*
-.glass-box-flat {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-    padding: 0;
-    overflow: hidden;
-}
-.btn-glass {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.btn-glass:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-.select-glass {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    font-size: 0.875rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    cursor: pointer;
-}
-.select-glass option {
-    background: #333;
-    color: white;
-}
-.select-glass:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.8);
-    background: rgba(255, 255, 255, 0.2);
-}
-*/
 
 export default GroupSearch;

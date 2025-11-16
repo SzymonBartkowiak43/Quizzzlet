@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .word-set-details-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -12,7 +12,6 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* --- Nagłówek (Glass) --- */
 .page-header {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -27,7 +26,7 @@
     gap: 1.5rem;
     padding: 2rem;
     margin-bottom: 2rem;
-    justify-content: space-between; /* <--- POPRAWKA UKŁADU */
+    justify-content: space-between;
 }
 
 .header-content {
@@ -39,7 +38,6 @@
     color: white;
     font-size: 2.2rem;
     font-weight: 700;
-    /* MOCNIEJSZY CIEŃ DLA CZYTELNOŚCI */
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     word-break: break-word;
 }
@@ -49,7 +47,6 @@
     margin: 0.5rem 0 1rem 0;
     font-size: 1.15rem;
     line-height: 1.5;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
@@ -59,11 +56,9 @@
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.97rem;
     margin-top: 6px;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Przyciski w nagłówku */
 .header-actions {
     flex: 1;
     min-width: 260px;
@@ -82,7 +77,6 @@
     width: 100%;
 }
 
-/* --- Sekcja słówek (Glass) --- */
 .words-section {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -95,7 +89,6 @@
     margin-bottom: 2rem;
 }
 
-/* Kontrolki (zaznaczanie, liczniki) */
 .selection-bar {
     display: flex;
     justify-content: space-between;
@@ -104,7 +97,6 @@
     padding: 1rem 1.5rem;
     border-radius: 9px;
     margin-bottom: 1.5rem;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .selection-actions {
@@ -124,7 +116,6 @@
     font-size: 1.25rem;
     font-weight: 600;
     color: white;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .bulk-actions {
@@ -132,14 +123,12 @@
     gap: 0.5rem;
 }
 
-/* --- Siatka słówek --- */
 .words-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
     gap: 1.5rem;
 }
 
-/* Karta słówka (wewnętrzny Glass) */
 .word-card {
     display: flex;
     align-items: center;
@@ -156,7 +145,7 @@
     border-color: rgba(255, 255, 255, 0.5);
 }
 .word-card.selected {
-    background: rgba(102, 126, 234, 0.3); /* Kolor z gradientu */
+    background: rgba(102, 126, 234, 0.3);
     border-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -176,18 +165,15 @@
     margin-bottom: 0.25rem;
     font-size: 1.1rem;
     word-break: break-word;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .polish-translation {
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.95rem;
     word-break: break-word;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Akcje na karcie słówka (ikony) */
 .word-actions {
     display: flex;
     gap: 0.5rem;
@@ -213,7 +199,6 @@
     background: rgba(239, 68, 68, 0.5);
 }
 
-/* --- Stan pusty i CTA --- */
 .empty-words {
     text-align: center;
     padding: 3rem 2rem;
@@ -229,17 +214,14 @@
     color: white;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .empty-words p {
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 1rem;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Sekcja CTA (Fiszki, Quiz) */
 .learning-cta-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -261,7 +243,6 @@
     font-size: 1.4em;
     margin: 0 0 8px 0;
     font-weight: 700;
-    /* DODANY CIEŃ */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .flashcards-cta p, .quiz-cta p {
@@ -273,9 +254,6 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Style przycisków (globalne dla tej strony) --- */
-
-/* Solidny biały przycisk (główna akcja) */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -303,7 +281,7 @@
     cursor: not-allowed;
     transform: none;
 }
-/* Kolory dla Quiz/Fiszki */
+
 .btn-primary-solid.btn-quiz {
     background-color: #ff9800;
     color: white;
@@ -319,8 +297,6 @@
     background-color: #388e3c;
 }
 
-
-/* Przycisk "Glass" (drugorzędna akcja) */
 .btn-glass, .btn-glass-icon {
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -359,7 +335,6 @@
     border-color: rgba(239, 68, 68, 0.6);
 }
 
-/* --- Stany pomocnicze --- */
 .loading, .error-message {
     text-align: center;
     font-size: 1.125em;
@@ -376,8 +351,6 @@
     max-width: 800px;
 }
 
-
-/* --- Responsywność --- */
 @media (max-width: 900px) {
     .word-set-details-container {
         padding: 5rem 1rem 2rem 1rem;

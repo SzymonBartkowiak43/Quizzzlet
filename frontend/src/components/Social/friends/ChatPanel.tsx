@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import socialApi from '../../../services/socialApi';
 import './ChatPanel.css';
 import { Send } from 'lucide-react';
-import LoadingSpinner from '../../Shared/LoadingSpinner'; // Zakładam, że masz ten komponent
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 interface ChatPanelProps {
     friend: { id: number, name: string, email: string };
@@ -44,7 +44,6 @@ const ChatPanel: React.FC<ChatPanelProps> = ({ friend, onClose }) => {
         try {
             await socialApi.sendPrivateMessage(friend.id, messageText);
             setMessageText('');
-            // odśwież rozmowę
             const data = await socialApi.getConversation(friend.id);
             setMessages(data.messages || []);
         } finally {

@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .friends-page {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
@@ -7,13 +7,11 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* Kontener centrujący treść */
 .friends-content-wrapper {
     max-width: 1000px;
     margin: 0 auto;
 }
 
-/* --- Nagłówek --- */
 .friends-header {
     display: flex;
     align-items: center;
@@ -35,7 +33,6 @@
     font-size: 1.5rem;
 }
 
-/* --- Wyszukiwarka (styl Glass) --- */
 .search-input {
     width: 100%;
     max-width: 350px;
@@ -56,7 +53,6 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* --- Stany pomocnicze --- */
 .loading-container,
 .error-container,
 .empty-state {

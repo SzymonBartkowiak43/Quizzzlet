@@ -1,13 +1,10 @@
-/* --- Główna strona (dla layoutu, tło jest na MessagesPage) --- */
+
 .group-details-page {
-    /* Zakładamy, że tło jest już na stronie nadrzędnej (np. MessagesPage) */
-    /* Jeśli ten komponent jest ładowany na stronie bez tła, dodaj je tutaj */
     max-width: 1280px;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* --- Style pudełek "Glass" --- */
 .glass-box {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -35,7 +32,6 @@
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-/* --- Karta statystyk --- */
 .stat-card {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
@@ -55,7 +51,6 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* --- Lista info --- */
 .info-item {
     display: flex;
     justify-content: space-between;
@@ -67,7 +62,6 @@
     border-bottom: none;
 }
 
-/* --- Strefa niebezpieczna --- */
 .danger-zone {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
@@ -75,7 +69,6 @@
     padding: 1.5rem;
 }
 
-/* --- Przyciski (globalne, jeśli jeszcze ich nie masz) --- */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;

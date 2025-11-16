@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .video-player-page {
     max-width: 1200px;
     margin: 0 auto;
@@ -9,7 +9,6 @@
     padding: 6rem 1.5rem 4rem 1.5rem;
 }
 
-/* --- Kontener wideo (Glass) --- */
 .video-container {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -24,7 +23,7 @@
 .video-player {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
     height: 0;
     background: #000;
 }
@@ -37,7 +36,6 @@
     border: none;
 }
 
-/* --- Informacje o wideo --- */
 .video-info {
     padding: 2rem;
 }
@@ -105,7 +103,6 @@
     margin-left: 0.5rem;
 }
 
-/* Opis (wewnętrzny Glass) */
 .video-description {
     background: rgba(0, 0, 0, 0.15);
     padding: 1.5rem;
@@ -138,7 +135,6 @@
     font-weight: 500;
 }
 
-/* --- Sekcja komentarzy (Glass) --- */
 .comments-section {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -160,7 +156,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* Formularz komentarza */
 .comment-form {
     margin-bottom: 2rem;
 }
@@ -197,7 +192,6 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Logowanie */
 .login-prompt {
     text-align: center;
     padding: 2rem;
@@ -215,7 +209,6 @@
     color: #81c784;
 }
 
-/* Lista komentarzy */
 .comments-list {
     space-y: 1.5rem;
 }
@@ -270,12 +263,10 @@
     color: white;
 }
 
-/* Powrót */
 .back-to-videos {
     text-align: center;
 }
 
-/* Stany pomocnicze */
 .loading, .error {
     text-align: center;
     padding: 8rem 3rem;
@@ -293,7 +284,6 @@
     max-width: 800px;
 }
 
-/* --- Style przycisków --- */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -336,7 +326,6 @@
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .video-player-page {
         padding: 5rem 1rem 2rem 1rem;

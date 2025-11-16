@@ -176,11 +176,9 @@ const GroupChatPage: React.FC = () => {
                 )}
             </aside>
 
-            {/* Prawa kolumna: czat */}
             <section className="glass-box-flat flex flex-col">
                 {selectedGroup ? (
                     <>
-                        {/* Nagłówek czatu */}
                         <div className="p-4 border-b border-white/20">
                             <h4 className="box-title mb-1">{selectedGroup.name}</h4>
                             <div className="chat-members">
@@ -189,7 +187,6 @@ const GroupChatPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Wiadomości */}
                         <div className="chat-messages">
                             {loadingMessages ? (
                                 <div className="empty-chat">
@@ -207,7 +204,6 @@ const GroupChatPage: React.FC = () => {
                             ))}
                         </div>
 
-                        {/* Input */}
                         <div className="chat-input-row">
                             <input
                                 value={newMsg}

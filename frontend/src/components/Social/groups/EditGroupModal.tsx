@@ -22,7 +22,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // ... (Logika walidacji i obsługi bez zmian) ...
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
         if (!formData.name?.trim()) {
@@ -64,7 +63,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
             }));
         }
     };
-    // ... (Koniec logiki) ...
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -80,9 +78,7 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                     </button>
                 </div>
 
-                {/* Content */}
                 <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
-                    {/* Nazwa grupy */}
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-2">
                             Nazwa grupy *
@@ -102,7 +98,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                         )}
                     </div>
 
-                    {/* Opis */}
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-2">
                             Opis grupy *
@@ -122,7 +117,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                         )}
                     </div>
 
-                    {/* Ustawienia prywatności */}
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-3">
                             Ustawienia prywatności
@@ -168,7 +162,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                         </div>
                     </div>
 
-                    {/* Max Members */}
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-2">
                             Maksymalna liczba członków
@@ -192,7 +185,6 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
                     </div>
                 </form>
 
-                {/* Footer */}
                 <div className="flex justify-end gap-3 p-6 border-t border-white/20">
                     <button
                         type="button"
@@ -224,62 +216,5 @@ const EditGroupModal: React.FC<EditGroupModalProps> = ({
         </div>
     );
 };
-
-// --- DODAJ TE STYLE DO GLOBALNEGO CSS (jeśli jeszcze ich nie masz) ---
-/*
-.glass-box-flat {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-    padding: 0;
-    overflow: hidden;
-}
-.input-glass {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    transition: all 0.2s ease;
-}
-.input-glass::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-.input-glass:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.8);
-    background: rgba(255, 255, 255, 0.2);
-}
-.form-radio {
-    width: 18px;
-    height: 18px;
-    accent-color: white;
-    cursor: pointer;
-}
-.setting-option {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.setting-option:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-.setting-option.selected {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-.btn-primary-solid { ... }
-.btn-glass { ... }
-*/
 
 export default EditGroupModal;

@@ -57,14 +57,6 @@ const FriendsList: React.FC<FriendsListProps> = ({
                             <Trash2 size={16} />
                             Usuń
                         </button>
-                        {/* <button
-                            className="btn-glass-danger"
-                            onClick={() => onBlockUser(friend.id)}
-                            disabled={processingId === friend.id}
-                        >
-                            <XCircle size={16} />
-                            Zablokuj
-                        </button> */}
                     </div>
                 </div>
             ))}

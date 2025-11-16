@@ -32,12 +32,11 @@ const LoginPage: React.FC = () => {
         try {
             const authResponse = await authService.login(formData);
 
-            // Utworzenie obiektu użytkownika na podstawie odpowiedzi
             const user = {
-                id: 0, // Będzie zaktualizowane gdy API zwróci pełne dane użytkownika
+                id: 0,
                 email: authResponse.email,
-                userName: authResponse.email.split('@')[0], // Tymczasowo
-                roles: ['USER'] // Domyślnie
+                userName: authResponse.email.split('@')[0],
+                roles: ['USER']
             };
 
             login(authResponse.token, user);

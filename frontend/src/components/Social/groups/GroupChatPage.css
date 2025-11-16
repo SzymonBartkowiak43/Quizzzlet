@@ -5,17 +5,14 @@
     max-width: 1200px;
     margin: 0 auto;
 
-    /* --- DODANE STYLE --- */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex: 1;
-    /* --- KONIEC DODANYCH STYLI --- */
 
     color: white;
     padding: 6rem 1.5rem 4rem 1.5rem;
     margin-top: -4rem;
 }
 
-/* --- Globalne style "Glass" (jeśli ich nie masz) --- */
 .glass-box {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
@@ -67,7 +64,6 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* --- Lewa kolumna --- */
 .group-chat-page aside {
     flex: 1;
     min-width: 260px;
@@ -176,7 +172,7 @@
 }
 .chat-message .sender {
     font-weight: 600;
-    color: #a5b4fc; /* Jasny niebieski dla kontrastu */
+    color: #a5b4fc;
 }
 .chat-message .timestamp {
     float: right;
@@ -233,7 +229,6 @@
     cursor: not-allowed;
 }
 
-/* Responsive */
 @media (max-width: 900px) {
     .group-chat-page {
         flex-direction: column;

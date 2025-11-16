@@ -3,7 +3,7 @@ import { useFriendships } from '../../../hooks/userFriendships';
 import FriendsList from './FriendsList';
 import ChatPanel from './ChatPanel';
 import './FriendsPage.css';
-import LoadingSpinner from '../../Shared/LoadingSpinner'; // Zakładam, że masz ten komponent
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 const FriendsPage: React.FC = () => {
     const { friendshipInfo, loading, error, removeFriend, blockUser } = useFriendships();

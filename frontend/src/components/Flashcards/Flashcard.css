@@ -153,7 +153,7 @@
 
 .translation {
     font-size: 2.5rem !important;
-    color: #81c784 !important; /* Jasny zielony dla kontrastu */
+    color: #81c784 !important;
     text-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
 }
 
@@ -184,7 +184,6 @@
     border-radius: 15px;
 }
 
-/* Wskaźnik odwrócenia */
 .flip-indicator {
     position: absolute;
     bottom: -50px;
@@ -204,7 +203,6 @@
     50% { opacity: 1; transform: scale(1.1); }
 }
 
-/* Hover */
 .flashcard:hover {
     transform: scale(1.02);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
@@ -213,7 +211,6 @@
     transform: rotateY(180deg) scale(1.02);
 }
 
-/* Mobile */
 @media (max-width: 768px) {
     .flashcard-container {
         height: 300px;

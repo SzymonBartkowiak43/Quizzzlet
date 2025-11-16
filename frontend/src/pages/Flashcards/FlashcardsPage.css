@@ -1,4 +1,4 @@
-/* --- Główna strona --- */
+
 .flashcards-page {
     min-height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -7,13 +7,11 @@
     flex-direction: column;
     outline: none;
     color: white;
-    /* Anuluje padding z App.css i ręcznie ustawia padding góra/dół */
     margin-top: -4rem;
     padding-top: 6rem;
     padding-bottom: 2rem;
 }
 
-/* --- Nagłówek (Glass) --- */
 .flashcards-header {
     display: flex;
     justify-content: space-between;
@@ -65,7 +63,6 @@
     font-weight: 600;
 }
 
-/* --- Pasek postępu --- */
 .progress-bar {
     max-width: 1000px;
     margin: 0 auto 40px;
@@ -82,7 +79,6 @@
     border-radius: 3px;
 }
 
-/* --- Kontener Fiszki --- */
 .flashcard-container {
     display: flex;
     flex-direction: column;
@@ -95,7 +91,6 @@
     min-height: 400px;
 }
 
-/* Fiszka */
 .flashcard {
     width: 100%;
     height: 320px;
@@ -115,7 +110,6 @@
     pointer-events: none;
 }
 
-/* Przód i tył karty (Glass) */
 .flashcard-front,
 .flashcard-back {
     width: 100%;
@@ -139,7 +133,6 @@
     backface-visibility: hidden;
 }
 
-/* Stan początkowy */
 .flashcard-front {
     transform: rotateY(0deg);
 }
@@ -147,7 +140,6 @@
     transform: rotateY(180deg);
 }
 
-/* Stan odwrócony */
 .flashcard.flipped .flashcard-front {
     transform: rotateY(-180deg);
 }
@@ -182,7 +174,6 @@
     display: inline-block;
 }
 
-/* Podpowiedź */
 .card-hint {
     text-align: center;
     color: rgba(255, 255, 255, 0.8);
@@ -204,7 +195,6 @@
     font-weight: 600;
 }
 
-/* --- Sekcja odpowiedzi (Glass) --- */
 .answer-section {
     max-width: 600px;
     width: 100%;
@@ -240,7 +230,6 @@
     flex-wrap: wrap;
 }
 
-/* --- Nawigacja --- */
 .flashcard-navigation {
     display: flex;
     justify-content: space-between;
@@ -268,7 +257,6 @@
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* --- Koniec Sesji (Glass) --- */
 .session-complete {
     display: flex;
     flex-direction: column;
@@ -306,7 +294,7 @@
 .stat-value {
     font-size: 3em;
     font-weight: 700;
-    color: #81c784; /* Jasny zielony */
+    color: #81c784;
     text-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 .stat-label {
@@ -323,7 +311,6 @@
     justify-content: center;
 }
 
-/* --- Przyciski (WSPÓLNE STYLE) --- */
 .btn-primary-solid {
     background-color: white;
     color: #667eea;
@@ -393,8 +380,6 @@
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-
-/* --- Stany pomocnicze --- */
 .loading,
 .error-container {
     display: flex;
@@ -420,7 +405,6 @@
     font-weight: 500;
 }
 
-/* --- Responsywność --- */
 @media (max-width: 768px) {
     .flashcards-page {
         padding: 16px;

@@ -52,7 +52,6 @@ const InviteMembersModal: React.FC<InviteMembersModalProps> = ({
 
         setInvitingFriends(true);
         try {
-            // Mock API call
             await new Promise(resolve => setTimeout(resolve, 1000));
             setSelectedFriends([]);
             alert(`Wysłano zaproszenia do ${selectedFriends.length} przyjaciół!`);
@@ -83,9 +82,7 @@ const InviteMembersModal: React.FC<InviteMembersModalProps> = ({
                     </button>
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                    {/* Sekcja kodu zaproszenia */}
                     <div className="bg-blue-500/20 rounded-lg p-6">
                         <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
                             <Copy className="h-5 w-5" />
@@ -130,7 +127,6 @@ const InviteMembersModal: React.FC<InviteMembersModalProps> = ({
                         </p>
                     </div>
 
-                    {/* Sekcja zapraszania przyjaciół */}
                     {friends.length > 0 && (
                         <div>
                             <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
@@ -195,7 +191,6 @@ const InviteMembersModal: React.FC<InviteMembersModalProps> = ({
                         </div>
                     )}
 
-                    {/* Komunikat o braku przyjaciół */}
                     {friends.length === 0 && (
                         <div className="text-center py-8 bg-black/20 rounded-lg">
                             <Users className="h-12 w-12 text-gray-500 mx-auto mb-3" />
@@ -206,7 +201,6 @@ const InviteMembersModal: React.FC<InviteMembersModalProps> = ({
                         </div>
                     )}
 
-                    {/* Wskazówki */}
                     <div className="bg-yellow-500/20 rounded-lg p-4">
                         <h4 className="font-medium text-yellow-200 mb-2">💡 Wskazówki</h4>
                         <ul className="text-sm text-yellow-100/90 space-y-1">
@@ -218,7 +212,6 @@ const InviteMembersModal: React.FC<InviteMembersModalProps> = ({
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="p-6 border-t border-white/20">
                     <button
                         onClick={onClose}
