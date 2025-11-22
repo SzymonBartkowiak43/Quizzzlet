@@ -32,14 +32,9 @@ const LoginPage: React.FC = () => {
         try {
             const authResponse = await authService.login(formData);
 
-            const user = {
-                id: 0,
-                email: authResponse.email,
-                userName: authResponse.email.split('@')[0],
-                roles: ['USER']
-            };
 
-            login(authResponse.token, user);
+            login(authResponse.token, authResponse.user);
+
             navigate('/');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Logowanie nieudane. Sprawdź swoje dane.');

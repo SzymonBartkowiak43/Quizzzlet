@@ -3,9 +3,8 @@ package com.example.quizlecikprojekt.controllers;
 import com.example.quizlecikprojekt.controllers.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.UserFacade;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +22,13 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userFacade.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userFacade.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
 

@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
     User, LogOut, Settings, ChevronDown, Home, BookOpen,
-    Users, MessageCircle, Users2, Bell, Search, Video, Menu, X
+    Users, Users2, Video, Menu, X, Shield
 } from 'lucide-react';
 import './Header.css';
 
@@ -18,17 +18,22 @@ const navItems = [
 
 const Header: React.FC = () => {
     const { user, logout } = useAuth();
+
+    console.log("DANE UŻYTKOWNIKA W HEADERZE:", user);
     const navigate = useNavigate();
     const location = useLocation();
 
     const [showUserDropdown, setShowUserDropdown] = useState(false);
-    const [showNotifications, setShowNotifications] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
     const userDropdownRef = useRef<HTMLDivElement>(null);
-    const notificationsRef = useRef<HTMLDivElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+    // <<< 2. Logika sprawdzająca czy użytkownik jest adminem
+    // Używamy 'any' rzutowania dla user, jeśli TypeScript krzyczy o brak pola roles,
+    // ale w produkcji lepiej dodać to do interfejsu User.
+    const isAdmin = (user as any)?.roles?.includes('ADMIN') || (user as any)?.role === 'ADMIN';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -44,9 +49,6 @@ const Header: React.FC = () => {
             const target = event.target as Node;
             if (userDropdownRef.current && !userDropdownRef.current.contains(target)) {
                 setShowUserDropdown(false);
-            }
-            if (notificationsRef.current && !notificationsRef.current.contains(target)) {
-                setShowNotifications(false);
             }
             if (mobileMenuRef.current && mobileMenuRef.current === target) {
                 setIsMobileMenuOpen(false);
@@ -89,8 +91,7 @@ const Header: React.FC = () => {
         setIsMobileMenuOpen(false);
     };
 
-    const notificationCount = 3;
-    const messageCount = 2;
+    const messageCount = 2; // Tutaj w przyszłości podepniesz prawdziwą liczbę wiadomości
 
     const headerClassName = `header ${isScrolled ? 'scrolled' : ''} ${location.pathname !== '/' ? 'solid' : ''}`;
 
@@ -111,6 +112,7 @@ const Header: React.FC = () => {
 
                         {user && (
                             <nav className="nav-desktop">
+                                {/* Standardowe linki */}
                                 {navItems.map(item => {
                                     const Icon = item.icon;
                                     const active = isActive(item.path);
@@ -130,6 +132,18 @@ const Header: React.FC = () => {
                                         </Link>
                                     );
                                 })}
+
+                                {/* <<< 3. Link dla Admina (Desktop) */}
+                                {isAdmin && (
+                                    <Link
+                                        to="/admin/users"
+                                        className={`nav-link ${isActive('/admin') ? 'active' : ''}`}
+                                        style={{ color: '#ff6b6b', fontWeight: 500 }}
+                                    >
+                                        <Shield size={16} />
+                                        Panel Admina
+                                    </Link>
+                                )}
                             </nav>
                         )}
 
@@ -233,6 +247,18 @@ const Header: React.FC = () => {
                                     </button>
                                 );
                             })}
+
+                            {/* <<< 4. Link dla Admina (Mobile) */}
+                            {isAdmin && (
+                                <button
+                                    onClick={() => handleMobileLinkClick('/admin/users')}
+                                    className={`mobile-nav-link ${isActive('/admin') ? 'active' : ''}`}
+                                    style={{ color: '#ff6b6b' }}
+                                >
+                                    <Shield size={20} />
+                                    Panel Admina
+                                </button>
+                            )}
                         </nav>
 
                         <hr className="mobile-nav-divider" />

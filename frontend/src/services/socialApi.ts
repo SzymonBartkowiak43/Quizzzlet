@@ -126,6 +126,10 @@ export const sendGroupMessage = async (groupId: number, content: string) => {
     return response.data;
 };
 
+export const deleteUser = async (userId: number) => {
+    await api.delete(`/api/users/${userId}`);
+};
+
 export default {
     getSocialDashboard,
     getMyFriendships,
@@ -142,5 +146,6 @@ export default {
     sendGroupMessage,
     getConversation,
     getAllUsers,
+    deleteUser,
     checkFriendshipStatus
 };

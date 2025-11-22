@@ -90,4 +90,11 @@ class UserService {
                         + DEFAULT_USER_ROLE
                         + "' is missing. Seed it before running the app/tests."));
   }
+
+    public void deleteUser(Long userId) {
+      if (!userRepository.existsById(userId)) {
+        throw new UserNotFoundException("User not found with ID: " + userId);
+      }
+        userRepository.deleteById(userId);
+    }
 }

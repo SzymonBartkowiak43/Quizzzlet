@@ -92,7 +92,7 @@ public class SocialFacade {
 
         List<UserDto> suggestedFriends = friendshipService.getSuggestedFriends(userId)
                         .stream()
-                        .map(u -> new UserDto(u.getId(), u.getName(), u.getEmail()))
+                        .map(this::toDto)
                         .collect(Collectors.toList());
         friendshipInfo.put("suggestedFriends", suggestedFriends);
 
@@ -339,6 +339,20 @@ public class SocialFacade {
                 f.getAddressee().getName(),
                 f.getAddressee().getEmail(),
                 f.getStatus().name()
+        );
+    }
+
+    private UserDto toDto(User user) {
+        // Pobieramy nazwy ról z encji Role
+        List<String> roles = user.getRoles().stream()
+                .map(role -> role.getName()) // Zakładam, że Role ma metodę getName()
+                .toList();
+
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                roles // <--- PRZEKAZUJEMY ROLE TUTAJ
         );
     }
 }

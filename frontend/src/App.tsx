@@ -25,6 +25,7 @@ import FriendsPage from './components/Social/friends/FriendsPage';
 import MessagesPage from './components/Social/messages/MessagesPage';
 import GroupChatPage from './components/Social/groups/GroupChatPage';
 import CommunityPage from './components/Social/friends/CommunityPage';
+import AdminUsersPage from './components/Admin/AdminUsersPage';
 
 import './App.css';
 
@@ -49,6 +50,8 @@ function App() {
                 <Route path="/videos" element={<VideosPage />} />
                 <Route path="/videos/:id" element={<VideoPlayerPage />} />
                 <Route path="/review" element={<div>Review - Coming Soon</div>} />
+
+                <Route path="/admin/users" element={<AdminUsersPage />} />
 
                 <Route path="/social" element={<Navigate to="/social/dashboard" replace />} />
                 <Route path="/social/dashboard" element={<SocialDashboard />} />

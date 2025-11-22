@@ -1,0 +1,136 @@
+/* src/components/Admin/AdminUsersPage.css */
+
+.admin-page {
+    /* Użyj globalnego tła lub zdefiniuj własne */
+    background: var(--app-background, linear-gradient(135deg, #1a1a2e 0%, #16213e 100%));
+    min-height: calc(100vh - var(--header-height, 64px)); /* Dostosuj wysokość headera */
+    padding: 2rem;
+    color: #e0e0e0;
+}
+
+/* Kontener w stylu "szkła" */
+.admin-glass-box {
+    background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Nagłówek sekcji */
+.admin-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-icon {
+    color: #ff6b6b; /* Czerwony kolor dla admina */
+}
+
+.admin-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Tabela */
+.table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.admin-table th {
+    padding: 1rem;
+    font-weight: 600;
+    color: #a0a0a0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+}
+
+.user-row:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.user-id {
+    font-family: monospace;
+    color: #a0a0a0;
+}
+
+.user-name {
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.user-email {
+    color: #d0d0d0;
+}
+
+.user-role-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.role-admin {
+    background-color: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.role-user {
+    background-color: rgba(100, 255, 218, 0.2);
+    color: #64ffda;
+    border: 1px solid rgba(100, 255, 218, 0.3);
+}
+
+
+/* Przycisk usuwania */
+.delete-button {
+    background-color: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    border: none;
+    padding: 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button:hover {
+    background-color: rgba(255, 107, 107, 0.3);
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #a0a0a0;
+    font-size: 1.1rem;
+}

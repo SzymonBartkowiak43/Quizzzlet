@@ -4,6 +4,7 @@ import com.example.quizlecikprojekt.controllers.dto.UserDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserRegisterDto;
 import com.example.quizlecikprojekt.domain.user.dto.UserResponseDto;
 import com.example.quizlecikprojekt.entity.User;
+import com.example.quizlecikprojekt.entity.UserRole;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class UserFacade {
   public List<UserDto> getAllUsers() {
     return userRepository.findAll()
             .stream()
-            .map(u -> new UserDto(u.getId(), u.getName(), u.getEmail()))
+            .map(this::toDto)
             .toList();
   }
 
@@ -43,4 +44,22 @@ public class UserFacade {
   public UserResponseDto createNewUser(UserRegisterDto userRegisterDto) {
     return userService.createNewUser(userRegisterDto);
   }
+
+  public void deleteUser(Long userId) {
+    userService.deleteUser(userId);
+  }
+
+  private UserDto toDto(User user) {
+    List<String> roles = user.getRoles().stream()
+            .map(UserRole::getName)
+            .toList();
+
+    return new UserDto(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            roles
+    );
+  }
+
 }
