@@ -30,39 +30,38 @@ public class WordSetFacade {
   public WordSetResponse createNewWordSet(String userEmail, WordSetCreateRequest request) {
     User user = userFacade.getUserByEmail(userEmail);
 
+    // Tutaj przekazujemy request (z językami) do serwisu
     WordSet created = wordSetService.createWordSet(user, request);
 
     return mapToWordSetResponse(created);
   }
 
   public WordAddResponse addWordsToWordSet(
-      String userEmail, Long wordSetId, WordAddRequest request) {
+          String userEmail, Long wordSetId, WordAddRequest request) {
 
     User user = userFacade.getUserByEmail(userEmail);
 
     List<Word> savedWords = wordSetService.addWordsToWordSet(wordSetId, request.words(), user);
 
     List<WordResponse> wordResponses =
-        savedWords.stream().map(WordSetMapper::mapToWordResponse).toList();
+            savedWords.stream().map(WordSetMapper::mapToWordResponse).toList();
 
     return new WordAddResponse(
-        wordResponses,
-        wordResponses.size(),
-        wordResponses.size() == 1
-            ? "Word added successfully"
-            : wordResponses.size() + " words added successfully");
+            wordResponses,
+            wordResponses.size(),
+            wordResponses.size() == 1
+                    ? "Word added successfully"
+                    : wordResponses.size() + " words added successfully");
   }
 
   public List<WordSetResponse> getWordSets(String userEmail) {
     User user = userFacade.getUserByEmail(userEmail);
-
     List<WordSet> wordSets = wordSetService.getWordSetsByUser(user);
-
     return wordSets.stream().map(WordSetMapper::mapToWordSetResponse).toList();
   }
 
   public WordSetResponse updateWordSet(
-      String userEmail, Long wordSetId, WordSetUpdateRequest request) {
+          String userEmail, Long wordSetId, WordSetUpdateRequest request) {
 
     WordSet wordSetForm = new WordSet();
     if (request.title() != null) {
@@ -84,7 +83,7 @@ public class WordSetFacade {
   }
 
   public WordResponse updateWord(
-      String userEmail, Long wordSetId, Long wordId, WordUpdateRequest request) {
+          String userEmail, Long wordSetId, Long wordId, WordUpdateRequest request) {
     Word updatedWord = wordFacade.updateWord(wordId, request.word(), request.translation());
     return mapToWordResponse(updatedWord);
   }

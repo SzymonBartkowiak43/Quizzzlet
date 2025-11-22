@@ -25,14 +25,13 @@ class WordSetService {
 
   public WordSet getWordSetById(Long wordSetId) {
     return wordSetRepository
-        .findById(wordSetId)
-        .orElseThrow(() -> new WordSetNotFoundException("WordSet not found with id: " + wordSetId));
+            .findById(wordSetId)
+            .orElseThrow(() -> new WordSetNotFoundException("WordSet not found with id: " + wordSetId));
   }
 
   public void deleteWordSet(Long id) {
     try {
       transactionalService.deleteWordSet(id);
-
     } catch (WordSetNotFoundException e) {
       throw e;
     } catch (Exception e) {
@@ -43,7 +42,6 @@ class WordSetService {
   public WordSet updateWordSet(Long id, WordSet wordSetForm) {
     try {
       WordSet wordSetOptional = getWordSetById(id);
-
       WordSet existingWordSet = prepareWordSetForUpdate(wordSetForm, wordSetOptional);
 
       if (wordSetForm.getWords() != null && !wordSetForm.getWords().isEmpty()) {
@@ -68,34 +66,32 @@ class WordSetService {
     }
 
     List<Word> wordsToSave =
-        wordItems.stream()
-            .map(
-                wordItem -> {
-                  Word word = new Word();
-                  word.setWord(wordItem.word().trim());
-                  word.setTranslation(wordItem.translation().trim());
-                  word.setPoints(0);
-                  word.setStar(false);
-                  word.setWordSet(wordSet);
-                  return word;
-                })
-            .toList();
+            wordItems.stream()
+                    .map(
+                            wordItem -> {
+                              Word word = new Word();
+                              word.setWord(wordItem.word().trim());
+                              word.setTranslation(wordItem.translation().trim());
+                              word.setPoints(0);
+                              word.setStar(false);
+                              word.setWordSet(wordSet);
+                              return word;
+                            })
+                    .toList();
 
     return wordRepository.saveAll(wordsToSave);
   }
 
   public List<WordSet> getWordSetsByUser(User user) {
     List<WordSet> wordSets = wordSetRepository.findByUserWithWordsOrderByCreatedAtDesc(user);
-
+    // Wymuszamy inicjalizację kolekcji (jeśli jest Lazy Loading)
     for (WordSet wordSet : wordSets) {
       wordSet.getWords().size();
     }
-
     return wordSets;
   }
 
   private static WordSet prepareWordSetForUpdate(WordSet wordSetForm, WordSet existingWordSet) {
-
     if (wordSetForm.getTitle() != null) {
       existingWordSet.setTitle(wordSetForm.getTitle());
     }
@@ -111,13 +107,21 @@ class WordSetService {
     return existingWordSet;
   }
 
+  // <<< TUTAJ JEST GŁÓWNA ZMIANA >>>
   public WordSet createWordSet(User user, WordSetCreateRequest request) {
     WordSet wordSet = new WordSet();
     wordSet.setUser(user);
+
+    // Ustawiamy tytuł
     wordSet.setTitle(request.name() != null ? request.name().trim() : "New Word Set");
-    wordSet.setDescription(request.description() != null ? request.description() : "Description");
-    wordSet.setLanguage("pl");
-    wordSet.setTranslationLanguage("en");
+
+    // Ustawiamy opis
+    wordSet.setDescription(request.description() != null ? request.description() : "");
+
+    // <<< Mapujemy języki z requestu zamiast wpisywać je na sztywno >>>
+    // Dodajemy proste zabezpieczenie (default), gdyby z jakiegoś powodu przyszły nulle
+    wordSet.setLanguage(request.language() != null ? request.language() : "en");
+    wordSet.setTranslationLanguage(request.translationLanguage() != null ? request.translationLanguage() : "pl");
 
     return transactionalService.createWordSet(wordSet);
   }

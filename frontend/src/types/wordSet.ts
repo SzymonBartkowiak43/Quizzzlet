@@ -22,10 +22,10 @@ export interface Word {
 }
 
 export interface CreateWordSetRequest {
-    title: string;
+    name: string; // Backend oczekuje 'name', upewnij się że serwis to mapuje lub zmień na name
     description?: string;
-    language?: string;
-    translationLanguage?: string;
+    language: string;
+    translationLanguage: string;
 }
 
 export interface UpdateWordSetRequest {
