@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://68.183.66.208:80")
+@CrossOrigin(origins = "http://68.183.66.208")
 public class RegisterController {
 
   private final UserFacade userFacade;

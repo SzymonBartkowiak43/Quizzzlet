@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/evaluations")
-@CrossOrigin(origins = "http://68.183.66.208:80")
+@CrossOrigin(origins = "http://68.183.66.208")
 public class EvaluationController {
 
   private final EvaluationFacade evaluationFacade;

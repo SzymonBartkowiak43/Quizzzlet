@@ -33,4 +33,4 @@ auth:
 
 app:
   cors:
-    allowed-origin: "http://68.183.66.208:80"
+    allowed-origin: "http://68.183.66.208"
