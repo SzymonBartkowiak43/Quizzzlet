@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/progress")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://68.183.66.208:3000")
 public class ProgressController {
 
   private final ProgressFacade progressFacade;

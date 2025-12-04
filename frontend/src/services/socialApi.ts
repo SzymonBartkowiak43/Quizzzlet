@@ -12,7 +12,7 @@ import {
 } from '../types/social';
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080',
+    baseURL: process.env.REACT_APP_API_URL || 'http://68.183.66.208:8080',
     headers: {
         'Content-Type': 'application/json',
     },

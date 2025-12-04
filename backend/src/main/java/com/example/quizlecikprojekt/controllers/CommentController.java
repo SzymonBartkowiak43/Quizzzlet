@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/videos")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://68.183.66.208:3000")
 public class CommentController {
 
   private final CommentFacade commentFacade;
