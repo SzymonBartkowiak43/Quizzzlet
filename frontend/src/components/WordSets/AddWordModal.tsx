@@ -173,7 +173,7 @@ const AddWordModal: React.FC<AddWordModalProps> = ({ onClose, onAdd }) => {
                             className="btn btn-primary"
                             disabled={loading || words.every(w => !w.englishWord.trim() || !w.polishTranslation.trim())}
                         >
-                            {loading ? 'Dodaję...' : `Dodaj ${words.filter(w => w.englishWord.trim() && w.polishTranslation.trim()).length} słówek`}
+                            {loading ? 'Dodaję...' : `Dodaj ${words.filter(w => w.englishWord.trim() && w.polishTranslation.trim()).length} słówko`}
                         </button>
                     </div>
                 </form>

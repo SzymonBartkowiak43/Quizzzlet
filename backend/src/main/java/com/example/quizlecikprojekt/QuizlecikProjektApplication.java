@@ -15,7 +15,5 @@ public class QuizlecikProjektApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(QuizlecikProjektApplication.class, args);
-
-
   }
 }
