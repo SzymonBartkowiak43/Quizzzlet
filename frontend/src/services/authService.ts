@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { LoginRequest, RegisterRequest, AuthResponse, RegisterResponse } from '../types/auth';
 
-const API_URL = 'http://68.183.66.20880';
+const API_URL = '';
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
@@ -35,6 +35,7 @@ axiosInstance.interceptors.response.use(
 
 export const authService = {
     async login(credentials: LoginRequest): Promise<AuthResponse> {
+        // Teraz ścieżka jest relatywna
         const response = await axiosInstance.post('/api/auth/token', credentials);
 
         if (response.data.token) {
