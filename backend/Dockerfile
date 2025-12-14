@@ -14,3 +14,9 @@ COPY --from=maven-build /build/target/Quizlecik-projekt*.jar /opt/app.jar
 WORKDIR /opt
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+
+
+
+
