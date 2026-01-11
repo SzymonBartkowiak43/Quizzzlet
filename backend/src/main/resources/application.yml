@@ -28,7 +28,7 @@ deepl:
 auth:
   jwt:
     expirationDays: 30
-    secret: ${JWT_SECRET:ababababbbsadfweawgehrth}
+    secret: ${JWT_SECRET}
     issuer: sb-reservation-system-backend
 
 app:

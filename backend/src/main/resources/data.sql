@@ -411,20 +411,9 @@ WHERE NOT EXISTS (
 
 
 
-
--- ===== SKRYPT DODAJĄCY DANE DLA UŻYTKOWNIKA 'PROMOTOR' =====
--- Ten skrypt dodaje 8 nowych użytkowników (w tym 'promotor@test.pl')
--- oraz generuje dla 'promotor@test.pl' dużą ilość danych:
--- 1. Nowe zestawy słówek (5 zestawów)
--- 2. Słówka do każdego nowego zestawu (ok. 5-7 na zestaw)
--- 3. Znajomych (7)
--- 4. Prywatne wiadomości
--- 5. Dodatkowe materiały wideo
-
--- ===== 1. DODANIE 8 NOWYCH UŻYTKOWNIKÓW =====
 INSERT INTO users (email, name, password)
 VALUES
-    ('promotor@test.pl', 'Jan Promotor', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'), -- Ten jest najważniejszy
+    ('promotor@test.pl', 'Jan Promotor', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
     ('marek@test.pl', 'Marek Wiśniewski', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
     ('ewa@test.pl', 'Ewa Dąbrowska', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
     ('tomasz@test.pl', 'Tomasz Zieliński', '$2a$10$zQzBzQ57yTHuC0OGejYcveQsdWziMLnkmpFX.m6F45WlC4Kr6N0Gy'),
